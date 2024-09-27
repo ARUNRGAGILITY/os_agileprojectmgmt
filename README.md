@@ -1,8 +1,8 @@
 # Open Source Agile Project Managment Software
 
-### Aim: Adept at creating a simple Open source software for Agile and Project Management Software, that helps to manage projects and provide business agility with insights.
+**Aim:** Adept at creating a simple Open source software for Agile and Project Management Software, that helps to manage projects and provide business agility with insights.
 
-### Vision: Creating a simple visual agile and project management software
+**Vision:** Creating a simple visual agile and project management software
 
 ### Strategy: 
 #### Strategy for the Open Source Agile Project Management Software:
