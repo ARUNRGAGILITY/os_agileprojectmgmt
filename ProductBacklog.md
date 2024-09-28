@@ -3,13 +3,13 @@
 #### **Backlog Items: Phase 1 (Core MVP Development)**
 
 1. **User Authentication & Role Management**:
-   - User registration and login (OAuth, Google SSO)
-   - Assign roles: Product Owner, ScrumMaster, Team Member
+   - User registration with invite code and login 
+   - Assign roles: Super Admin, Organization Admin, Project Admin, Delivery Manager,Project Manager, Business Owner, Product Owner, ScrumMaster, Team Member, HR, Support Roles
    - Role-based access control for different project features
 
 2. **Project Creation & Backlog Management**:
    - Create and manage projects
-   - Add user stories, tasks, and subtasks to the backlog
+   - Add Strategy, MVP/Release, Epics, Features, Components, Capabilities, User stories, tasks, and subtasks to the backlog
    - Set task priorities and estimates (story points, hours)
 
 3. **Scrum & Kanban Boards**:
