@@ -1,4 +1,4 @@
-# Open Source Agile Project Managment Software
+# Open-Source Jiva Project Management System
 
 **Aim:** Adept at creating a simple Open source software for Agile and Project Management Software, that helps to manage projects and provide business agility with insights.
 
