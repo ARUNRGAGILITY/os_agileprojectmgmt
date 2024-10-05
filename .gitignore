@@ -9,7 +9,6 @@ dev_env/project_area/*
 !dev_env/project_area/.gitkeep
 # C extensions
 *.so
-dev_env/
 projects/
 staging/work_area/
 tmp/work_area/
