@@ -3,7 +3,7 @@ import os
 import subprocess
 from utils import *
 
-DJANGO_PROJECTS_DIRNAME = "projects"
+DJANGO_PROJECTS_DIRNAME = "dev_env"
 PROJECTAREA_DIRNAME = "project_area"
 
 

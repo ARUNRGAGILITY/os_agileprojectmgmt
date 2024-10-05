@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Base directory where all projects are located
+BASE_PROJECT_DIR="../dev_env/project_area"
+
+# Function to list all projects in the base directory
+list_projects() {
+    echo "Available projects:"
+    ls -d "$BASE_PROJECT_DIR"/*/ | xargs -n 1 basename
+}
+
+
+list_projects

@@ -50,7 +50,7 @@ def create_directory(path):
     """
     try:
         os.makedirs(path, exist_ok=True)  # 'exist_ok=True' prevents error if directory already exists
-        print(f"Directory '{path}' created successfully or already exists.")
+        print(f"Directory '{path}' created successfully.")
     except Exception as e:
         print(f"Error: Failed to create directory '{path}'. Reason: {str(e)}")
 

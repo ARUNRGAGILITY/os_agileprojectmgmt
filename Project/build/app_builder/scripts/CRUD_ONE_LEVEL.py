@@ -1583,7 +1583,7 @@ for module in process_modules:
 
 
 # Special handling for urls module
-project_dir = f"../../projects/project_area/env_{project_name}/{project_name}"
+project_dir = f"../../dev_env/project_area/env_{project_name}/{project_name}"
 app_dirname = f"{app_name}"
 dest_dir = f"{project_dir}/{app_dirname}/templates/{app_dirname}/mod_{module_name}"
 copy_files(html_dir, dest_dir, html_files_list)

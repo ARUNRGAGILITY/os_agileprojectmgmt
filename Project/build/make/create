@@ -1,0 +1,3 @@
+#!/bin/bash
+# Forward all command line arguments to the Python script
+python ../project_builder/bin/django.py django "$@"
