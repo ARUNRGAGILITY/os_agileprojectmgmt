@@ -2,7 +2,11 @@
 __pycache__/
 *.py[cod]
 *$py.class
+# Ignore everything inside the project_area directory
+dev_env/project_area/*
 
+# Allow the .gitkeep file to be tracked
+!dev_env/project_area/.gitkeep
 # C extensions
 *.so
 dev_env/
