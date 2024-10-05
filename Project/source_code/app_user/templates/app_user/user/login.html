@@ -1,0 +1,45 @@
+{% extends "app_web/base/custom_base.html" %}
+{% load static %}
+{% load custom_tags %}
+
+{% block title %}Login{% endblock title %}
+
+<!-- Page Begin -->
+{% block content %}
+{% include "app_web/includes/custom_base.css.html" %}
+{% include "app_web/includes/navbar.html" %}
+
+<!-- Page Content -->
+<div class="container">
+    <!-- error messages -->
+    <div class="row">
+        <div class="col col-md-6"></div>
+        <div class="col col-md-6">
+            {% include "app_web/includes/messages.html" %}
+        </div>
+    </div>
+    <!-- second row -->
+    <div class="row">
+        <div class="col col-md-6">
+            <div class="container">
+                <div class="row">
+                    <div class="col col-md-12">
+                        <br>
+                        <p>Welcome to the {{SITE_NAME}} </p>
+                        <p class="site_desc">
+                            {{SITE_DESC}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col col-md-6">
+            <!-- Read from the current manual form -->
+            {% include "./_login_form.html" %}
+        </div>
+    </div>
+   
+</div>
+{% include "app_web/includes/footer.html" %}
+{% endblock content %}
+<!-- End Page-->
