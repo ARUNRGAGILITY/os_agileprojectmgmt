@@ -1,0 +1,176 @@
+{% extends 'app_common/common_files/base_template.html' %}
+{% load static %}
+
+{% block content %}
+{% include 'app_common/common_files/navbar.html' %}
+<!-- Begin: Content -->
+<!-- Font Awesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <style>
+        /* Global Styles */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: white;
+        }
+
+        /* Centering Header and Subheader */
+        .header, .subheader {
+            text-align: center;
+        }
+
+        .header {
+            font-size: 48px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .subheader {
+            font-size: 24px;
+            margin-top: 10px;
+            font-weight: normal;
+        }
+
+        /* Carousel Item Styling */
+        .carousel-item {
+            background-color: white; /* Set background to white */
+        }
+
+        .carousel-item img {
+            width: 100%;
+            height: 180px; /* Adjusted height for images */
+            object-fit: cover; /* Ensure the image covers the space without distortion */
+        }
+
+        .carousel-caption {
+            background-color: rgba(255, 255, 255, 0.9); /* Light background for text */
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        .icon {
+            font-size: 40px;
+            color: #007BFF;
+            margin-bottom: 10px;
+        }
+
+        /* Custom Styles for Carousel Controls */
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            background-color: #007BFF;
+            padding: 20px;
+            border-radius: 50%;
+        }
+
+        /* Buttons */
+        .buttons {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding-bottom: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Sticky Footer */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            padding: 10px 0;
+            background-color: #000080;
+            color: white;
+            font-size: 14px;
+        }
+
+       
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .header {
+                font-size: 36px;
+            }
+
+            .subheader {
+                font-size: 20px;
+            }
+
+            .buttons {
+                display: block;
+                text-align: center;
+            }
+
+            .btn {
+                font-size: 14px;
+                padding: 8px 15px;
+            }
+
+            .carousel-item img {
+                height: 190px;  /* Smaller height for mobile */
+            }
+
+            .carousel-caption {
+                padding: 10px; /* Reduce padding for smaller screens */
+                font-size: 14px; /* Reduced font size for mobile */
+            }
+
+            .icon {
+                font-size: 30px; /* Reduced icon size for mobile */
+            }
+        }
+    </style>
+
+
+
+    <!-- Landing Page Content -->
+    <div class="container">
+        <div class="header">About the Project: Jiva PMS</div>
+        <div class="subheader">Jiva Project Management System</div>
+        <br>
+        <br>
+        <p>
+            Jiva is a Project Management System (PMS) that helps you manage your projects, tasks, and teams effectively.
+            It is designed to be user-friendly and intuitive, making it easy for you to stay organized and focused on your work.
+        </p>
+        <p>
+            Jiva is an open-source MT Project Management System that is built using Django, a high-level web framework for Python.
+            It is designed to be flexible and customizable, allowing you to tailor it to your specific needs and requirements.
+        </p>
+        <p>
+            You can access the Project Details here hosted on Github.com
+
+            <a href="https://github.com/ARUNRGAGILITY/os_jiva_pms" class="btn btn-success">Jiva PMS Github Project</a>
+        </p>
+    </div>
+
+   
+
+    <!-- Bootstrap JS, Popper.js, and jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  
+<!-- End: Content -->
+{% endblock content %}
+
+

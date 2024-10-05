@@ -1,0 +1,148 @@
+<style>
+    .navbar {
+        z-index: 1001; /* Ensure it stays above the sidebar */
+    }
+    /* Sidebar styling */
+    .sidebar {
+        width: 50px;
+        background-color: darkblue;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        padding-top: 56px; /* Offset for the navbar height */
+        transition: width 0.3s;
+        height: 100vh;
+        position: absolute;
+        top: 0;
+        left: 0;
+        overflow: hidden;
+        opacity: 1; /* Ensure opaque background */
+        z-index: 900; /* Ensure it stays below the navbar */
+    }
+
+    /* Sidebar expands on hover */
+    .sidebar:hover, .sidebar.open {
+        width: 280px;
+    }
+
+    /* Scrollable sidebar menu */
+    .sidebar-menu {
+        flex: 1;
+        overflow-y: auto;
+        width: 100%;
+    }
+
+    .sidebar .nav-link {
+        color: white;
+        font-size: 1.0em;
+        text-align: left;
+        width: 100%;
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .sidebar .nav-link i {
+        margin-right: 10px;
+    }
+
+    .sidebar .nav-link span {
+        white-space: nowrap;
+        overflow: hidden;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+    .sidebar:hover .nav-link span, .sidebar.open .nav-link span {
+        opacity: 1;
+    }
+
+    .sidebar .nav-link.active {
+        background-color: #495057;
+        border-radius: 5px;
+    }
+
+    .sidebar .nav-link.active i {
+        color: #ffc107;
+    }
+
+    /* Sticky settings section at the bottom */
+    .sidebar .settings {
+        position: sticky;
+        bottom: 0;
+        width: 100%;
+        background-color: darkblue;
+        text-align: left;
+    }
+
+    .sidebar .settings .nav-link {
+        color: white;
+        font-size: 1.0em;
+    }
+
+    /* Content area */
+    .content-wrapper {
+        display: flex;
+        flex: 1;
+        margin-left: 80px;
+    }
+
+    .contentbar {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+        height: calc(100vh - 66px); /* Full height minus navbar height */
+        margin-left: 10px;
+    }
+
+    /* Sidebar toggle button (for mobile) */
+    .toggle-btn {
+        display: none;
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        z-index: 1100;
+        background-color: #343a40;
+        border: none;
+        color: white;
+        padding: 10px;
+        cursor: pointer;
+    }
+
+    
+
+    /* Adjustments for small screens */
+    @media (max-width: 768px) {
+        .sidebar {
+            width: 80px;
+            transform: translateX(-100%);
+            z-index: 1000;
+        }
+
+        .sidebar.open {
+            transform: translateX(0);
+        }
+        .navbar .navbar-brand {
+            margin-left: 30px;
+        }
+        .toggle-btn {
+            display: block;
+        }
+
+        .content-wrapper {
+            margin-left: 0;
+        }
+
+        .contentbar {
+            margin-left: 0;
+            height: calc(100vh - 56px); /* Full height minus navbar height */
+        }
+    }
+
+    .nav-link.active {
+        font-weight: bold; /* Makes the text bolder */
+        color: #007bff !important; /* Changes the text color to a bright blue */
+        background-color: #f8f9fa; /* Adds a subtle background color for more emphasis */
+    }  
+</style>
