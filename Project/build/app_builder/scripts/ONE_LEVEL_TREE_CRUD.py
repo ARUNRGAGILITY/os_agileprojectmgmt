@@ -192,9 +192,9 @@ zipped_lists = list(zip(base_templates_dirnames, created_linked_modules))
 root_content_dirname = "content"
 module_path_prefix = app_name.split("_")[1] 
 connect_module_path_prefix = connect_app_name.split("_")[1]
-placeholder_files_dir = "../library/django_files"
-project_dir = f"../projects/project_area/env_{project_name}/{project_name}"
-dest_app_dir = f"../projects/project_area/env_{project_name}/{project_name}/{app_name}"
+placeholder_files_dir = "../../library/django_files"
+project_dir = f"../../projects/project_area/env_{project_name}/{project_name}"
+dest_app_dir = f"../../projects/project_area/env_{project_name}/{project_name}/{app_name}"
 
 connected_apps_dirname = "connected_apps"
 template_files_dir = f"{placeholder_files_dir}/{connected_apps_dirname}/{script_name}"
