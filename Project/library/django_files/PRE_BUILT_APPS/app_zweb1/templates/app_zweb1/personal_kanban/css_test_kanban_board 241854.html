@@ -1,0 +1,99 @@
+<style>
+    {% for state in board_states %}
+        #sortable_{{state.id}} {
+        border: 1px solid #eee;
+        width: 142px;
+        min-width: 100%;
+        min-height: 20px;
+        list-style-type: none;
+        margin: 0;
+        padding: 5px 0 0 0;
+        float: left;
+        margin-right: 10px;
+        }
+        #sortable_{{state.id}} li {
+            margin: 0 5px 5px 5px;
+            padding: 5px;
+            font-size: 1.2em;
+            width: 120px;
+        }
+    {% endfor %}
+</style>
+<style>
+    /* The priority styling */
+    .priority1 {
+      background-color: red;
+      color: white;
+    }
+    .priority2 {
+      background-color: orange;
+      color: white;
+    }
+    .priority3 {
+      background-color: yellow;
+      color: black;
+    }
+    .priority4 {
+      background-color: green;
+      color: white;
+    }
+
+    .droppable-cell {
+        width: 350px;
+        background-color: red;
+    }
+  </style>
+<script>
+    
+$( function() {
+        {% for state in board_states %}
+        $( "#sortable_{{state.id}}" ).sortable({
+            connectWith: ".connectedSortable",           
+        }).disableSelection();
+        {% endfor %}
+
+
+    // Enabling sortable functionality on all lists that are meant to be sortable
+    $(".sortable-list").sortable({
+        connectWith: ".sortable-list", // Allow dragging between lists
+        placeholder: "ui-state-highlight", // Visual placeholder configuration
+        start: function(event, ui) {
+            ui.item.data('start_pos', ui.item.index()); // Store the starting position
+        },
+        stop: function(event, ui) {
+            var card_id = ui.item.attr('id'); // Get the ID of the card that was moved
+            var state_id = ui.item.closest('ul').attr('id').split('_')[1]; // Get the new state ID from the parent list
+            var cards = [];
+
+            // Collect the updated list of card IDs and their new positions in the new state
+            ui.item.parent().children().each(function(index) {
+                cards.push({
+                    id: $(this).attr('id'),
+                    position: index
+                });
+            });
+            
+
+            // AJAX call to update the backend with the new positions and the moved card details
+            $.ajax({
+                url: "{% url 'ajax_update_kanban_board_state' %}",
+                type: 'POST',
+                data: {
+                    'card_id': card_id,
+                    'state_id': state_id,
+                    'cards': JSON.stringify(cards),
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    console.log('Update successful', response);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error updating position:', status, error);
+                }
+            });
+        }
+    }).disableSelection();
+});
+
+
+</script>

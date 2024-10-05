@@ -1,0 +1,135 @@
+{% extends 'app_assessment/__common/base_template.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+
+{% block content %}
+<style>
+    .card-text {
+        font-size: 11px;
+        color: grey;
+    }
+    .card {
+        min-height: 200px;
+        display: flex;
+        flex-direction: column;  /* Align children of the card vertically */
+    }
+    .card-body {
+        flex: 1;  /* Flex-grow to use available space */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; /* Pushes the button to the bottom */
+    }
+</style>
+
+{% include 'app_assessment/__common/navbar.html' %}
+
+<!-- Begin: Content -->
+<div class="container-fluid mt-4">
+    <div class="row bg-info">
+        <div class="col col-md-12">
+            {% include 'app_assessment/configure/conduct_assessments/breadcrumb_conduct_assessments.html' %}
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+
+    <!-- content part1 -->
+    <div class="row">
+  
+        <div class="col col-md-12">
+           
+            <!-- display -->
+
+            <div class="container-fluid-width mt-2">
+                <ul class="nav nav-tabs" id="assessmentTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="select-tab" data-toggle="tab" href="#overview" role="tab" aria-controls="overview" aria-selected="true">Overview</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " id="select-tab" data-toggle="tab" href="#select" role="tab" aria-controls="select" aria-selected="false">Select Assessment</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="configure-tab" data-toggle="tab" href="#configure" role="tab" aria-controls="configure" aria-selected="false">Configure Assessment</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="schedule-tab" data-toggle="tab" href="#schedule" role="tab" aria-controls="schedule" aria-selected="false">Schedule Assessment</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="send-tab" data-toggle="tab" href="#send" role="tab" aria-controls="send" aria-selected="false">Send Assessment Details</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review" aria-selected="false">Review Assessment</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="reports-tab" data-toggle="tab" href="#reports" role="tab" aria-controls="reports" aria-selected="false">Assessment Reports</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="assessmentTabContent">
+                    <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="select-tab">
+                        <br>
+                        <p>Welcome to Conducting Assessments!
+                            Here you can conduct assessments, summarize, and generate reports for your assessments.</p>
+                        <b>Overview of conducting assessment processs</b>:<br>
+                        <p>The conducting assessments process is simple step-by-step process as follows...</p>
+                        <ul>
+                            <li>Select the Assessment which you want to share with individuals or people / organizations </li>
+
+                        </ul>
+
+
+                    </div>
+                    <div class="tab-pane fade" id="select" role="tabpanel" aria-labelledby="select-tab"></div>
+                    <div class="tab-pane fade" id="configure" role="tabpanel" aria-labelledby="configure-tab"></div>
+                    <div class="tab-pane fade" id="schedule" role="tabpanel" aria-labelledby="schedule-tab"></div>
+                    <div class="tab-pane fade" id="send" role="tabpanel" aria-labelledby="send-tab"></div>
+                    <div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab"></div>
+                    <div class="tab-pane fade" id="reports" role="tabpanel" aria-labelledby="reports-tab"></div>
+                </div>
+            </div>
+            
+            <!-- end display -->
+        </div>
+    </div>
+
+</div>
+<script>
+    $(document).ready(function() {
+// Function to load content for a given tab
+function loadTabContent(tabId) {
+        var target = $(tabId);
+        if (target.is(':empty')) {  // Check if the tab's content is empty and needs to be loaded
+            var urlMap = {
+                "#select": "{% url 'select_assessment' org_id %}",
+                "#configure": "{% url 'test_tab' org_id %}",
+                "#schedule": "{% url 'test_tab' org_id %}",
+                "#send": "{% url 'test_tab' org_id %}",
+                "#review": "{% url 'test_tab' org_id %}",
+                "#reports": "{% url 'test_tab' org_id %}"
+            };
+            target.load(urlMap[tabId], function(response, status, xhr) {
+                if (status === "error") {
+                    console.log("Error loading the tab content: " + xhr.status + " " + xhr.statusText);
+                } else {
+                    console.log("Content loaded successfully for " + tabId);
+                }
+            });
+        }
+    }
+
+    // Load content for the initially active tab
+    loadTabContent($('.nav-link.active').attr('href'));
+
+    // Setup event handler for tab clicks
+    $('a[data-toggle="tab"]').on('click', function (e) {
+        e.preventDefault();  // Stop the default navigation behavior
+        var targetId = $(this).attr("href");  // Get the ID of the tab target
+        loadTabContent(targetId);  // Load content for the clicked tab
+        $(this).tab('show');  // Activate the tab
+    });
+
+    });
+    </script>
+    
+<!-- End: Content -->
+{% endblock content %}

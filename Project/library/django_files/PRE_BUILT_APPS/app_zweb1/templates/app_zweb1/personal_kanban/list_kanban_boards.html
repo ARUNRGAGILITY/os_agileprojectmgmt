@@ -1,0 +1,26 @@
+<!-- kanban_board_list.html -->
+{% extends 'base.html' %}
+{% block content %}
+<h1>Kanban Boards</h1>
+<form method="get">
+    <input type="text" name="search" placeholder="Search boards...">
+    <button type="submit">Search</button>
+</form>
+<ul>
+    {% for board in page_obj %}
+    <li>{{ board.name }}
+        <a href="{% url 'kanban_board_edit' board.pk %}">Edit</a>
+        <a href="{% url 'kanban_board_delete' board.pk %}">Delete</a>
+    </li>
+    {% endfor %}
+</ul>
+<div>
+    {% for page_num in page_obj.paginator.page_range %}
+    {% if page_obj.number == page_num %}
+    <span>{{ page_num }}</span>
+    {% else %}
+    <a href="?page={{ page_num }}">{{ page_num }}</a>
+    {% endif %}
+    {% endfor %}
+</div>
+{% endblock %}

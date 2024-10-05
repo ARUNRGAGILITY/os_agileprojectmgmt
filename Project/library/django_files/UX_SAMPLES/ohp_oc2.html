@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organization Home Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+        }
+        .navbar {
+            background-color: #343a40;
+        }
+        .navbar .navbar-brand,
+        .navbar .nav-link {
+            color: white;
+        }
+        .navbar .nav-link.active {
+            color: #ffc107;
+        }
+        .sidebar {
+            width: 80px;
+            background-color: #343a40;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: start;
+            padding-top: 20px;
+            transition: width 0.3s;
+            overflow: hidden;
+            position: relative;
+        }
+        .sidebar:hover, .sidebar.open {
+            width: 250px;
+        }
+        .sidebar .nav-link {
+            color: white;
+            font-size: 1.2em;
+            text-align: left;
+            width: 100%;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .sidebar .nav-link i {
+            margin-right: 10px;
+            transition: color 0.3s;
+        }
+        .sidebar .nav-link span {
+            white-space: nowrap;
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .sidebar:hover .nav-link span, .sidebar.open .nav-link span {
+            opacity: 1;
+        }
+        .sidebar .nav-link.active {
+            background-color: #495057;
+            border-radius: 5px;
+        }
+        .sidebar .nav-link.active i {
+            color: #ffc107;
+        }
+        .content-wrapper {
+            display: flex;
+            flex: 1;
+        }
+        .contentbar {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .sidebar .settings {
+            margin-top: auto;
+            width: 100%;
+            text-align: left;
+        }
+        .sidebar .settings .nav-link {
+            color: white;
+            font-size: 1.2em;
+        }
+        #loading {
+            display: none;
+        }
+        .toggle-btn {
+            display: none;
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 1100;
+            background-color: #343a40;
+            border: none;
+            color: white;
+            padding: 10px;
+            cursor: pointer;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                position: absolute;
+                z-index: 1000;
+                width: 80px;
+                height: 100vh;
+                transition: transform 0.3s ease;
+                transform: translateX(-100%);
+                padding-top: 60px;
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .toggle-btn {
+                display: block;
+            }
+            .contentbar {
+                padding: 20px;
+                margin-left: 0;
+                flex: 1;
+            }
+            .navbar .navbar-brand {
+                margin-left: 50px; /* Adjust margin to create space for the toggle button */
+            }
+            .navbar-toggler {
+                margin-left: auto; /* Pushes the toggle button to the right */
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">BrandName</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content-wrapper">
+        <button class="toggle-btn" onclick="toggleSidebar()">
+            <i class="bi bi-list"></i>
+        </button>
+        <div class="sidebar" id="sidebar">
+            <a href="#" class="nav-link active" data-org-id="1" data-url="/getContent">
+                <i class="bi bi-house"></i>
+                <span>Home</span>
+            </a>
+            <a href="#" class="nav-link" data-org-id="2" data-url="/getContent">
+                <i class="bi bi-eye"></i>
+                <span>Vision & Mission</span>
+            </a>
+            <a href="#" class="nav-link" data-org-id="3" data-url="/getContent">
+                <i class="bi bi-heart"></i>
+                <span>Values</span>
+            </a>
+            <a href="#" class="nav-link" data-org-id="4" data-url="/getContent">
+                <i class="bi bi-lightbulb"></i>
+                <span>Strategy</span>
+            </a>
+            <a href="#" class="nav-link" data-org-id="5" data-url="/getContent">
+                <i class="bi bi-funnel"></i>
+                <span>Initiatives</span>
+            </a>
+            <a href="#" class="nav-link" data-org-id="6" data-url="/getContent">
+                <i class="bi bi-map"></i>
+                <span>Roadmap</span>
+            </a>
+            <a href="#" class="nav-link" data-org-id="7" data-url="/getContent">
+                <i class="bi bi-arrow-left-circle"></i>
+                <span>Back</span>
+            </a>
+            <div class="settings">
+                <a href="#" class="nav-link" data-org-id="8" data-url="/getContent">
+                    <i class="bi bi-gear"></i>
+                    <span>Settings</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="contentbar" id="contentbar">
+            <div id="loading">Loading...</div>
+            <div id="content"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('open');
+        }
+
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(event) {
+                event.preventDefault(); // Prevent default link behavior
+
+                // Remove 'active' class from all nav links and change icons back to regular
+                document.querySelectorAll('.nav-link').forEach(item => {
+                    item.classList.remove('active');
+                    let icon = item.querySelector('i');
+                    if (icon) {
+                        // Remove -fill from the icon class if it exists
+                        icon.className = icon.className.replace('-fill', '');
+                    }
+                });
+
+                // Add 'active' class to the clicked link and change icon to filled if applicable
+                link.classList.add('active');
+                let icon = link.querySelector('i');
+                if (icon && !icon.className.includes('bi-gear-wide-connected')) {
+                    // Add -fill to the icon class for supported icons
+                    icon.className += '-fill';
+                }
+
+                // Show loading indicator
+                document.getElementById('loading').style.display = 'block';
+
+                // Get the org ID and URL for the AJAX request
+                const orgId = link.getAttribute('data-org-id');
+                const url = link.getAttribute('data-url');
+
+                // Prepare the POST data
+                const postData = {
+                    orgId: orgId
+                };
+
+                // Fetch content via POST request with CSRF token
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCSRFToken()
+                    },
+                    body: JSON.stringify(postData)
+                })
+                .then(response => response.text())
+                .then(data => {
+                    // Hide loading indicator
+                    document.getElementById('loading').style.display = 'none';
+
+                    // Display the fetched content
+                    document.getElementById('content').innerHTML = data;
+                })
+                .catch(error => {
+                    console.error('Error fetching content:', error);
+                });
+            });
+        });
+
+        // Load default content for the initially active link
+        document.querySelector('.nav-link.active').click();
+
+        function getCSRFToken() {
+            return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        }
+    </script>
+</body>
+</html>

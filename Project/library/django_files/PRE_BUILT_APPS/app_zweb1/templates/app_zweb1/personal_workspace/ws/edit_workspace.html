@@ -1,0 +1,91 @@
+{% extends 'app_zweb1/__common/base_template.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+{% load app_web_my_filters %}
+
+{% block content %}
+{% include 'app_zweb1/__common/navbar.html' %}
+{% include 'app_zweb1/personal_workspace/ws/breadcrumb_workspace.html' %}
+<!-- Begin: Content -->
+
+<form method="post">
+    {% csrf_token %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col col-md-12">
+            <div class="container-fluid-width">
+                <div class="row">
+                    <div class="col col-md-8">
+                        <h2>{% if form.instance.pk %}Edit - {{form.instance}} -
+                             {% else %}Create{% endif %} Workspace</h2>
+                    </div>
+                    <div class="col col-md-4 text-end">
+                        <a href="{% url 'personal_workspace' %}" class="btn btn-sm btn-primary"><b>List Workspaces</b></a>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th colspan="2">
+                            <div class="container-fluid-width">
+                                <div class="row">
+                                    <div class="col col-md-5">
+                                        {{page_title}}:: {{workspace}}
+                                    </div>
+                                    <div class="col col-md-7">
+                                        <div class="text-end">
+                                            <a href="{% url 'view_workspace' workspace.id %}" class="btn btn-sm btn-primary"><b>View</b></a>
+                                            &nbsp;&nbsp;&nbsp;
+                                            <a href="{% url 'delete_workspace' workspace.id %}" class="btn btn-sm btn-danger"><b>Delete</b></a>
+                                            &nbsp;&nbsp;&nbsp;
+                                            <a href="{% url 'view_workspace' workspace.id %}" class="btn btn-sm btn-success"><b>Workspace</b></a>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td width="8%">
+                            <strong>Topic</strong>
+                        </td>
+                        <td>
+                            {{form.name|as_crispy_field}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Description</strong>
+                        </td>
+                        <td>
+                            {{form.description|as_crispy_field}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Mark this as Template</strong>
+                        </td>
+                        <td>
+                            {{form.template|as_crispy_field}}
+                            &nbsp;&nbsp;&nbsp;
+                            <font color="red">Please note: Once marked template, this workspace will be seen in Template Tab.</font>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="text-center"><button type="submit"
+                            class="btn btn-sm btn-success">Save</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+    
+</form>
+<!-- End: Content -->
+{% endblock content %}

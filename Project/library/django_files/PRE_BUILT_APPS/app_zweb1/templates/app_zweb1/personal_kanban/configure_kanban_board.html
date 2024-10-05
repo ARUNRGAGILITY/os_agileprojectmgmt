@@ -1,0 +1,75 @@
+{% extends 'app_zweb1/__common/base_template.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+{% load app_web_my_filters %}
+
+{% block content %}
+{% include 'app_zweb1/__common/navbar.html' %}
+{% include 'app_zweb1/personal_kanban/breadcrumb_board_states.html' %}
+<!-- Begin: Content -->
+<form method="post">
+    {% csrf_token %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col col-md-12">
+                <div class="container-fluid-width">
+                    <div class="row">
+                        <div class="col col-md-8">
+                            <h2>Configure Kanban Board</h2>
+                        </div>
+                        <div class="col col-md-4 text-end">
+                            <a href="{% url 'personal_kanban' %}" class="btn btn-sm btn-primary"><b>List Kanban Boards</b></a>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-bordered">
+                    <tr>
+                        <tr>
+                            <td colspan="3" class="text-center">
+                                <h4>Board: {{board}}</h4>
+                            </td>
+                        </tr>
+                    </tr>
+                    <tr>
+                        <td width="33%">
+                            <strong>Configure States/Columns &amp; WIP Limits</strong>
+                            <br>
+                            <p>
+                                Configure the Board columns or states and their WIP Limits.
+                                Also you can configure the start and end points for lead time, the cycle time columns.
+                            </p>
+                            <br>
+                            
+                        </td>
+                        <td width="33%">
+                            <strong>Configure Card Display</strong>
+                            <br>
+                            <p>
+                                Configure how the cards are displayed on this board.
+                            </p>
+                            <br>
+                            
+                        </td>
+                        <td width="33%">
+                            <strong>Configure Board Display</strong>
+                            <br>
+                            <p>
+                                Configure how this board is displayed.
+                            </p>
+                            <br>
+                            
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-center"><a href="{% url 'board_states' board.id %}" class="btn btn-sm btn-primary">Configure</a></td>
+                        <td class="text-center"><a href="" class="btn btn-sm btn-primary">Configure</a></td>
+                        <td class="text-center"><a href="" class="btn btn-sm btn-primary">Configure</a></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- End: Content -->
+{% endblock content %}

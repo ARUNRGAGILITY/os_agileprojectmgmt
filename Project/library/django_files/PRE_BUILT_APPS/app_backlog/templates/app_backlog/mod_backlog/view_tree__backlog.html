@@ -1,0 +1,235 @@
+{% extends 'app_common/common_files/base_template.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+{% load app_web_my_filters %}
+{% load mptt_tags %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col col-md-12">
+            
+        </div>
+    </div>
+</div>
+{% include 'app_common/common_files/navbar.html' %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col col-md-12">
+            {% include 'app_backlog/mod_backlog/breadcrumb__backlogs.html' %}
+        </div>
+    </div>
+</div>
+<!-- Begin: Content -->
+<style>
+    #mpttTable {
+    counter-reset: level1;  /* Initial counter reset for the first level */
+}
+
+#mpttTable tr[data-level="1"] > td::before {
+    counter-reset: level2;  /* Each time a level 1 row is started, reset the second level counter */
+    counter-increment: level1;  /* Increment the level 1 counter */
+    content: counter(level1) ". ";  /* Display level 1 counter */
+}
+
+#mpttTable tr[data-level="2"] > td::before {
+    counter-reset: level3;  /* Reset the third level counter at each new level 2 row */
+    counter-increment: level2;  /* Increment level 2 counter */
+    content: counter(level1) "." counter(level2) ". ";  /* Display both level 1 and level 2 counters */
+}
+
+#mpttTable tr[data-level="3"] > td::before {
+    counter-increment: level3;  /* Increment the level 3 counter */
+    content: counter(level1) "." counter(level2) "." counter(level3) ". ";  /* Display full hierarchical numbering */
+}
+
+</style>
+
+<form action="" method="POST">
+{% csrf_token %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col col-md-12">
+           
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col col-md-12">
+            <div class="container-fluid-width">
+                <div class="row pb-2">
+                    <div class="col col-md-8">
+                        <h2>Backlog</h2> 
+                    </div>
+                    <div class="col col-md-4 text-end">    
+                        <!-- Dropdown for switching styles -->
+                        <span class="display_count">{{objects_count}} item(s)</span>
+                        &nbsp; &nbsp;               
+                        <a href="{% url 'list_backlogs' org_id ref_parent_id %}" class="btn btn-sm btn-primary"><b>List Backlog(s) </b></a>
+                       
+                    </div>
+                </div>
+               
+            </div>
+            <!-- CBA -->
+
+
+       
+{% with counter="0" %}
+<table border="1" class="table table-bordered sortable_table serial-number-column mpttTable">
+    <thead>
+        <tr>
+            <th width="2%"><i class="bi bi-grip-vertical"></i></th>
+            <th width="2%">#</th>
+            <th width="3%">Type</th>
+            <!-- <th width="2%">ID</th> -->
+            <th>Backlog</th>
+            <th>Description</th>
+            <th>Progress</th>
+            <th>Done</th>
+        </tr>
+    </thead>
+    <tbody  id="sortable" class="sortable-tbody todo-container">
+    {% for node, serial in serialized_nodes %}
+    <tr id="{{node.id}}_{{ forloop.counter }}" class="sortable-row display_tr " >
+            <td class="drag-handle" width="2%">
+                <i class="bi bi-grip-vertical"></i> 
+            </td>
+            <td width="2%" ><strong>{{serial}}</strong></td>
+            <th width="3%">{{node.type}}</th>
+            <!-- <td width="2%">{{node.id}}</td> -->
+            <td width="25%" style="font-size: {{ node|font_size }}; font-weight: bold; padding-left: {{ node.level }}em;" >&nbsp;<a href="{% url 'view_backlog' org_id ref_parent_id node.id %}">{{ node.name }}</a></td>
+            <td width="40%">{{node.description|display_if_not_none|truncatechars:60}}</td>
+            <td width="30%">
+
+                <font size="-1">
+                    {% if not node.is_leaf_node %}
+                    {% with completion_stats=node.get_completion_stats %}
+                    {{ completion_stats.completed_count }}/{{ completion_stats.total_count }} done.
+                    {{ completion_stats.percent_complete }}%
+                     <div class="progress">
+                      <div class="progress-bar" role="progressbar"
+                      style="width:{{ completion_stats.percent_complete }}%;"
+                      aria-valuenow="{{ completion_stats.percent_complete }}"
+                      aria-valuemin="0"
+                      aria-valuemax="100"></div>
+                  </div>
+                    {% endwith %}
+                    {% else %}
+                    {% if node.done  %}
+                      <b>Done</b>
+                      {% else %}
+                      <b>TBC</b>
+                    {% endif %}
+                    {% endif %}
+                    </font>
+                
+                
+            </td>
+            <td width="4%">
+                <input type="checkbox" id="done_{{ node.id }}" name="done_{{ node.id }}" 
+                value="{{ node.id }}" class="done-checkbox" 
+                {% if node.done %} checked {% endif %}
+                onchange="updateDoneState('{{ node.id }}', this.checked);">
+            </td>
+
+        </tr>
+        
+{% endfor %}
+</tbody>
+</table>
+
+{% endwith %}
+        </div>
+    </div>
+</div>
+</form>
+
+    
+<script>
+    function updateDoneState(wslistId, isType) {
+    $.ajax({
+        url: '/common/common_ajax/ajax_update_task_done_state/',  // Ensure this URL is correct and handled properly in Django
+        type: 'POST',
+        data: {
+            'id': wslistId,
+            'done': isType,
+            'model_name': 'Backlog',
+            'app_name': 'app_backlog',
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+        },
+        success: function(response) {
+            console.log('Update successful!');
+            // Optionally, trigger a DOM update here to visually confirm the change
+            location.reload();
+        },
+        error: function(xhr, status, error) {
+            console.log('An error occurred: ' + error);
+        }
+    });
+}
+</script>
+
+
+<script>
+    $(".sortable_table").find("tbody").sortable({
+      items: "> tr",
+      handle: ".drag-handle",
+      appendTo: "parent",
+      cancel: "[contenteditable]",
+      update: function(event, ui) {
+              var serialOrder = $('#sortable').sortable('serialize');
+              var arrayOrder = $('#sortable').sortable('toArray');
+              //alert(arrayOrder);
+              $.ajax({
+                url: '/common/common_ajax/ajax_update_model_list_sorted/',
+                type: 'POST',
+                data : {
+                  'csrfmiddlewaretoken': "{{ csrf_token }}",
+                  'model_name': 'Backlog',
+                  'app_name': 'app_backlog',
+                  'sorted_list_data': JSON.stringify(arrayOrder),
+                  
+                },
+                dataType: 'json',
+                success: function(data) {
+                  console.log(data);
+                }
+              })
+            }
+    });
+</script>    
+
+
+
+<script>
+    function makeEditable(element) {
+        element.contentEditable = true;
+        element.focus();
+    }
+    
+  
+    function save_element_text(element, id,  appName, modelName, fieldName) {
+        element.contentEditable = false;
+        $.ajax({
+            url: '/common/common_ajax/ajax_save_element_text/',
+            type: 'POST',
+            data : {
+            'csrfmiddlewaretoken': "{{ csrf_token }}",
+            'model_name': modelName,
+            'app_name': appName,
+            'field_name': fieldName,
+            'text': element.textContent, 
+            'id': id,
+            },
+            dataType: 'json',
+            success: function(data) {
+            console.log(data);
+            }
+        })
+    }
+    </script>
+    
+<!-- End: Content -->
+{% endblock content %}

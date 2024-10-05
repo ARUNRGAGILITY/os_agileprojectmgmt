@@ -1,0 +1,79 @@
+<style>
+  {% for state in board_states %}
+      #sortable_{{state.id}} {
+      border: 1px solid #eee;
+      width: 142px;
+      min-width: 100%;
+      min-height: 20px;
+      list-style-type: none;
+      margin: 0;
+      padding: 5px 0 0 0;
+      float: left;
+      margin-right: 10px;
+      }
+      #sortable_{{state.id}} li {
+        
+      }
+  {% endfor %}
+</style>
+<style>
+  /* The priority styling */
+  .priority1 {
+    background-color: red;
+    color: white;
+  }
+  .priority2 {
+    background-color: orange;
+    color: white;
+  }
+  .priority3 {
+    background-color: yellow;
+    color: black;
+  }
+  .priority4 {
+    background-color: green;
+    color: white;
+  }
+
+  .droppable-cell {
+      width: 350px;
+      background-color: red;
+  }
+</style>
+
+<script>
+     $( function() {
+        {% for state in board_states %}
+        $( "#sortable_{{state.id}}" ).sortable({
+            connectWith: ".connectedSortable",           
+        }).disableSelection();
+        {% endfor %}
+    });
+</script>
+
+<script>
+ $( function() {
+        $( ".droppable-cell" ).droppable({
+            drop: function( event, ui ) {
+                var card_id = ui.draggable.attr('id');
+                var state_id = $(this).find('ul').attr('id').split('_')[1];
+                $.ajax({
+                    url: "{% url 'ajax_update_kanban_board_state' %}",
+                    type: 'POST',
+                    data: {
+                        'card_id': card_id,
+                        'state_id': state_id,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function(response) {
+                        console.log(response);
+                    }
+                });
+            }
+        });
+    });
+  </script>
+  
+
+  
+  

@@ -1,0 +1,150 @@
+
+{% extends 'app_assessment/__common/base_template.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+{% load app_web_my_filters %}
+{% load markdown_extras  %}
+
+{% block content %}
+<style>
+    .answer_container {
+
+        margin: 0 auto;
+    }
+    .display_input {
+
+    }
+
+</style>
+<script>
+    $(document).ready(function() {
+        $('#id_question_type').change(function() {
+            var selectedTypeText = $(this).find('option:selected').text();
+            var answersContainer = $('#answers_container');
+            answersContainer.html(''); // Clear previous inputs
+
+            switch(selectedTypeText) {
+                case 'SCQ':
+                    // Add input fields for each potential answer and a checkbox for selecting the correct answer
+                    for(var i = 1; i <= 5; i++) { // Example: Add 4 answers
+                        answersContainer.append(`<div class="display_input"><table><tr><td><div class="text_input"><input class="form-control" type="text" name="answers" placeholder="Answer ${i}" required size="85"/>&nbsp;&nbsp;</td><td><div>&nbsp;&nbsp;<input type="radio" name="correct_answer" value="${i}">&nbsp;&nbsp;</td><td>&nbsp; Correct</td></tr></table></div>`);
+                    }
+                    break;
+                case 'MCQ':
+                    // Add input fields for each potential answer and a checkbox for selecting the correct answer
+                    for(var i = 1; i <= 5; i++) { // Example: Add 4 answers
+                        answersContainer.append(`<div class="display_input"><table><tr><td><div class="text_input"><input class="form-control" type="text" name="answers" placeholder="Answer ${i}" required size="85"/>&nbsp;&nbsp;</td><td><div>&nbsp;&nbsp;<input type="checkbox" name="correct_answer" value="${i}">&nbsp;&nbsp;</td><td> &nbsp;Correct</td></tr></table></div>`);
+                    }
+                    break;
+                case 'Yes/No':
+                case 'True/False':
+                    // Add Yes/No options
+                    answersContainer.append('<div><input class="" type="radio" name="answers" value="Yes" required> Yes</div>');
+                    answersContainer.append('<div><input class=" " type="radio" name="answers" value="No" required> No</div>');
+                    break;
+                case 'Rating5':
+                    // Add Rating input
+                    for(var i = 1; i <= 5; i++) { // Example: Add 4 answers
+                        answersContainer.append(`<div class="display_input"><table><tr><td><div class="text_input"><input class="form-control" type="text" name="answers" placeholder="Answer ${i}" required size="45"/>&nbsp;&nbsp;</td><td><div>&nbsp;&nbsp;</tr></table></div>`);
+                    }
+                    break;
+                case 'Rating10':
+                    // Add Rating input
+                    for(var i = 1; i <= 10; i++) { // Example: Add 4 answers
+                        answersContainer.append(`<div class="display_input"><table><tr><td><div class="text_input"><input class="form-control" type="text" name="answers" placeholder="Answer ${i}" required size="45"/>&nbsp;&nbsp;</td></tr></table></div>`);
+                    }
+                    break;
+                case 'Text':
+                    // Add Rating input
+                    answersContainer.append('<div><input type="text" class="textinput form-control" name="answers" required></div>');
+                    break;
+            }
+        });
+    });
+    </script>
+{% include 'app_assessment/__common/navbar.html' %}
+<div class="container-fluid mt-4">
+    <div class="row bg-info">
+        <div class="col col-md-12">
+            {% include 'app_assessment/configure/assessment_questions/breadcrumb_assessment_questions.html' %}
+        </div>
+    </div>
+</div>
+<!-- Begin: Content -->
+<form method="post">
+    {% csrf_token %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col col-md-12">
+                <div class="container-fluid-width">
+                    <div class="row">
+                        <div class="col col-md-8">
+                            <h2>{% if form.instance.pk %}Edit{% else %}Create{% endif %} 
+                                Assessment Question</h2>
+                        </div>
+                        <div class="col col-md-4 text-end">
+                            <a href="{% url 'list_assessment_questions' areas_id %}"
+                             class="btn btn-sm btn-primary"><b>List Assessment Question(s)</b></a>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th colspan="2">{{page_title}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>                       
+                        <tr>
+                            <td width="15%">
+                                <strong>Question Type</strong>
+                            </td>
+                            <td>
+                                {{form.question_type|as_crispy_field}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="15%">
+                                <strong>Assessment Question</strong>
+                            </td>
+                            <td>
+                                {{form.text|as_crispy_field}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Answers</strong>
+                            </td>
+                            <td>
+                                <div id="answers_container">
+                                    <!-- Answers will be dynamically added here based on the selected question type -->
+                                </div>
+                            </td>
+                        </tr>    
+                        <tr>
+                            <td>
+                                <strong>Instructions</strong>
+                            </td>
+                            <td>
+                                {{form.instructions|as_crispy_field}}
+                            </td>
+                        </tr>
+                                           
+                       <tr>
+                            <td colspan="2" class="text-center"><button type="submit"
+                                class="btn btn-sm btn-success">Save</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</form>
+<script>
+    focusField = document.getElementById('id_question_type');
+    focusField.focus();
+</script>
+
+<!-- End: Content -->
+{% endblock content %}

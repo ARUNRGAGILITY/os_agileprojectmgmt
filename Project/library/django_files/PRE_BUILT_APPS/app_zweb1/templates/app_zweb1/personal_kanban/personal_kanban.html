@@ -1,0 +1,105 @@
+{% extends 'app_zweb1/__common/base_template.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+{% load app_web_my_filters %}
+
+{% block content %}
+
+{% include 'app_zweb1/__common/navbar.html' %}
+
+<!-- Begin: Content -->
+{% include 'app_zweb1/personal_kanban/breadcrumb_kanban_board.html' %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col col-md-12">
+            
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col col-md-12">
+            <div class="container-fluid-width">
+                <div class="row pb-2">
+                    <div class="col col-md-8">
+                        <h2>Personal Kanban Boards</h2>
+                    </div>
+                    <div class="col col-md-4 text-end">
+                        <a href="{% url 'create_kanban_board' %}" class="btn btn-sm btn-success"><b>+ Create Kanban Board</b></a>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-bordered sortable_table">
+                <thead>
+                    <tr>
+                        <th width="2%">#</th>
+                        <!-- <th width="2%">ID</th> -->
+                        <th>Board</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody  id="sortable" class="sortable-tbody">
+                    {% for board in page_obj %}
+                    <tr id="{{board.id}}_{{ forloop.counter }}" class="sortable-row display_tr">
+                        <td>{{forloop.counter}}</td>
+                        <!-- <td>{{board.id}}</td> -->
+                        <td width="20%">{{board.name}}</td>
+                        <td width="40%">
+                            {{board.description}}
+                        </td>
+                        <td>
+                            <a href="{% url 'view_kanban_board' board.id %}" class="btn btn-sm btn-primary">View</a>
+                            &nbsp;&nbsp;&nbsp;
+                            <a href="{% url 'edit_kanban_board' board.id %}" class="btn btn-sm btn-warning">Edit</a>
+                            &nbsp;&nbsp;&nbsp;
+                            <a href="{% url 'delete_kanban_board' board.id %}" class="btn btn-sm btn-danger">Delete</a>
+                            &nbsp;&nbsp;&nbsp;
+                            <a href="{% url 'configure_kanban_board' board.id %}" class="btn btn-sm btn-info">Configure Board</a>
+
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <a href="{% url 'visualize_kanban_workflow' board.id %}" class="btn btn-sm btn-info">View Board</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                    <tr>
+                        <td colspan="5">
+                            {% include 'app_zweb1/__common/pagination.html' %}
+                        </td>
+                    </tr>
+                
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(".sortable_table").find("tbody").sortable({
+      items: "> tr",
+      appendTo: "parent",
+      cancel: "[contenteditable]",
+      update: function(event, ui) {
+              var serialOrder = $('#sortable').sortable('serialize');
+              var arrayOrder = $('#sortable').sortable('toArray');
+              //alert(arrayOrder);
+              $.ajax({
+                url: '/v1/ajax_update_model_list_sorted/',
+                type: 'POST',
+                data : {
+                  'csrfmiddlewaretoken': "{{ csrf_token }}",
+                  'model_name': 'KanbanBoard',
+                  'sorted_list_data': JSON.stringify(arrayOrder),
+                  
+                },
+                dataType: 'json',
+                success: function(data) {
+                  console.log(data);
+                }
+              })
+            }
+    });
+    </script>
+<!-- End: Content -->
+{% endblock content %}

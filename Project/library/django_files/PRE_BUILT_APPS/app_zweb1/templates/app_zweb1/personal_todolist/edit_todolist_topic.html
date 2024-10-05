@@ -1,0 +1,81 @@
+{% extends 'app_zweb1/__common/base_template.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+{% load app_web_my_filters %}
+
+{% block content %}
+{% include 'app_zweb1/__common/navbar.html' %}
+{% include 'app_zweb1/personal_todolist/breadcrumb_personal_todolist.html' %}
+<!-- Begin: Content -->
+
+<form method="post">
+    {% csrf_token %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col col-md-12">
+            <div class="container-fluid-width">
+                <div class="row">
+                    <div class="col col-md-8">
+                        <h2>{% if form.instance.pk %}Edit - {{form.instance}} - {% else %}Create{% endif %} To Do List</h2>
+                    </div>
+                    <div class="col col-md-4 text-end">
+                        <a href="{% url 'personal_todolist' %}" class="btn btn-sm btn-primary"><b>List To Do List</b></a>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th colspan="2">
+                            <div class="container-fluid-width">
+                                <div class="row">
+                                    <div class="col col-md-5">
+                                        {{page_title}}:: {{topic}}
+                                    </div>
+                                    <div class="col col-md-7">
+                                        <div class="text-end">
+                                            <a href="{% url 'view_todolist_topic' topic.id %}" class="btn btn-sm btn-primary"><b>view</b></a>
+                                            &nbsp;&nbsp;&nbsp;
+                                            <a href="{% url 'delete_todolist_topic' topic.id %}" class="btn btn-sm btn-danger"><b>Delete</b></a>
+                                            &nbsp;&nbsp;&nbsp;
+                                            <a href="{% url 'view_todolist' topic.id %}" class="btn btn-sm btn-success"><b>To Do List</b></a>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td width="8%">
+                            <strong>Topic</strong>
+                        </td>
+                        <td>
+                            {{form.name|as_crispy_field}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Description</strong>
+                        </td>
+                        <td>
+                            {{form.description|as_crispy_field}}
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td colspan="2" class="text-center"><button type="submit"
+                            class="btn btn-sm btn-success">Save</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+    
+</form>
+<!-- End: Content -->
+{% endblock content %}

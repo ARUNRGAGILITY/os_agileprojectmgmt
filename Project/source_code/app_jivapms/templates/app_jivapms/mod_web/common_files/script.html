@@ -207,3 +207,31 @@
      // Set default content
      displayContent('listSiteContent', 'SuperAdmin Home');
 </script>
+
+
+<script>
+    function loadContent(url, breadcrumbText) {
+        $('#content').html('<div id="loading">Loading...</div>');
+        $.ajax({
+            url: '{% url "ajax_super_user_orgcrudlsp" %}',
+            method: 'POST',
+            data: {
+                'csrfmiddlewaretoken': '{{ csrf_token }}'  // Include CSRF token
+            },
+            success: function(response) {
+                $('#content').html(response);
+                //updateBreadcrumb(breadcrumbText);
+            },
+            error: function(xhr, status, error) {
+                $('#content').html('<p>Error loading content.</p>');
+                console.error('AJAX error: ', error);
+            }
+        });
+    }
+
+    function updateBreadcrumb(text) {
+        // Update breadcrumb with the provided text (optional)
+        $('nav.breadcrumb').html(`<li class="breadcrumb-item active">${text}</li>`);
+    }
+</script>
+        

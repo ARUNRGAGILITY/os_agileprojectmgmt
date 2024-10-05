@@ -1,0 +1,48 @@
+<style>
+    .my_container { background-color: rgb(157, 157, 173); margin-bottom: 100px;}
+    .dashboard-card { cursor: pointer; transition: transform .2s; height: 100%; }
+    .dashboard-card:hover { transform: scale(1.05); }
+    .row-eq-height { display: flex; flex-wrap: wrap; }
+
+    .dashboard-row { margin-bottom: 20px;} /* Adjusts the gap between rows */
+
+    .dashboard-card {
+    box-sizing: border-box; /* Ensures padding and border are included in the width/height */
+    }
+    .feature {
+        padding: 20px; /* Adjust if necessary */
+        margin: 0 10px 30px 10px; /* Adds margin to the left and right, adjust as necessary */
+    }
+    .row-eq-height {
+        margin-right: -15px; /* Bootstrap row has a -15px margin on right and left */
+        margin-left: -15px;
+    }
+    .card-link {
+        color: inherit; /* Ensures text color is not changed */
+        text-decoration: none; /* Removes underline from links */
+    }
+
+    .card-link:hover {
+        text-decoration: none; /* Removes underline on hover */
+    }
+    .header_topic {
+        padding-top: -100px;
+        background-color: rgb(172, 214, 21);
+        padding: 1px;
+        color: white;
+    }
+    /* Breadcrumb styles */
+    nav.breadcrumb-nav {
+        position: sticky;
+        top: 56px; /* Adjusted to fit right below the main navbar */
+        z-index: 1050; /* Ensures it's above most other page elements */
+        background-color: white;
+        padding: 2px 15px;
+        box-shadow: 0px 4px 6px -1px rgba(0,0,0,0.1); /* Adds depth */
+    }
+    .breadcrumb {
+        margin-bottom: 0;
+        padding: 2px 0;
+        font-size: 0.875rem;
+    }
+</style>

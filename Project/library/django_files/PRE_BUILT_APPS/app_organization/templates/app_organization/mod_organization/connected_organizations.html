@@ -1,0 +1,30 @@
+
+<!-- append the linkd that is linked to this level/model -->
+
+<a id="Backlog_super_type" href="{% url 'list_backlog_super_types' tobject.id %}"
+   class="btn btn-sm btn-primary">
+    <i class="bi bi-diagram-3"></i> 
+    Backlog Super Type
+</a>
+&nbsp;&nbsp;
+
+<a id="Backlog" href="{% url 'list_backlogs' tobject.id 0 %}"
+   class="btn btn-sm btn-primary">
+    <i class="bi bi-diagram-3"></i> 
+    Backlog
+</a>
+
+
+<a id="System_super_type" href="{% url 'list_system_super_types' tobject.id %}"
+   class="btn btn-sm btn-primary">
+    <i class="bi bi-diagram-3"></i> 
+    System Super Type
+</a>
+&nbsp;&nbsp;
+
+<a id="System" href="{% url 'list_systems' tobject.id 0 %}"
+   class="btn btn-sm btn-primary">
+    <i class="bi bi-diagram-3"></i> 
+    System
+</a>
+

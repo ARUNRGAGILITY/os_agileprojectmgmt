@@ -1,0 +1,39 @@
+# views.py
+from django.http import JsonResponse, HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import render
+import json
+
+# Assuming you have a dictionary to store your HTML contents for simplicity
+CONTENT_MAPPING = {
+    "1": "<h2>Welcome to the Organization Home Page</h2><p>This is the main page of the organization where you can find an overview of the company's vision, mission, values, strategy, initiatives, and roadmap.</p>",
+    "2": "<h2>Vision & Mission</h2><p>Our vision and mission are to create a positive impact in the industry by driving innovation and sustainability.</p>",
+    "3": "<h2>Values</h2><p>We believe in integrity, excellence, and respect for individuals.</p>",
+    "4": "<h2>Strategy</h2><p>Our strategic initiatives focus on customer satisfaction, technological advancements, and market expansion.</p>",
+    "5": "<h2>Initiatives</h2><p>We are committed to various initiatives that drive growth, innovation, and community engagement.</p>",
+    "6": "<h2>Roadmap</h2><p>Our roadmap outlines our plans and milestones for achieving our long-term goals.</p>",
+    "7": "<h2>Back</h2><p>Back to the main menu.</p>",
+    "8": "<h2>Settings</h2><p>Settings page content goes here. Customize your experience and manage your preferences.</p>",
+}
+
+@csrf_exempt
+def get_content(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            org_id = str(data.get('orgId'))
+            content = CONTENT_MAPPING.get(org_id, "<h2>Content Not Found</h2><p>The requested content could not be found.</p>")
+            return HttpResponse(content)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
+    return JsonResponse({"error": "Invalid request method."}, status=400)
+
+#################################################
+    # urls.py
+    from django.urls import path
+    from . import views
+    
+    urlpatterns = [
+        path('getContent', views.get_content, name='get_content'),
+    ]
+    

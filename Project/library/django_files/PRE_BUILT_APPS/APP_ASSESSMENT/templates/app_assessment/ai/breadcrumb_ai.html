@@ -1,0 +1,34 @@
+ <!-- Begin: Breadcrumb -->
+ <div class="breadcrumb1">
+    <nav aria-label="breadcrumb"> <!-- Inline style for demonstration -->
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{% url 'general_home_page' %}">
+                    <i class="bi bi-house"></i> Home
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{% url 'loggedin_home_page' %}">
+                    Dashboard
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{% url 'organization_list' %}">
+                    Organizations
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{% url 'organization_page' org.id %}">
+                    {{org}}
+                </a>
+            </li>
+            
+            <li class="breadcrumb-item active" aria-current="page">
+                <a href="{% url 'asmt_home' org_id %}">Assessment Home</a></li>
+        
+            <li class="breadcrumb-item active" aria-current="page">
+                AI Advisor</li>
+        </ol>
+    </nav>
+</div>
+<!-- End: Breadcrumb -->

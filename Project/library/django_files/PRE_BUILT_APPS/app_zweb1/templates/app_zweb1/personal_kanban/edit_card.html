@@ -1,0 +1,82 @@
+{% extends 'app_zweb1/__common/base_template.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+{% load app_web_my_filters %}
+
+{% block content %}
+{% include 'app_zweb1/__common/navbar.html' %}
+{% include 'app_zweb1/personal_kanban/breadcrumb_kanban_board.html' %}
+<!-- Begin: Content -->
+<form method="POST">
+{% csrf_token %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col col-md-12">
+            <div class="container-fluid-width">
+                <div class="row">
+                    <div class="col col-md-5">
+                        <h2>Edit Card </h2>
+                    </div>
+                    <div class="col col-md-7 text-end">
+                        <a href="{% url 'personal_kanban' %}" class="btn btn-sm btn-primary"><b>List Kanban Boards</b></a>
+                        &nbsp;&nbsp;
+                        <a href="{% url 'visualize_kanban_workflow' card.board.id %}" class="btn btn-sm btn-primary"><b>Kanban Board {{board}}</b></a>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th colspan="2">
+                            <div class="container-fluid-width">
+                                <div class="row">
+                                    <div class="col col-md-8">Board: {{card.board}}</div>
+                                    <div class="col col-md-4 text-end">
+                                        <a href="{% url 'view_card' card.id %}" class="btn btn-sm btn-warning">View</a>
+                                        &nbsp;&nbsp;&nbsp;
+                                        <a href="{% url 'delete_card' card.id %}" class="btn btn-sm btn-danger">Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td width="8%">
+                            <strong>Priority</strong>
+                        </td>
+                        <td>
+                            {{form.priority|as_crispy_field}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="8%">
+                            <strong>Card</strong>
+                        </td>
+                        <td>
+                            {{form.name|as_crispy_field}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Description</strong>
+                        </td>
+                        <td>
+                            {{form.description|as_crispy_field}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="text-center"><button type="submit"
+                            class="btn btn-sm btn-success">Save</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</form>
+<!-- End: Content -->
+{% endblock content %}

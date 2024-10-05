@@ -1,0 +1,144 @@
+
+{% extends 'app_assessment/__common/base_template.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+{% load app_web_my_filters %}
+
+{% block content %}
+<style>
+    .template_display {
+        font-size: 18px;
+        font-weight: bold;
+        background-color: white;
+        color: black;
+        border: 1px solid grey;
+    }
+    .area_display {
+        font-size: 16px;
+        font-weight: bold;
+        background-color: white;
+        border: 1px solid grey;
+    }
+    .question_display {
+        font-size: 16px;
+        border: 1px solid grey;
+    }
+    .special_table  {
+        width: 100%;
+        border: 1px solid grey;
+        
+    }
+</style>
+{% include 'app_assessment/__common/navbar.html' %}
+
+<div class="container-fluid mt-4">
+    <div class="row bg-info">
+        <div class="col col-md-12">
+            {% include 'app_assessment/configure/assessments/breadcrumb_assessments.html' %}
+        </div>
+    </div>
+</div>
+<!-- Begin: Content -->
+<form method="post">
+    {% csrf_token %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col col-md-12">
+                <div class="container-fluid-width">
+                    <div class="row">
+                        <div class="col col-md-8">
+                            <b>View 
+                                Assessment Tree View :: {{object}}</b>
+                        </div>
+                        <div class="col col-md-4 text-end">
+                            <a href="{% url 'list_assessments' org.id %}"
+                             class="btn btn-sm btn-primary"><b>List Assessment(s)</b></a>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                       
+                    </thead>
+                    <tbody>
+                        <!-- treeview table -->
+                        <table class="special_table">
+                            <thead>
+                                <tr>
+                                    <td colspan="2" class="template_display" ondblclick="makeEditable(this)" 
+                                    onblur="save_element_text(this, '{{ object.id }}',  'app_assessment', 'AssessmentTemplates', 'name')">{{ object }}</td>
+                                    <td width="20%" class="template_display text-end">
+                                        {% if area_list|length > 0 %}
+                                        <a href="{% url 'list_areas' object.id %}" style="text-decoration: None; font-weight: bold;">
+                                            {{area_list|length}} area(s)
+                                        </a>
+                                        {% else %}
+                                            &nbsp;&nbsp;<a href="{% url 'list_areas' object.id %}" style="text-decoration: None; font-weight: bold;">Add</a>
+                                        {% endif %}</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for area in area_list %}
+                                <tr class="area_display">
+                                    <td class="text-start" width="2%">{{forloop.counter}}.&nbsp;</td>
+                                    <td ondblclick="makeEditable(this)" 
+                                    onblur="save_element_text(this, '{{ area.area.id }}',  'app_assessment', 'AssessmentAreas', 'name')">{{ area.area.name }}</td>
+                                    <td width="20%" class="text-end">{% if area.question_count > 0 %}
+                                        <a href="{% url 'list_assessment_questions' area.area.id %}" style="text-decoration: None; font-weight: bold;">{{area.question_count}} question(s)</a>
+                                        {% else %}
+                                        &nbsp;&nbsp;<a href="{% url 'list_assessment_questions' area.area.id %}" style="text-decoration: None; font-weight: bold;">Add</a>
+                                        {% endif %}
+                                        
+                                    </td>
+                                </tr>                                
+                                {% for question in area.questions %}
+                                <tr>
+                                    <td class="question_display text-start" width="2%">{{ forloop.parentloop.counter }}.{{forloop.counter}}&nbsp;</td>
+                                    <td class="question_display"  ondblclick="makeEditable(this)" 
+                                    onblur="save_element_text(this, '{{ question.id }}',  'app_assessment', 'AssessmentQuestions', 'text')">{{ question.text }}</td>
+                                    <td width="20%" class="question_display text-end">
+                                        <a href="{% url 'edit_assessment_question' question.areas.id question.id %}" style="text-decoration: None; font-weight: bold;">{{question.question_type.name}}</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}                                
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <script>
+                        function makeEditable(element) {
+                            element.contentEditable = true;
+                            element.focus();
+                        }
+                        
+                        function save_element_text(element, id,  appName, modelName, fieldName) {
+                            element.contentEditable = false;
+                            $.ajax({
+                                url: '/at/asmt/templates/ajax_save_element_text/',
+                                type: 'POST',
+                                data : {
+                                'csrfmiddlewaretoken': "{{ csrf_token }}",
+                                'model_name': modelName,
+                                'app_name': appName,
+                                'field_name': fieldName,
+                                'text': element.textContent, 
+                                'id': id,
+                                },
+                                dataType: 'json',
+                                success: function(data) {
+                                console.log(data);
+                                }
+                            })
+                        }
+                        </script>
+                        
+
+                        <!-- treeview table -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- End: Content -->
+{% endblock content %}

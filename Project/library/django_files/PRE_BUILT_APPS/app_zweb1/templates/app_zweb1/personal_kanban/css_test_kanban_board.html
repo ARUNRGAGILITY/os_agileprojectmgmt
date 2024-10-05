@@ -1,0 +1,234 @@
+<style>
+    {% for state in board_states %}
+        #sortable_{{state.id}} {
+        border: 1px solid #eee;
+        width: 142px;
+        min-width: 100%;
+        min-height: 20px;
+        list-style-type: none;
+        margin: 0;
+        padding: 5px 0 0 0;
+        float: left;
+        margin-right: 10px;
+        }
+        #sortable_{{state.id}} li {
+            margin: 0 5px 5px 5px;
+            padding: 5px;
+            width: 150px;
+            min-height: 100px;
+        }
+    {% endfor %}
+</style>
+<style>
+    
+
+    .droppable-cell {
+        width: 350px;
+        background-color: red;
+    }
+
+    .post_it_notes {
+        position: relative;
+        min-height: 70px;
+        margin: 1px;
+        padding: 4px;
+        font-size: 14px;
+    }
+   
+    .post_it_notes:before {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        border-width: 8px 8px 0 0;
+        border-style: solid;
+    }
+
+    /* The priority styling */
+    .priority1 {
+      background-color: red;
+      color: white;
+    }
+    .priority1:before {
+        border-color: lightcoral white;
+    }
+    .priority2 {
+      background-color: orange;
+      color: black;
+    }
+    .priority2:before {
+        border-color: lightskyblue white;
+    }
+    .priority3 {
+      background-color: yellow;
+      color: black;
+    }
+    .priority3:before {
+        border-color: lightgreen white;
+    }
+    .priority4 {
+      background-color: green;
+      color: white;
+    }
+    .priority4:before {
+        border-color: lightgreen white;
+    }
+  
+  </style>
+
+  <style>
+
+.notes1 {
+  text-decoration:none;
+  color:#000;
+  display:block;
+    width: 100%;
+  padding:1em;
+  box-shadow: 5px 5px 7px rgba(33,33,33,.7);
+}
+
+
+.card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ccc; /* Optional: Border around the card */
+    margin: 1em; /* Spacing around the card */
+    background: #fff; /* Background color for the card */
+    box-shadow: 5px 5px 7px rgba(33,33,33,.7);
+    font-size: 14px;
+    min-height: 100px;
+}
+
+.card_header, .card_content, .card_footer {
+    padding: 5px; /* Padding inside each section */
+    font-size: 14px;
+}
+
+.card_content {
+    flex-grow: 1; /* Allows the content to expand and fill available space */
+}
+
+.card_footer {
+    border-top: 1px solid white; /* Thick line on top of the footer */
+
+    display: flex;
+    justify-content: space-evenly; /* Even spacing for footer items */
+    align-items: center; /* Vertically aligns footer items */
+}
+
+.card_footer a {
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+    padding: 1px 1px; /* Padding around the links for easier clicking */
+}
+
+.display_status {
+    position: relative;
+}
+.status_circle {
+    position: absolute;
+    top: -16px; /* Adjust as needed */
+    right: -10px; /* Adjust as needed */
+    width: 24px; /* Size of the circle */
+    height: 24px; /* Size of the circle */
+    background-color: skyblue; /* Tomato red, change as needed */
+    color: BLUE;
+    text-align: center;
+    line-height: 24px; /* Vertically center the text in the circle */
+    border-radius: 50%; /* Makes the div a circle */
+    font-size: 12px; /* Adjust the font size as needed */
+    font-weight: bold;
+
+}
+
+.kanban_board_table_head {
+    position: sticky;
+    top: 76px;
+    border: 1px solid #ccc;
+    background-color: white;
+}
+.wip_limit_display {
+    background-color: white;
+    color: red;
+}
+.display_card_count {
+    font-size: 10px;
+    font-weight: bold;
+    color: grey;
+}
+.display_wip_limit {
+    font-size: 10px;
+    font-weight: bold;
+    color: red;
+}
+
+@keyframes blinker {
+  0% { background-color: transparent; }
+  50% { background-color: red; }
+  100% {s background-color: transparent; }
+}
+
+.blinking-background {
+  animation: blinker 2s linear infinite;
+}
+
+</style>
+<script>
+  
+$( function() {
+     // Toggle the dropdown menu when the button is clicked
+    
+
+        {% for state in board_states %}
+        $( "#sortable_{{state.id}}" ).sortable({
+            connectWith: ".connectedSortable",           
+        }).disableSelection();
+        {% endfor %}
+
+  
+    // Enabling sortable functionality on all lists that are meant to be sortable
+    $(".sortable-list").sortable({
+        connectWith: ".sortable-list", // Allow dragging between lists
+        placeholder: "ui-state-highlight", // Visual placeholder configuration
+        start: function(event, ui) {
+            ui.item.data('start_pos', ui.item.index()); // Store the starting position
+        },
+        stop: function(event, ui) {
+            var card_id = ui.item.attr('id'); // Get the ID of the card that was moved
+            var state_id = ui.item.closest('ul').attr('id').split('_')[1]; // Get the new state ID from the parent list
+            var cards = [];
+            
+            // Collect the updated list of card IDs and their new positions in the new state
+            ui.item.parent().children().each(function(index) {
+                cards.push({
+                    id: $(this).attr('id'),
+                    position: index
+                });
+            });
+            
+            
+            // AJAX call to update the backend with the new positions and the moved card details
+            $.ajax({
+                url: "{% url 'ajax_update_kanban_board_state' %}",
+                type: 'POST',
+                data: {
+                    'card_id': card_id,
+                    'state_id': state_id,
+                    'cards': JSON.stringify(cards),
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    console.log('Update successful', response);
+                    adjust_column_height();
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error updating position:', status, error);
+                }
+            });
+        }
+    }).disableSelection();
+});
+
+</script>

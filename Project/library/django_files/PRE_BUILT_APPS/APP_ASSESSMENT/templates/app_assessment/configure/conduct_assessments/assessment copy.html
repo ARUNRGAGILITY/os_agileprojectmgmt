@@ -1,0 +1,250 @@
+{% extends 'app_assessment/__common/base_template.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+
+{% block content %}
+<style>
+    .card-text {
+        font-size: 11px;
+        color: grey;
+    }
+    .card {
+        min-height: 200px;
+        display: flex;
+        flex-direction: column;  /* Align children of the card vertically */
+    }
+    .card-body {
+        flex: 1;  /* Flex-grow to use available space */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; /* Pushes the button to the bottom */
+    }
+</style>
+
+{% include 'app_assessment/__common/navbar.html' %}
+<form method="post">
+{% csrf_token %}
+
+<!-- Begin: Content -->
+<div class="container-fluid mt-4">
+    <div class="row bg-info">
+        <div class="col col-md-12">
+            {% include 'app_assessment/configure/conduct_assessments/breadcrumb_conduct_assessments.html' %}
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <!-- content part1 -->
+    <div class="row">  
+        <div class="col col-md-12">           
+            <!-- display -->
+            {% include 'app_assessment/configure/conduct_assessments/__conduct_assessment_tabs.html' %}
+            <div class="tab-content">
+                <div class="tab-pane active">     
+                    <!-- display a header -->                    
+                    <div class="container-fluid-width">
+                        <div class="row pt-3">
+                            <div class="col col-md-7">
+                                <b class="h3">Assessment:</b> {{object}} 
+                            </div>
+                            <div class="col col-md-5 text-end">
+                                <a href="{% url 'review_assessment' org.id  object.id  %}"
+                                    class="btn btn-sm btn-primary"><i class="bi bi-clipboard-pulse"></i> Next: Review Assessment</a>
+                            </div>
+                        </div>
+                        {% if result_display_flag == False %}
+                        <!-- display of assessment -->
+                        <div class="row">
+                            <div class="col col-md-12">
+                                <b>Total Questions: {{ total_questions }}</b><br>
+
+                        {% for area in area_list %}
+                            <div>
+                                <b>Area: {{ area.area.name }}</b>
+                                <p>Questions in this Area: {{ area.question_count }}</p>
+                            
+                            {% for question_detail in area.question_details %}
+                         
+                                <strong>Q {{question_detail.question.id}}: {{question_detail.question.question_type.name}} {{ question_detail.question.text }}</strong>
+
+
+                                <div>
+                                    {% for answer in question_detail.answers %}
+                                    <div class="display_input">
+                                        <table>
+                                    
+                                                {% if question_detail.question.question_type.name == "MCQ" %}
+                                                <tr></tr><td>
+                                                    &nbsp;&nbsp;
+                                                    {{ forloop.counter }}. {{answer.id}} &nbsp;
+                                                    <input type="checkbox" id="{{question_detail.question.id}}_{{answer.id}}" name="{{question_detail.question.id}}" 
+                                                    value="{{answer.id}}" 
+                                                    > &nbsp;&nbsp;                                              
+                                                </td>
+                                                <td>
+                                                    {{ answer.text }} {{answer.is_correct}}
+                                                </td></tr>
+                                                {% endif%}
+                                       
+                                                {% if question_detail.question.question_type.name == "SCQ" %}
+                                                <tr></tr><td>
+                                                    &nbsp;&nbsp;
+                                                    {{ forloop.counter }}. {{answer.id}} &nbsp;
+                                                    <input type="radio" id="{{question_detail.question.id}}_{{answer.id}}" name="{{question_detail.question.id}}" 
+                                                    value="{{answer.id}}" 
+                                                    > &nbsp;&nbsp;                                              
+                                                </td>
+                                                <td>
+                                                    {{ answer.text }} {{answer.is_correct}}
+                                                </td></tr>
+                                                {% endif%}
+
+                                                {% if question_detail.question.question_type.name == "True/False" %}
+                                                <tr></tr><td>
+                                                    &nbsp;&nbsp;
+                                                    {{ forloop.counter }}. {{answer.id}} &nbsp;
+                                                    <input type="radio" id="{{question_detail.question.id}}_{{answer.id}}" name="{{question_detail.question.id}}" 
+                                                    value="{{answer.id}}" 
+                                                    > &nbsp;&nbsp;                                              
+                                                </td>
+                                                <td>
+                                                    {{ answer.text }} {{answer.is_correct}}
+                                                </td></tr>
+                                                {% endif%}
+
+                                                {% if question_detail.question.question_type.name == "Rating5" %}
+                                                <tr></tr><td>
+                                                    &nbsp;&nbsp;
+                                                    {{ forloop.counter }}. {{answer.id}} &nbsp;
+                                                    <input type="radio" id="{{question_detail.question.id}}_{{answer.id}}" name="{{question_detail.question.id}}" 
+                                                    value="{{answer.id}}" 
+                                                    > &nbsp;&nbsp;                                              
+                                                </td>
+                                                <td>
+                                                    {{ answer.text }} 
+                                                </td></tr>
+                                                {% endif%}
+
+                                                {% if question_detail.question.question_type.name == "Rating10" %}
+                                                <tr></tr><td>
+                                                    &nbsp;&nbsp;
+                                                    {{ forloop.counter }}. {{answer.id}} &nbsp;
+                                                    <input type="radio" id="{{question_detail.question.id}}_{{answer.id}}" name="{{question_detail.question.id}}" 
+                                                    value="{{answer.id}}" 
+                                                    > &nbsp;&nbsp;                                              
+                                                </td>
+                                                <td>
+                                                    {{ answer.text }} 
+                                                </td></tr>
+                                                {% endif%}
+
+                                                {% if question_detail.question.question_type.name == "Text" %}
+                                                <tr></tr><td>
+                                                    &nbsp;&nbsp;
+                                                    {{ forloop.counter }}. {{answer.id}}&nbsp;
+                                                    <textarea name="{{question_detail.question.id}}" id="{{question_detail.question.id}}_{{answer.id}}" rows="2" cols="50"></textarea>
+                                                    &nbsp;&nbsp;                                              
+                                                </td>
+                                                <td>
+                                                    {{ answer.text }} 
+                                                </td></tr>
+                                                {% endif%}
+
+                                                    
+                                                </table>
+                                            </div>                                    
+                                            {% endfor %}
+                                        </div>
+                                {% endfor %}
+                            </div>
+                            {% endfor %}
+                            </div>
+                        </div>
+                        <table>
+                            <tr>
+                                <td colspan="2" width="100%" class="text-center">
+                                    <input type="submit" name="submit" value="Submit" class="btn btn-sm btn-primary">
+                                </td>
+                            </tr>
+                        </table>
+                        {% elif result_display_flag == True %}
+                            <div class="row">
+                                <div class="col col-md-12">
+                                    <!-- {{candidate_assessment_details}} -->
+                                     <table class="table table-bordered">
+                                        <tr>
+                                            <th colspan="2">Your Assessment Results</th>
+                                        </tr>
+                                        <tr>
+                                            <td width="30%">
+                                                <strong>Total Questions</strong>
+                                            </td>
+                                            <td>
+                                                <strong>{{candidate_assessment_details.total_questions}}</strong>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="30%">
+                                                <strong>Total Correct</strong>
+                                            </td>
+                                            <td>
+                                                <strong>{{candidate_assessment_details.total_correct}}</strong>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="30%">
+                                                <strong>Total Unanswered</strong>
+                                            </td>
+                                            <td>
+                                                <strong>{{candidate_assessment_details.total_unanswered}}</strong>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="30%">
+                                                <strong>Passing Percentage</strong>
+                                            </td>
+                                            <td>
+                                                <strong>{{candidate_assessment_details.passing_percentage}}</strong>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="30%">
+                                                <strong>Your Percentage</strong>
+                                            </td>
+                                            <td>
+                                                <strong>{{candidate_assessment_details.percentage|floatformat:2}} %</strong>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="30%">
+                                                <strong>Assessment Status</strong>
+                                            </td>
+                                            <td>
+                                               {% if candidate_assessment_details.candidate_pass == True %}
+                                                    <span class="text-success"><b>Pass</b></span>
+                                                {% else %}
+                                                    <span class="text-danger"><b>Fail</b></span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                     </table>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <!-- end display of assessment -->
+                      
+
+
+
+                    </div>
+                    <!-- display a header -->   
+                </div>
+            </div>
+            <!-- end display-->
+        </div>
+    </div>
+</div>  
+</form>
+<!-- End: Content -->
+{% endblock content %}

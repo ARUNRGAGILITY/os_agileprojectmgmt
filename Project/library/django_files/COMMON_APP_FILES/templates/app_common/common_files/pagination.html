@@ -1,0 +1,39 @@
+{% if objects_count > objects_per_page %}
+<div class="pagination">
+    <span class="step-links">
+        {% if show_all != 'all' %}
+            {% if page_obj.has_previous %}
+                <a href="?page=1&all={{objects_per_page}}">&laquo; First</a>&nbsp;&nbsp;
+                <a href="?page={{ page_obj.previous_page_number }}&all={{objects_per_page}}">Previous</a>&nbsp;&nbsp;
+            {% endif %}
+            
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+            &nbsp;&nbsp;
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}&all={{objects_per_page}}">Next</a>&nbsp;&nbsp;
+                <a href="?page={{ page_obj.paginator.num_pages }}&all={{objects_per_page}}">Last &raquo;</a>
+            {% endif %}
+            
+            <a href="?all={{tobjects.count}}" class="show-all">Show All</a>            
+
+        {% else %}
+        <a href="?all={{objects_per_page}}" class="show-all">Show {{objects_per_page}} per Page</a>
+        {% endif %}
+    </span>
+</div>
+{% endif %}
+<div class="pagination">
+    <font color="lightgrey" size="-1">{{objects_per_page}}/{{objects_count}}</font>
+</div>
+<!--
+
+    this is a common pagination html module
+    you need to setup the view for page_obj either to take all records or by pagination
+    based on the if condition
+    then you need to check the show all variable
+    object_count is the total number of records
+    objects_per_page is the number of records per page
+    
+-->

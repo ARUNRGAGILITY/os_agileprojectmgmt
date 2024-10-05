@@ -1,0 +1,136 @@
+{% extends 'app_zweb1/__common/base_template.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+{% load app_web_my_filters %}
+
+{% block content %}
+{% include 'app_zweb1/personal_workspace/ws/css_workspace.html' %}
+{% include 'app_zweb1/__common/navbar.html' %}
+<!-- Begin: Content -->
+{% include 'app_zweb1/personal_workspace/ws/breadcrumb_display_ws.html' %}
+<form action="" method="POST">
+{% csrf_token %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col col-md-12">
+            
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col col-md-12">
+            <div class="container-fluid-width">
+                <div class="row pb-2">
+                    <div class="col col-md-8">
+                        <h2>{{ws_item}} </h2>
+                    </div>
+                    <div class="col col-md-4 text-end">                  
+                        <a href="{% url 'personal_workspace' %}" 
+                        class="btn btn-sm btn-primary"><b>List Workspaces </b></a>
+                    </div>
+                </div>
+                
+            </div>
+            <table class="table table-bordered sortable_table {{theme}}" id="themeTable"
+            >
+                <thead>
+                    <tr>
+                        <th colspan="2">
+                            <div class="container-fluid-width">
+                                <div class="row">
+                                    <div class="col col-md-4">
+                                        View Workspace Item
+                                    </div>
+                                    <div class="col col-md-8 text-end">
+                                       
+                                        <a href="{% url 'edit_ws_item' ws_item.id %}?page_from=view_ws_item" class="btn btn-sm btn-info">
+                                            Edit
+                                        </a>
+                                        &nbsp;&nbsp;&nbsp;
+                                        <a href="{% url 'delete_ws_item' ws_item.id %}?page_from=view_ws_item" class="btn btn-sm btn-danger">
+                                            Delete
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </th>         
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td width="10%"><strong>To Do:</strong></td>
+                        <td>{{ws_item.name}}</td>
+                    </tr>
+                    <tr>
+                        <td width="10%"><strong>Description:</strong></td>
+                        <td>{{ws_item.description}}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Progress</strong>
+                        </td>
+                        <td>
+                            <div class="todolist_container">
+                            {% if ws_details %}
+                            {% for detail in ws_details %}
+                                <div>
+                                    <strong>{{ detail.ws_completion_stats.completed_count }}/{{ detail.ws_completion_stats.total_count }}</strong>
+                                    &nbsp;
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" style="width: {{ detail.ws_completion_stats.percent_complete }}%"
+                                             aria-valuenow="{{ detail.ws_completion_stats.percent_complete }}"
+                                             aria-valuemin="0" aria-valuemax="100">
+                                            {{ detail.ws_completion_stats.percent_complete }}%
+                                        </div>
+                                    </div>
+                                </div>
+                    
+                                <b class="h4">Workspace Item(s):</b><br>
+                                <ul class="no-bullets">
+                                    {% for item in detail.ws_items %}
+                                        <li>{{forloop.counter}} 
+                                            <input type="checkbox" id="done_{{ item.item.id }}" name="done_{{ item.item.id }}" 
+                                                value="{{ item.item.id }}" class="done-checkbox" 
+                                                {% if item.item.done %} checked {% endif %}
+                                                onchange="updateDoneState('{{ item.item.id }}', this.checked);">
+                                            {{ item.item.name }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endfor %}
+                            {% else %}
+                                <p>No todo list items found for this topic.</p>
+                            {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+                
+            </table>
+        </div>
+    </div>
+</div>
+</form>
+<script>
+    function updateDoneState(todolistId, isType) {
+    $.ajax({
+        url: '/v1/ajax_update_todolist_done_state/',  // Ensure this URL is correct and handled properly in Django
+        type: 'POST',
+        data: {
+            'id': todolistId,
+            'done': isType,
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+        },
+        success: function(response) {
+            console.log('Update successful!');
+            // Optionally, trigger a DOM update here to visually confirm the change
+            location.reload();
+        },
+        error: function(xhr, status, error) {
+            console.log('An error occurred: ' + error);
+        }
+    });
+}
+</script>
+<!-- End: Content -->
+{% endblock content %}

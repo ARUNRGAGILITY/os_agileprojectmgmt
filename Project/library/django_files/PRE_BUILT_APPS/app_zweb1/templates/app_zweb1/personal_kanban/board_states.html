@@ -1,0 +1,115 @@
+{% extends 'app_zweb1/__common/base_template.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+{% load app_web_my_filters %}
+
+{% block content %}
+{% include 'app_zweb1/__common/navbar.html' %}
+<!-- Begin: Content -->
+{% include 'app_zweb1/personal_kanban/breadcrumb_board_states.html' %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col col-md-12">
+            
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col col-md-12">
+            <div class="container-fluid-width">
+                <div class="row pb-2">
+                    <div class="col col-md-8">
+                        <h2>{{board}} States/Columns</h2>
+                    </div>
+                    <div class="col col-md-4 text-end">
+                        <a href="{% url 'create_board_state' board.id %}" class="btn btn-sm btn-success"><b>+ Create Kanban State/Column</b></a>
+                        &nbsp;&nbsp;&nbsp;
+                        <a href="{% url 'personal_kanban' %}" class="btn btn-sm btn-primary"><b>List Kanban Boards</b></a>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-bordered sortable_table">
+                <thead>
+                    <tr>
+                        <th width="2%">#</th>
+                        <th>State/Column</th>
+                        <th>Description</th>
+                        <th width="10%">WIP Limit</th>
+                        <th width="5%">No WIP Limit</th>
+                        <th width="5%">Done State</th>                        
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody  id="sortable" class="sortable-tbody">
+                    {% for state in page_obj %}
+                    <tr id="{{state.id}}_{{ forloop.counter }}" class="sortable-row display_tr">
+                        <td>{{forloop.counter}}</td>
+                        <td width="20%">{{state.name}}</td>
+                        <td width="40%">
+                            {{state.description}}
+                        </td>
+                        <td width="10%">{% if state.wip_limit > 0 %}{{state.wip_limit}}{% endif %}</td>
+                        <td width="5%">
+                            {% if state.exclude_wip_limit %}
+                                <span class="badge bg-success">Yes</span>
+                            {% else %}
+                                <span class="badge bg-danger">No</span>
+                            {% endif %}
+                        </td>
+                        <td width="5%">
+                            {% if state.done_column %}
+                                <span class="badge bg-success">Yes</span>
+                            {% else %}
+                                <span class="badge bg-danger">No</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'view_board_state' board.id state.id  %}" class="btn btn-sm btn-primary">View</a>
+                            &nbsp;&nbsp;&nbsp;
+                            <a href="{% url 'edit_board_state' board.id state.id %}" class="btn btn-sm btn-warning">Edit</a>
+                            &nbsp;&nbsp;&nbsp;
+                            <a href="{% url 'delete_board_state' board.id state.id %}" class="btn btn-sm btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                    <tr>
+                        <td colspan="5">
+                            {% include 'app_zweb1/__common/pagination.html' %}
+                        </td>
+                    </tr>
+                
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    $(".sortable_table").find("tbody").sortable({
+      items: "> tr",
+      appendTo: "parent",
+      cancel: "[contenteditable]",
+      update: function(event, ui) {
+              var serialOrder = $('#sortable').sortable('serialize');
+              var arrayOrder = $('#sortable').sortable('toArray');
+              //alert(arrayOrder);
+              $.ajax({
+                url: '/v1/ajax_update_model_list_sorted/',
+                type: 'POST',
+                data : {
+                  'csrfmiddlewaretoken': "{{ csrf_token }}",
+                  'model_name': 'BoardState',
+                  'sorted_list_data': JSON.stringify(arrayOrder),
+                  
+                },
+                dataType: 'json',
+                success: function(data) {
+                  console.log(data);
+                }
+              })
+            }
+    });
+    </script>
+<!-- End: Content -->
+{% endblock content %}

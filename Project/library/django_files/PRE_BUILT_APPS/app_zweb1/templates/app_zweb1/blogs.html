@@ -1,0 +1,78 @@
+{% extends 'app_zweb1/__common/base_template.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+{% load app_web_my_filters %}
+
+{% block content %}
+<style>
+    body { font-family: 'Arial', sans-serif; }
+    .card-img-top { width: 100%; height: auto; }
+    .btn-primary { background-color: #007bff; border-color: #007bff; }
+    .btn-primary:hover { background-color: #0056b3; border-color: #004085; }
+    .card-footer { background-color: #f8f9fa; }
+    .list-group-item-action:hover { background-color: #f8f9fa; }
+    /* Breadcrumb styles */
+    nav.breadcrumb-nav {
+        position: sticky;
+        top: 90px; /* Adjust this if your navbar takes up space */
+        z-index: 1050; /* Higher than most other elements */
+        background-color: white; /* Ensures visibility over content */
+        padding: 5px 15px; /* Optional: Adds some spacing and framing */
+        box-shadow: 0px 4px 6px -1px rgba(0,0,0,0.1); /* Optional: Adds subtle shadow for depth */
+    }
+</style>
+
+{% include 'app_zweb1/__common/navbar.html' %}
+<!-- Begin: Content -->
+<body>
+    <div class="container mt-4">
+        <div class="row">
+            <!-- Blog entries -->
+            <div class="col-md-8">
+                <h2 class="mb-4">Latest Blog Posts</h2>
+                <!-- Single post snippet -->
+                <div class="card mb-4">
+                    <img src="https://via.placeholder.com/750x300" class="card-img-top" alt="Blog Post Image">
+                    <div class="card-body">
+                        <h5 class="card-title">Post Title 1</h5>
+                        <p class="card-text">This is a summary of the blog post content. Click the link below to read more about this interesting topic.</p>
+                        <a href="{% url 'blog_details' %}" class="btn btn-primary">Read More</a>
+                    </div>
+                    <div class="card-footer text-muted">
+                        Posted on January 1, 2024 by Author Name
+                    </div>
+                </div>
+
+                <!-- Repeat for other posts -->
+                <div class="card mb-4">
+                    <img src="https://via.placeholder.com/750x300" class="card-img-top" alt="Blog Post Image">
+                    <div class="card-body">
+                        <h5 class="card-title">Post Title 2</h5>
+                        <p class="card-text">This is a summary of the blog post content. Click the link below to read more about this interesting topic.</p>
+                        <a href="{% url 'blog_details' %}" class="btn btn-primary">Read More</a>
+                    </div>
+                    <div class="card-footer text-muted">
+                        Posted on February 2, 2024 by Another Author
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar for categories or latest posts -->
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Categories</h5>
+                        <div class="list-group">
+                            <a href="#" class="list-group-item list-group-item-action">Technology</a>
+                            <a href="#" class="list-group-item list-group-item-action">Design</a>
+                            <a href="#" class="list-group-item list-group-item-action">Culture</a>
+                            <a href="#" class="list-group-item list-group-item-action">Business</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- End: Content -->
+{% endblock content %}

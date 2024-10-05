@@ -1,0 +1,134 @@
+{% extends 'app_zweb1/__common/base_template.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+{% load app_web_my_filters %}
+
+{% block content %}
+{% include 'app_zweb1/__common/dashboard_css.html' %}
+{% include 'app_zweb1/__common/navbar.html' %}
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col col-md-12">
+            <!-- Begin: Breadcrumb -->
+            <nav aria-label="breadcrumb" style="margin-top: 60px;"> <!-- Inline style for demonstration -->
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="{% url 'general_home_page' %}">
+                            <i class="bi bi-house"></i> Home
+                        </a>
+                    </li>
+                    
+                    <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+                </ol>
+            </nav>
+            <!-- End: Breadcrumb -->
+        </div>
+    </div>
+</div>
+<!-- Begin: Content -->
+<div class="container mt-5 my_container">
+    <div class="header_topic"><h2 class="text-center mb-3">Dashboard</h2></div>
+    <!-- PRIORITY ROW -->
+    <div class="row row-eq-height dashboard-row pt-4">
+       
+        <div class="col-md-4">
+            <a href="{% url 'organization_list' %}" class="card-link">
+            <div class="card dashboard-card feature">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-building"></i> Organizations</h5>
+                    <p class="card-text">Manage your organizations and teams.</p>
+                </div>
+            </div>
+            </a>
+        </div>
+        {% if user.is_superuser %}
+        <div class="col-md-4">
+            <a href="/site_admin_home" class="card-link">
+            <div class="card dashboard-card feature">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-person-badge"></i> Site Admin</h5>
+                    <p class="card-text">Manage your Site.</p>
+                </div>
+            </div>
+            </a>
+        </div>
+        {% endif %}
+        <div class="col-md-4">
+            <a href="link-to-page.html" class="card-link">
+            <div class="card dashboard-card feature">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-clipboard2-data"></i> Administration</h5>
+                    <p class="card-text">Access admin features and settings.</p>
+                </div>
+            </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- NEW ROW -->
+    <div class="row row-eq-height dashboard-row pb-4">
+        <div class="col-md-4">
+            <a href="{% url 'personal_workspace' %}" class="card-link">
+                <div class="card dashboard-card feature">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="bi bi-person"></i>
+                            Personal Workspace</h5>
+                        <p class="card-text">Manage your personal projects and tasks.</p>
+                    </div>
+                </div>
+            </a>
+        </div>            
+        <div class="col-md-4">
+            <a href="{% url 'personal_kanban' %}" class="card-link">
+            <div class="card dashboard-card feature">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-kanban"></i></i>
+                        Personal Kanban</h5>
+                    <p class="card-text">Visualize your workflow with a personal Kanban board.</p>
+                </div>
+            </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'personal_todolist' %}" class="card-link">
+            <div class="card dashboard-card feature">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-list-check"></i> Todo List</h5>
+                    <p class="card-text">Keep track of your daily tasks and to-dos.</p>
+                </div>
+            </div>
+            </a>
+        </div>
+    </div>
+    <div class="row row-eq-height dashboard-row pb-4">
+        <div class="col-md-4">
+            <a href="{% url 'storyboard' %}" class="card-link">
+                <div class="card dashboard-card feature">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="bi bi-card-image"></i>
+                            Storboard</h5>
+                        <p class="card-text">Create Storyboard</p>
+                    </div>
+                </div>
+            </a>
+        </div>            
+       
+        <div class="col-md-4">
+            <a href="{% url 'basic_drawing' %}" class="card-link">
+                <div class="card dashboard-card feature">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="bi bi-card-image"></i>
+                            Drawing</h5>
+                        <p class="card-text">Create Images</p>
+                    </div>
+                </div>
+            </a>
+        </div>            
+       
+     
+    </div>
+    
+</div>
+<!-- End: Content -->   
+{% endblock content %}

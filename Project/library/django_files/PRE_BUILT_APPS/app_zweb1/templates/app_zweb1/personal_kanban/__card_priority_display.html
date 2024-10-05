@@ -1,0 +1,11 @@
+{% if card.priority == 1 %}
+<div class="display_status">
+    <div class="status_circle">P1</div>
+</div>
+{% elif card.priority == 2 %}
+<div class="display_status"><div class="status_circle">P2</div></div>
+{% elif card.priority == 3 %}
+<div class="display_status"><div class="status_circle">P3</div></div>
+{% elif card.priority == 4 %}
+<div class="display_status"><div class="status_circle">P4</div></div>
+{% endif %}

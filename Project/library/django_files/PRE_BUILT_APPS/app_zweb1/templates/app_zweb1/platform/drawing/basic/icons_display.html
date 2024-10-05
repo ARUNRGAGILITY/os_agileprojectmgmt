@@ -1,0 +1,129 @@
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+
+<!-- drawing -->
+<img src="{% static 'img/cafeimpl/bank1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">                            
+<img src="{% static 'img/cafeimpl/bulb1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/budget1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+
+<img src="{% static 'img/cafeimpl/case1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/cloud1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/computer1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+
+<img src="{% static 'img/cafeimpl/community1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/discussion2.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/document1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+
+<img src="{% static 'img/cafeimpl/done1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/focus1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/funnel1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+
+<img src="{% static 'img/cafeimpl/goal1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/idea1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/increment1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+
+<img src="{% static 'img/cafeimpl/member1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/meeting1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/metrics1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+
+<img src="{% static 'img/cafeimpl/metrics2.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/metrics3.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/increment1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+
+<img src="{% static 'img/cafeimpl/one_on_one.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/organization1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/organization2.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/backlog1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/pie1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/presentation1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/process1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+
+<img src="{% static 'img/cafeimpl/process2.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/product1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/ready1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+
+<img src="{% static 'img/cafeimpl/retrospective1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/identity1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/schedule1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+
+<img src="{% static 'img/cafeimpl/strategy1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/structure1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/table1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+
+<img src="{% static 'img/cafeimpl/team1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/team2.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/tech1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+
+<img src="{% static 'img/cafeimpl/technology1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/timebox1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/timer1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+
+<img src="{% static 'img/cafeimpl/train1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/train2.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/trainer1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+
+
+<img src="{% static 'img/cafeimpl/value1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/idea1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/roadmap1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+
+<img src="{% static 'img/cafeimpl/developer1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/calendar2.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/code1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+
+
+<img src="{% static 'img/cafeimpl/right_grey_arrow1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/left_grey_arrow1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/up_grey_arrow1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/down_grey_arrow1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+
+<img src="{% static 'img/cafeimpl/release_box1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/release_iteration_box1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+
+<img src="{% static 'img/cafeimpl/thinking1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/callout1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/callout2.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/callout3.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+
+
+<img src="{% static 'img/cafeimpl/scene1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/planner1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/certificate1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/team3.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+
+
+<img src="{% static 'img/cafeimpl/chopper1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/ship1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/car1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/truck1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+
+
+<img src="{% static 'img/cafeimpl/bus1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/bike1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/plant1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/plant2.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+
+
+<img src="{% static 'img/cafeimpl/leadership1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/walking1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/tree1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/small_biz1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+
+
+<img src="{% static 'img/cafeimpl/shop1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/home1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/person1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/lady1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+
+
+<img src="{% static 'img/cafeimpl/explain1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+
+
+
+<img src="{% static 'img/cafeimpl/milestone1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/taxi1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+<img src="{% static 'img/cafeimpl/umbrella1.png' %}" id="draggableIcon" class="draggable" draggable="true" width="80px" height="80px">  
+
+
+                           

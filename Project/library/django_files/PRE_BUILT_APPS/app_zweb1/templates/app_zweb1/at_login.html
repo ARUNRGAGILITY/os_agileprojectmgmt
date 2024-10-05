@@ -1,0 +1,43 @@
+{% extends 'app_zweb1/__common/base_template.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+{% load app_web_my_filters %}
+
+{% block content %}
+{% include 'app_zweb1/__common/login_css.html' %}
+{% include 'app_zweb1/__common/navbar.html' %}
+<!-- Begin: Content -->
+<div class="login-container">
+    <div class="info col-md-4">
+        <h4>Welcome to {{SITE_TITLE}}</h4>
+        <p>{{SITE_TITLE}} is your go-to platform for managing Agile at Scale frameworks 
+            such as SAFe, LeSS, and Spotify inspired and Custom ones. 
+            Our platform, systems and environments are designed to integrate seamlessly 
+            into your organization's existing processes, helping to streamline operations and enhance collaboration.</p>
+        <p>Log in to access your personalized dashboard and start optimizing your agile processes today!</p>
+    </div>
+    <div class="login-form col-md-8">
+        <form style="width: 300px;" method="POST">
+            {% csrf_token %}
+            <!-- {% if messages %}
+            <div class="alert alert-danger" role="alert">
+                {{ messages }}
+            </div>
+            {% endif %} -->
+            <b class="h2">Login or </b> 
+            <b class="h2"><a href="{% url 'at_register' %}">Register</a></b>
+            <div class="mb-3 pt-2">
+                <label for="loginid" class="form-label">LoginID</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+    </div>
+</div>
+<!-- End: Content -->
+{% endblock content %}

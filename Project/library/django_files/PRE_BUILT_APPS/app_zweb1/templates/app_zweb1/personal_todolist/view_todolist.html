@@ -1,0 +1,168 @@
+{% extends 'app_zweb1/__common/base_template.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+{% load app_web_my_filters %}
+
+{% block content %}
+{% include 'app_zweb1/personal_todolist/css_todolist.html' %}
+{% include 'app_zweb1/__common/navbar.html' %}
+<!-- Begin: Content -->
+{% include 'app_zweb1/personal_todolist/breadcrumb_todolist.html' %}
+<form action="" method="POST">
+{% csrf_token %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col col-md-12">
+            
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col col-md-12">
+            <div class="container-fluid-width">
+                <div class="row pb-2">
+                    <div class="col col-md-8">
+                        <h2>{{topic}} To Do List</h2>
+                    </div>
+                    <div class="col col-md-4 text-end">    
+                        <!-- Dropdown for switching styles -->
+                        <span class="display_count">{{objects_count}} item(s)</span>
+                        <label for="themeSelector"><strong>Theme:</strong></label>
+                        <select id="themeSelector" onchange="changeTheme()">
+                            <option value="notebook-style" {% if theme == 'notebook-style'%}selected{% endif %}>Notebook Style</option>
+                            <option value="post-it-style"  {% if theme == 'post-it-style'%}selected{% endif %}>Post-it Style</option>
+                            <option value="modern-style"  {% if theme == 'modern-style'%}selected{% endif %}>Modern Style</option>
+                            <option value="canvas-style"  {% if theme == 'canvas-style'%}selected{% endif %}>Canvas Style</option>
+                            <option value="stone-style"  {% if theme == 'stone-style'%}selected{% endif %}>Marble Style</option>
+                        </select>
+                        &nbsp;                
+                        <a href="{% url 'personal_todolist' %}" class="btn btn-sm btn-primary"><b>List To Do Topics </b></a>
+                    </div>
+                </div>
+                <div class="row pb-2">
+                    <div class="col col-md-12">
+                        <strong>To Do</strong>: &nbsp;<input type="text" size="20" name="name" id="id_name">
+                        &nbsp;&nbsp;
+                        <strong>Desc</strong>: &nbsp;<input type="text" size="20" name="description" id="id_description">
+                        &nbsp;&nbsp;
+                        <button type="submit" class="btn btn-sm btn-success pb-1">Add</button>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-bordered sortable_table {{theme}}" id="themeTable"
+            >
+                <thead>
+                    <tr>
+                        <th width="2%"><i class="bi bi-grip-vertical"></i></th>
+                        <th width="2%">#</th>
+                        <th width="30%">To Do</th>
+                        <th width="30%">Actions</th>              
+                    </tr>
+                </thead>
+               
+                <tbody  id="sortable" class="sortable-tbody todo-container">
+                    {% for todolist in page_obj %}
+                    <tr id="{{todolist.id}}_{{ forloop.counter }}" class="sortable-row display_tr">
+                        <td class="drag-handle" width="2%">
+                            <i class="bi bi-grip-vertical"></i>
+                        </td>
+                        <td width="2%">{{forloop.counter}}</td>
+                        <td width="30%">{{todolist.name}}</td>
+                        <td width="30%">
+                            <input type="checkbox" id="done_{{ todolist.id }}" name="done_{{ todolist.id }}" 
+                                   value="{{ todolist.id }}" class="done-checkbox" 
+                                   {% if todolist.done %} checked {% endif %}
+                                   onchange="updateDoneState('{{ todolist.id }}', this.checked);">
+                            &nbsp;&nbsp;
+                            <a href="{% url 'view_list_item' todolist.id %}" class="btn btn-sm btn-primary">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            &nbsp;&nbsp;&nbsp;
+                            <a href="{% url 'edit_list_item' todolist.id %}" class="btn btn-sm btn-warning">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            &nbsp;&nbsp;&nbsp;
+                            <a href="{% url 'delete_list_item' todolist.id %}" class="btn btn-sm btn-danger">
+                                <i class="bi bi-x-lg"></i>
+                            </a>
+                        </td>
+                        
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                    <tr>
+                        <td colspan="5">
+                            {% include 'app_zweb1/__common/pagination.html' %}
+                        </td>
+                    </tr>
+                
+            </table>
+        </div>
+    </div>
+</div>
+</form>
+<script>
+    function updateDoneState(todolistId, isType) {
+    $.ajax({
+        url: '/v1/ajax_update_todolist_done_state/',  // Ensure this URL is correct and handled properly in Django
+        type: 'POST',
+        data: {
+            'id': todolistId,
+            'done': isType,
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+        },
+        success: function(response) {
+            console.log('Update successful!');
+            // Optionally, trigger a DOM update here to visually confirm the change
+        },
+        error: function(xhr, status, error) {
+            console.log('An error occurred: ' + error);
+        }
+    });
+}
+</script>
+
+<script>
+    focusField = document.getElementById('id_name');
+    focusField.focus();
+</script>
+
+<script>
+    $(".sortable_table").find("tbody").sortable({
+      items: "> tr",
+      handle: ".drag-handle",
+      appendTo: "parent",
+      cancel: "",
+      update: function(event, ui) {
+              var serialOrder = $('#sortable').sortable('serialize');
+              var arrayOrder = $('#sortable').sortable('toArray');
+              //alert(arrayOrder);
+              $.ajax({
+                url: '/v1/ajax_update_model_list_sorted/',
+                type: 'POST',
+                data : {
+                  'csrfmiddlewaretoken': "{{ csrf_token }}",
+                  'model_name': 'TreeDB',
+                  'sorted_list_data': JSON.stringify(arrayOrder),
+                  
+                },
+                dataType: 'json',
+                success: function(data) {
+                  console.log(data);
+                }
+              })
+            }
+    });
+    </script>
+  
+
+<script>
+    function changeTheme() {
+        var selectedTheme = document.getElementById('themeSelector').value;
+        window.location.href = '?theme=' + selectedTheme;
+    }
+</script>
+    
+<!-- End: Content -->
+{% endblock content %}

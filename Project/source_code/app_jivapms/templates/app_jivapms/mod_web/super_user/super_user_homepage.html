@@ -4,7 +4,8 @@
 {% block content %}
 {% include 'app_common/common_files/navbar.html' %}
 {% include 'app_jivapms/mod_web/common_files/css.html' %}
-
+<form action="" method="POST">
+{% csrf_token %}
     <div class="content-wrapper">
         <button class="toggle-btn" onclick="toggleSidebar()">
             <i class="bi bi-list"></i>
@@ -15,6 +16,10 @@
                 <a href="#" class="nav-link active" onclick="displayContent('listSiteContent', 'Site Administration')">
                     <i class="bi bi-grid"></i>
                     <span>Site Administration</span>
+                </a>
+                <a href="{% url 'list_organizations' %}" class="nav-link active" >
+                    <i class="bi bi-calendar"></i>
+                    <span>Org Administration</span>
                 </a>
                 <a href="#" class="nav-link active" onclick="displayContent('dashboardContent', 'Dashboard')">
                     <i class="bi bi-collection"></i>
@@ -62,7 +67,10 @@
                         </div>
                     </div>
                 </div>
-                
+                <div id="organizationContent" style="display: none;">
+                    <h1>OrganizationContent</h1>
+                    <p>Create and Manage Organizations.</p>
+                </div>
                 <div id="settingsContent" style="display: none;">
                     <h1>Settings</h1>
                     <p>Configure and adjust Site settings and preferences.</p>
@@ -105,6 +113,8 @@
             </div>
         </div>
     </div>
+</form>
+
 {% include 'app_jivapms/mod_web/common_files/script.html' %}   
 <!-- End: Content -->
 {% endblock content %}

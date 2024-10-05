@@ -1,0 +1,235 @@
+{% extends 'app_zweb1/__common/base_template.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+{% load app_web_my_filters %}
+{% load mptt_tags %}
+
+{% block content %}
+{% include 'app_zweb1/personal_workspace/ws/breadcrumb_display_tree.html' %}
+{% include 'app_zweb1/personal_workspace/ws/css_workspace.html' %}
+{% include 'app_zweb1/__common/navbar.html' %}
+<!-- Begin: Content -->
+
+
+<form action="" method="POST">
+{% csrf_token %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col col-md-12">
+           
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col col-md-12">
+            <div class="container-fluid-width">
+                <div class="row pb-2">
+                    <div class="col col-md-8">
+                        <h2>{{workspace}}</h2> 
+                    </div>
+                    <div class="col col-md-4 text-end">    
+                        <!-- Dropdown for switching styles -->
+                        <span class="display_count">{{objects_count}} item(s)</span>
+                        <!-- <label for="themeSelector"><strong>Theme:</strong></label>
+                        <select id="themeSelector" onchange="changeTheme()">
+                            <option value="notebook-style" {% if theme == 'notebook-style'%}selected{% endif %}>Notebook Style</option>
+                            <option value="post-it-style"  {% if theme == 'post-it-style'%}selected{% endif %}>Post-it Style</option>
+                            <option value="modern-style"  {% if theme == 'modern-style'%}selected{% endif %}>Modern Style</option>
+                            <option value="canvas-style"  {% if theme == 'canvas-style'%}selected{% endif %}>Canvas Style</option>
+                            <option value="stone-style"  {% if theme == 'stone-style'%}selected{% endif %}>Marble Style</option>
+                        </select> -->
+                        
+                        &nbsp; &nbsp;               
+                        <a href="{% url 'personal_workspace' %}" class="btn btn-sm btn-primary"><b>List Workspaces </b></a>
+                        &nbsp; &nbsp;               
+                        <a href="{% url 'view_workspace_level' workspace.id %}" class="btn btn-sm btn-primary"><b>{{workspace}}</b></a>
+                    </div>
+                </div>
+                <!-- <div class="row pb-2">
+                    <div class="col col-md-12">
+                        <strong>Task</strong>: &nbsp;<input type="text" size="20" name="name" id="id_name">
+                        &nbsp;&nbsp;
+                        <strong>Desc</strong>: &nbsp;<input type="text" size="20" name="description" id="id_description">
+                        &nbsp;&nbsp;
+                        <input type="hidden" name="parent_id" value="{{workspace.id}}" id="{{workspace.id}}">
+                        <button type="submit" class="btn btn-sm btn-success pb-1">Add </button>
+                    </div>
+                </div> -->
+            </div>
+            <!-- CBA -->
+       
+{% with counter="0" %}
+<table border="1" class="table table-bordered serial-number-column">
+    <thead>
+        <tr>
+            <th width="2%">#</th>
+            <!-- <th width="2%">ID</th> -->
+            <th>Work Item</th>
+            <th>Description</th>
+            <th>Progress</th>
+            <th>Done</th>
+        </tr>
+    </thead>
+    <tbody>
+{% for node in page_obj %}
+        <tr>
+            <td  width="2%" class="slno1"></td>
+            <!-- <td width="2%">{{node.id}}</td> -->
+            <td> <a href="{% url 'view_workspace_level' node.id %}"> {{ node.name }} </a> </td>
+            <td>  
+                {{node.description}}
+            </td>
+            <td width="15%">
+                <font size="-1">
+                {% with completion_stats=node.get_completion_stats %}
+                {{ completion_stats.completed_count }}/{{ completion_stats.total_count }} done.
+                {{ completion_stats.percent_complete }}%
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar"
+                    style="width:{{ completion_stats.percent_complete }}%;"
+                    aria-valuenow="{{ completion_stats.percent_complete }}"
+                    aria-valuemin="0"
+                    aria-valuemax="100"></div>
+                </div>
+                {% endwith %}
+                </font>
+            </td>
+            <td width="4%">
+                {% if node.done %}
+                    <img width='20px' height='20px' src="{% static 'img/check-mark-green.svg' %}" alt="">
+                {% endif %}
+            </td>
+
+        </tr>
+        {% if not node.is_leaf_node %}
+            {% recursetree node.get_active_descendants %}
+                <tr>
+
+                    <td  width="2%" class="slno1"></td>
+                    <!-- <td  width="2%">{{node.id}}</td> -->
+                    <td style="padding-left: {{ node.level }}em;">
+                        <a href="{% url 'view_workspace_level' node.id %}"> {{ node.name }} </a>
+                    </td>
+                    <td>  {{ node.workitemtype }} &nbsp;
+                        {{node.description}}
+                    </td>
+                    <td width="15%">
+                        <font size="-1">
+                        {% if not node.is_leaf_node %}
+                        {% with completion_stats=node.get_completion_stats %}
+                        {{ completion_stats.completed_count }}/{{ completion_stats.total_count }} done.
+                        {{ completion_stats.percent_complete }}%
+                         <div class="progress">
+                          <div class="progress-bar" role="progressbar"
+                          style="width:{{ completion_stats.percent_complete }}%;"
+                          aria-valuenow="{{ completion_stats.percent_complete }}"
+                          aria-valuemin="0"
+                          aria-valuemax="100"></div>
+                      </div>
+                        {% endwith %}
+                        {% else %}
+                        {% if node.done  %}
+                          <b>Done</b>
+                          {% else %}
+                          <b>TBC</b>
+                        {% endif %}
+                        {% endif %}
+                        </font>
+                    </td>
+                    <td width="4%">
+                        {% if node.done %}
+                            <img width='20px' height='20px' src="{% static 'img/check-mark-green.svg' %}" alt="">
+                        {% endif %}
+                    </td>
+
+                </tr>
+                {{ children }}
+            {% endrecursetree %}
+        {% endif %}
+
+{% endfor %}
+</tbody>
+</table>
+
+{% endwith %}
+        </div>
+    </div>
+</div>
+</form>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    updateSerialNumbers();
+    });
+    
+    function updateSerialNumbers() {
+    var serialNumberCells = document.getElementsByClassName('slno1');
+    for (var i = 0; i < serialNumberCells.length; i++) {
+        serialNumberCells[i].textContent = i + 1;
+    }
+    }
+    </script>
+<script>
+    function updateDoneState(wslistId, isType) {
+    $.ajax({
+        url: '/v1a/pw/ajax_update_wslist_done_state/',  // Ensure this URL is correct and handled properly in Django
+        type: 'POST',
+        data: {
+            'id': wslistId,
+            'done': isType,
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+        },
+        success: function(response) {
+            console.log('Update successful!');
+            // Optionally, trigger a DOM update here to visually confirm the change
+        },
+        error: function(xhr, status, error) {
+            console.log('An error occurred: ' + error);
+        }
+    });
+}
+</script>
+
+<script>
+    focusField = document.getElementById('id_name');
+    focusField.focus();
+</script>
+
+<script>
+    $(".sortable_table").find("tbody").sortable({
+      items: "> tr",
+      handle: ".drag-handle",
+      appendTo: "parent",
+      cancel: "",
+      update: function(event, ui) {
+              var serialOrder = $('#sortable').sortable('serialize');
+              var arrayOrder = $('#sortable').sortable('toArray');
+              //alert(arrayOrder);
+              $.ajax({
+                url: '/v1/ajax_update_model_list_sorted/',
+                type: 'POST',
+                data : {
+                  'csrfmiddlewaretoken': "{{ csrf_token }}",
+                  'model_name': 'TreeDB',
+                  'sorted_list_data': JSON.stringify(arrayOrder),
+                  
+                },
+                dataType: 'json',
+                success: function(data) {
+                  console.log(data);
+                }
+              })
+            }
+    });
+    </script>
+  
+
+<script>
+    function changeTheme() {
+        var selectedTheme = document.getElementById('themeSelector').value;
+        window.location.href = '?theme=' + selectedTheme;
+    }
+</script>
+    
+<!-- End: Content -->
+{% endblock content %}

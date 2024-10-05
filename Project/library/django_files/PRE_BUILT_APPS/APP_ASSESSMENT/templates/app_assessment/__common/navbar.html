@@ -1,0 +1,51 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/v1/">{{SITE_TITLE}}</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link {% if page == 'home' %}active{% endif %}" aria-current="page" href="/v1/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if page == 'features' or parent_page == 'features' %}active{% endif %}" href="{% url 'features' %}">Features</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if page == 'learn' %}active{% endif %}" href="{% url 'learn' %}">Learn</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if page == 'blogs' or parent_page == 'blogs' %}active{% endif %}" href="{% url 'blogs' %}">Blogs</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link {% if parent_page == 'cafeimpl' or page == 'cafeimpl' %}active{% endif %}" href="{% url 'cafeimpl' org.id %}">CAFE Impl</a>
+                </li>
+
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link {% if page == 'loggedin_home_page' or parent_page == 'loggedin_home_page' %}active{% endif %}" href="{% url 'loggedin_home_page' %}">User: {{user.username}}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'at_logout' %}">Logout</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link {% if page == 'at_register' %}active{% endif %}" href="{% url 'at_register' %}">Register</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if page == 'at_login' %}active{% endif %}" href="{% url 'at_login' %}">Login</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+<style>
+    .display_count {
+        font-size: 12px;
+        color: grey
+    }
+</style>

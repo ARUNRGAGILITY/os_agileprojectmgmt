@@ -1,0 +1,51 @@
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+{% load app_web_my_filters %}
+
+<tr id="{{ node.id }}_{{ forloop.counter }}" class="sortable-row display_tr" 
+style="padding-left:{{ node.level|multiply:20 }}px;" data-level="{{node.level}}">
+    <td class="drag-handle" width="2%">
+        <i class="bi bi-grip-vertical"></i>
+    </td>
+    <td>{{prefix}} {{ forloop.counter }}</td>
+    <td width="20%">{% if node.level > 2 %}{{ node.level|multiply_spaces|safe }}{% endif %}  {{ node.name }}</td>
+    <td width="30%">{{ node.description }}</td>
+    <td width="10%">
+        <div class="progress_display">
+            {{ node.get_completion_stats.completed_count }}/{{ node.get_completion_stats.total_count }}
+            &nbsp;
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: {{ node.get_completion_stats.percent_complete }}%;" aria-valuenow="{{ node.get_completion_stats.percent_complete }}" aria-valuemin="0" aria-valuemax="100">
+                    {{ node.get_completion_stats.percent_complete }}%
+                </div>
+            </div>
+        </div>
+    </td>
+</tr>
+{% for child in node.get_active_children %}
+    {% include 'app_zweb1/personal_workspace/ws/_tree_node.html' with node=child prefix=prefix|add:forloop.counter|add:"." %}
+{% endfor %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const rows = document.querySelectorAll('tr[data-level]');
+        let lastLevel = 0;
+        let counters = []; // Starting with 0 to handle first increment
+    
+        rows.forEach(row => {
+            const level = parseInt(row.getAttribute('data-level'), 10);
+            if (level > lastLevel) {
+                // Going deeper in the tree
+                counters.push(0); // Add a new level counter
+            } else if (level < lastLevel) {
+                // Going back up, pop off the extra counters
+                counters = counters.slice(0, level + 1);
+            }
+    
+            counters[counters.length - 1]++; // Increment the current level counter
+            row.querySelector('td:nth-child(2)').textContent = counters.join('.');
+            lastLevel = level; // Update last processed level
+        });
+    });
+    </script>
+    

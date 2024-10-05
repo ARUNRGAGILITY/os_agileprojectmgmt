@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organization Home Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+        }
+        .sidebar {
+            width: 80px;
+            background-color: #343a40;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: start;
+            padding-top: 20px;
+            transition: width 0.3s;
+            overflow: hidden;
+        }
+        .sidebar:hover {
+            width: 250px;
+        }
+        .sidebar .nav-link {
+            color: white;
+            font-size: 1.2em;
+            text-align: left;
+            width: 100%;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+        .sidebar .nav-link i {
+            margin-right: 10px;
+        }
+        .sidebar .nav-link span {
+            white-space: nowrap;
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .sidebar:hover .nav-link span {
+            opacity: 1;
+        }
+        .sidebar .nav-link.active {
+            background-color: #495057;
+            border-radius: 5px;
+        }
+        .contentbar {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .sidebar .settings {
+            margin-top: auto;
+            width: 100%;
+            text-align: left;
+        }
+        .sidebar .settings .nav-link {
+            color: white;
+            font-size: 1.2em;
+        }
+        .content {
+            display: none;
+        }
+        .content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <a href="#" class="nav-link active" data-url="content/home.html">
+            <i class="bi bi-house-fill"></i>
+            <span>Home</span>
+        </a>
+        <a href="#" class="nav-link" data-url="content/vision-mission.html">
+            <i class="bi bi-eye-fill"></i>
+            <span>Vision & Mission</span>
+        </a>
+        <a href="#" class="nav-link" data-url="content/values.html">
+            <i class="bi bi-heart-fill"></i>
+            <span>Values</span>
+        </a>
+        <a href="#" class="nav-link" data-url="content/strategy.html">
+            <i class="bi bi-lightbulb-fill"></i>
+            <span>Strategy</span>
+        </a>
+        <a href="#" class="nav-link" data-url="content/initiatives.html">
+            <i class="bi bi-gear-fill"></i>
+            <span>Initiatives</span>
+        </a>
+        <a href="#" class="nav-link" data-url="content/roadmap.html">
+            <i class="bi bi-map-fill"></i>
+            <span>Roadmap</span>
+        </a>
+        <a href="#" class="nav-link" data-url="content/back.html">
+            <i class="bi bi-arrow-left-circle-fill"></i>
+            <span>Back</span>
+        </a>
+        <div class="settings">
+            <a href="#" class="nav-link" data-url="content/settings.html">
+                <i class="bi bi-gear-wide-connected"></i>
+                <span>Settings</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="contentbar" id="contentbar">
+        <div id="loading" style="display: none;">Loading...</div>
+        <div id="content"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <script>
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(event) {
+                event.preventDefault(); // Prevent default link behavior
+
+                // Remove 'active' class from all nav links and add to the clicked one
+                document.querySelectorAll('.nav-link').forEach(item => item.classList.remove('active'));
+                link.classList.add('active');
+
+                // Show loading indicator
+                document.getElementById('loading').style.display = 'block';
+
+                // Fetch content via AJAX
+                fetch(link.getAttribute('data-url'))
+                    .then(response => response.text())
+                    .then(data => {
+                        // Hide loading indicator
+                        document.getElementById('loading').style.display = 'none';
+
+                        // Display the fetched content
+                        document.getElementById('content').innerHTML = data;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching content:', error);
+                    });
+            });
+        });
+
+        // Load default content for the initially active link
+        document.querySelector('.nav-link.active').click();
+    </script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+{% extends 'app_zweb1/__common/base_template.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+{% load app_web_my_filters %}
+
+{% block content %}
+{% include 'app_zweb1/__common/navbar.html' %}
+<!-- Begin: Content -->
+<form  method="POST">
+{% csrf_token %}
+<div class="container mt-4">
+    <h2 class="mb-3">Features :: {{display_feature}}</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <td>{{display_feature}}</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <strong>Email:</strong><br>
+                    <input type="text" name="email" id="email" maxlength="50">
+                </td>
+                <td>
+                    <strong>Comments/Request:</strong><br>
+                    <input type="text" name="comment" id="comment" maxlength="80">
+                </td>
+                <td>
+                    <br>
+                    <input type="submit" name="submit" value="{{display_feature}}">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</form>
+<!-- End: Content -->
+{% endblock content %}

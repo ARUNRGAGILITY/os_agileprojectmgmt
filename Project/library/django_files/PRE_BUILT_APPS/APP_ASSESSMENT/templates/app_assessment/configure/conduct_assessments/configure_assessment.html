@@ -1,0 +1,107 @@
+{% extends 'app_assessment/__common/base_template.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+
+{% block content %}
+<style>
+    .card-text {
+        font-size: 11px;
+        color: grey;
+    }
+    .card {
+        min-height: 200px;
+        display: flex;
+        flex-direction: column;  /* Align children of the card vertically */
+    }
+    .card-body {
+        flex: 1;  /* Flex-grow to use available space */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; /* Pushes the button to the bottom */
+    }
+</style>
+
+{% include 'app_assessment/__common/navbar.html' %}
+<form method="POST" action="">
+{% csrf_token %}
+<!-- Begin: Content -->
+<div class="container-fluid mt-4">
+    <div class="row bg-info">
+        <div class="col col-md-12">
+            {% include 'app_assessment/configure/conduct_assessments/breadcrumb_conduct_assessments.html' %}
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <!-- content part1 -->
+    <div class="row">  
+        <div class="col col-md-12">           
+            <!-- display -->
+            {% include 'app_assessment/configure/conduct_assessments/__conduct_assessment_tabs.html' %}
+            <!-- <div class="tab-content">
+                <div class="tab-pane active">
+                    <h3>Configure Assessment</h3>
+                    <p>In this we configure the assessment date, time, cutoff, grace time, to whom and how the assessment will be given.</p>
+                    <a href="{% url 'schedule_assessment' org.id  object.id  %}"
+                    class="btn btn-sm btn-primary"><i class="bi bi-calendar-check"></i> Schedule</a>
+
+                </div>
+            </div> -->
+
+
+            <div class="tab-content">
+                <div class="tab-pane active">     
+                    <!-- display a header -->                    
+                    <div class="container-fluid-width">
+                        <div class="row pt-3">
+                            <div class="col col-md-7">
+                                <b class="h3">Configure Assessment:</b> {{object}} 
+                            </div>
+                            <div class="col col-md-5 text-end">
+                                <a href="{% url 'schedule_assessment' org.id  object.id  %}"
+                                    class="btn btn-sm btn-primary"><i class="bi bi-calendar-check"></i> Next: Schedule Assessment</a>
+                            </div>
+                        </div>
+
+                        <div class="row pt-4">
+                            <div class="col col-md-4"></div>
+                            <div class="col col-md-4">
+                                <p>Here you configure the selected assessment:</p>
+                                <b class="">Select the Assessment Type:</b>
+                                <br>
+                                <select name="assessment_type" id="assessment_type">
+                                    <option value="-">-- Select Assessment Type --</option>
+                                    {% for at in assessment_types %}                                        
+                                        <option value="{{at.id}}">{{at}}</option>
+                                    {% endfor %}
+                                </select>  
+                                <br><br>
+                                <b class="">Select the Assessment Time duration:</b>
+                                <br>
+                                <select name="assessment_duration" id="assessment_duration">
+                                    <option value="-">-- Select Total Time Duration --</option>
+                                    <option value="15">15mins</option>
+                                    <option value="30">30mins</option>
+                                    <option value="45">45mins</option>
+                                    <option value="60">1 hour</option>
+                                    <option value="90">1 hour 30mins</option>
+                                    <option value="120">2 hours</option>
+                                    
+                                </select>  
+                                <br><br>
+                                <input type="submit" name="submit" value="Submit" class="btn btn-sm btn-success">                             
+                            </div>
+                            <div class="col col-md-4"></div>
+                        </div>
+                    </div>
+                    <!-- display a header -->
+                </div>
+            </div>
+            <!-- end display-->
+        </div>
+    </div>
+</div>  
+</form>
+<!-- End: Content -->
+{% endblock content %}

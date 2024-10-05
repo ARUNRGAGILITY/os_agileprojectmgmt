@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>JIVA PMS</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            background-color: white; /* Set background to white */
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        .header {
+            font-size: 48px;
+            font-weight: bold;
+        }
+
+        .subheader {
+            font-size: 24px;
+            margin-top: 10px;
+            font-weight: normal;
+        }
+
+        .description {
+            font-size: 16px;
+            margin-top: 20px;
+            padding: 0 20px;
+            max-width: 600px;
+            color: #555;
+        }
+
+        /* Buttons */
+        .buttons {
+            margin-top: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            margin: 0 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Sticky Footer */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            padding: 10px 0;
+            background-color: #000080; /* Set dark blue color */
+            color: white;
+            font-size: 14px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .header {
+                font-size: 36px;
+            }
+
+            .subheader {
+                font-size: 20px;
+            }
+
+            .description {
+                font-size: 14px;
+            }
+
+            .btn {
+                font-size: 14px;
+                padding: 8px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">Jiva PMS</div>
+        <div class="subheader">Jiva Project Management System</div>
+        <div class="description">
+            Jiva is an Open-Source Project Management System available for individuals, teams, and enterprises under MIT-License, where you can utilize the project as-is, contribute, customize and take our paid consulting for training, coaching, and implementation of the platform and environment.
+        </div>
+
+        <!-- Buttons for Sign Up, Sign In, and About the Project -->
+        <div class="buttons">
+            <a href="#" class="btn">Sign Up</a>
+            <a href="#" class="btn">Sign In</a>
+            <a href="#" class="btn">About the Project</a>
+        </div>
+    </div>
+
+    <!-- Sticky Footer -->
+    <div class="footer">
+        &copy; <span id="year"></span> Jiva Project Management System. All Rights Reserved.
+    </div>
+
+    <!-- Script to dynamically set the year in the footer -->
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+
+</body>
+</html>

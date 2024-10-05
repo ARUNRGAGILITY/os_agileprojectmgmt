@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 from app_jivapms.mod_web import views_web as web
+from app_jivapms.mod_web import views_ajax_web as ajax_web
 
 urlpatterns = [
     path('', web.index, name='index'), 
@@ -16,4 +17,7 @@ urlpatterns = [
     path('source_code/', web.source_code, name='source_code'),
 
     path('role_homepage/<str:role_name>/', web.role_homepage, name='role_homepage'),
+
+    # Ajax related
+    path('ajax_super_user_orgcrudlsp/', ajax_web.ajax_super_user_orgcrudlsp, name='ajax_super_user_orgcrudlsp'),
 ]

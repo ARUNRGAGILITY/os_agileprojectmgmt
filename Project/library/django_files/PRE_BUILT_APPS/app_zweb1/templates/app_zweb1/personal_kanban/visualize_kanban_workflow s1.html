@@ -1,0 +1,101 @@
+{% extends 'app_zweb1/__common/base_template.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+{% load app_web_my_filters %}
+
+{% block content %}
+{% include 'app_zweb1/__common/navbar.html' %}
+{% include 'app_zweb1/personal_kanban/css_test_kanban_board.html' %}
+{% include 'app_zweb1/personal_kanban/breadcrumb_board_states.html' %}
+<!-- Begin: Content -->
+<form action="" method="POST">
+{% csrf_token %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col col-md-12">
+            <div class="container-fluid-width">
+                <div class="row">
+                    <div class="col col-md-8 pb-2">
+                        <strong>Card</strong>: &nbsp;<input type="text" size="20" name="name" id="id_name">
+                        &nbsp;&nbsp;
+                        <strong>Desc</strong>: &nbsp;<input type="text" size="20" name="description" id="id_description">
+                        &nbsp;&nbsp;
+                        <strong>Priority</strong>: &nbsp;
+                        <select name="priority" id="id_priority">
+                            <option value="4">Normal</option>
+                            <option value="1">Critical</option>
+                            <option value="2">High</option>
+                            <option value="3">Medium</option>                            
+                        </select>
+                        &nbsp;&nbsp;
+                        <button type="submit" class="btn btn-sm btn-success">Add Card</button>
+                    </div>
+                    <div class="col col-md-4 text-end">
+                        <a href="{% url 'display_cfd' board.id %}" class="btn btn-sm btn-primary"><b>CFD</b></a>
+                        &nbsp;&nbsp;&nbsp;
+                        <a href="{% url 'board_states' board.id %}" class="btn btn-sm btn-primary"><b>List {{board}} State/Columns</b></a>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-bordered" id="visual_kanban_board">
+               <thead>
+                    <tr>
+                        {% for state in board_states %}
+                            <th>{{state.name}}</th>
+                        {% endfor %}
+                    </tr>
+               </thead>
+               <tbody>
+                <tr>                                            
+                    {% for state_data in board_states_data %}
+                    <td class="droppable-cell">
+                        <ul id="sortable_{{ state_data.state.id }}" class="sortable-list connectedSortable" data-column-id="{{ state_data.state.id }}">
+                            {% for card in state_data.cards %}
+                            <li id="{{ card.id }}" class="priority{{ card.priority }}" data-swimlane-id="1">
+                                {{ card.id }}:{{ card.position }}:{{ card.name }}
+                                <br>
+                                {{ card.description }}
+                            </li>   
+                            {% endfor %}
+                        </ul>                          
+                    </td>
+                    {% endfor %}
+
+                </tr>
+               </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</form>
+<script>
+    focusField = document.getElementById('id_name');
+    focusField.focus();
+</script>
+
+<script>
+    $("#visual_kanban_board tr").each(function() {
+    var maxCardCount = 0;
+
+    $(this).find(".connectedSortable").each(function() {
+      var cardCount = $(this).find("li").length;
+
+      if (cardCount > maxCardCount) {
+        maxCardCount = cardCount;
+      }
+    });
+    cardMinHeight = 80;
+    //$(this).find(".connectedSortable").height(maxCardCount * cardMinHeight);
+    // check
+    calc_height = maxCardCount * cardMinHeight;
+    var tdHeight = $(".droppable-cell").height();
+    $(this).find(".connectedSortable").height(tdHeight+"px");   
+    if (calc_height > tdHeight)  {
+      cardMinHeight = 80;
+      $(this).find(".connectedSortable").height(maxCardCount * cardMinHeight);
+    }
+  });
+</script>
+<!-- End: Content -->
+{% endblock content %}

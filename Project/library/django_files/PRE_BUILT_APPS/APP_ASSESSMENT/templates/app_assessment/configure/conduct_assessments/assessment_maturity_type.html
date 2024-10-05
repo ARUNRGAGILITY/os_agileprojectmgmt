@@ -1,0 +1,224 @@
+{% extends 'app_assessment/__common/base_template.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+
+{% block content %}
+<style>
+    .card-text {
+        font-size: 11px;
+        color: grey;
+    }
+    .card {
+        min-height: 200px;
+        display: flex;
+        flex-direction: column;  /* Align children of the card vertically */
+    }
+    .card-body {
+        flex: 1;  /* Flex-grow to use available space */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; /* Pushes the button to the bottom */
+    }
+    .scroll-container {
+        max-height: 400px; /* Limit the height and enable scrolling */
+        overflow-y: auto;
+        border: 1px solid #ccc;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse; /* Ensures borders between cells are merged */
+    }
+    th, td {
+        border: 1px solid lightgrey; /* Adds borders to cells */
+        padding: 8px; /* Adds space between text and cell borders */
+        text-align: left; /* Aligns text to the left */
+    }
+    .fixed-row {
+        position: sticky;
+        top: 76px; /* Stick to the top of the table */
+        background-color: white; /* Background to cover underlying data when scrolling */
+        z-index: 1; /* Ensures the row stays on top while scrolling */
+    }
+</style>
+
+{% include 'app_assessment/__common/navbar.html' %}
+<form method="post">
+{% csrf_token %}
+
+<!-- Begin: Content -->
+<div class="container-fluid mt-4">
+    <div class="row bg-info">
+        <div class="col col-md-12">
+            {% include 'app_assessment/configure/conduct_assessments/breadcrumb_conduct_assessments.html' %}
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <!-- content part1 -->
+    <div class="row">  
+        <div class="col col-md-12">           
+            <!-- display -->
+            {% include 'app_assessment/configure/conduct_assessments/__conduct_assessment_tabs.html' %}
+            <div class="tab-content">
+                <div class="tab-pane active">     
+                    <!-- display a header -->                    
+                    <div class="container-fluid-width">
+                        <div class="row pt-3">
+                            
+                            <div class="col col-md-7">
+                                <b class="">Assessment:</b> {{object}} 
+                                <b>Total Questions: </b> {{ total_questions }}
+                                <b>Total Duration: </b> {{assessment_details.total_time_given}} minutes
+                            </div>
+                            <div class="col col-md-5 text-end">
+                                <a href="{% url 'review_assessment' org.id  object.id  %}"
+                                    class="btn btn-sm btn-primary"><i class="bi bi-clipboard-pulse"></i> Next: Review Assessment</a>
+                            </div>
+                        </div>
+                        {% if result_display_flag == False %}
+                        <!-- display of assessment -->
+                        <div class="row pt-2">
+                            <div class="col col-md-1"></div>
+                            <div class="col col-md-10">
+                                <br>
+
+                        {% for area in area_list %}
+                            <div>
+                                
+                                
+                            <table class="table table-bordered scroll-container">
+                                
+                                <thead>
+                                    <tr>
+                                        <td colspan="8" class="text-start">
+                                            <b>Area: {{ area.area.name }}</b>
+                                            <p>Assumptions in this Area: {{ area.question_count }}</p>
+                                        </td>
+                                    </tr>
+                                    <tr class="fixed-row">
+                                        <td width="2%">
+                                            <strong>#</strong>
+                                        </td>
+                                        <td width="40%">
+                                            <b>Our current state</b>
+                                        </td>
+                                        <td width="2%">
+                                            <b>Rating</b>
+                                        </td>
+                                        <td style="background-color: lightcoral;">
+                                            <strong>Strongly Disgree</strong>
+                                        </td>
+                                        <td style="background-color: lightsalmon;">
+                                            <strong>DisAgree</strong>
+                                        </td>
+                                        <td style="background-color: lightblue;">
+                                            <strong>Neutral</strong>
+                                        </td>
+                                        <td style="background-color: lightgreen;">
+                                            <strong>Agree</strong>
+                                        </td>
+                                        <td style="background-color: lightseagreen;">
+                                            <strong>Strongly Agree</strong>
+                                        </td>
+                                    </tr>
+                                </thead>
+                               
+                            {% for question_detail in area.question_details %}                         
+                                <div>
+                                    <tr id="row_{{ question_detail.question.id }}">
+                                    
+                                        <div class="display_input">
+                                                {% if question_detail.question.question_type.name == "Rating5" %}
+                                                <td width="2%" class="text-end">{{ forloop.counter }}) </td>
+                                                <td width="40%" class="text-start">
+                                                    {{  question_detail.question.text }} 
+                                                </td>
+                                                <!-- rating td -->
+                                                <td width="2%" id="rating_cell_{{ question_detail.question.id }}">
+                                                </td>
+                                                {% for answer in question_detail.answers %}
+                                                <td class="text-center" width="4%" id="selected_cell_{{ answer.id }}">&nbsp;      
+                                                    <input type="radio" id="{{question_detail.question.id}}_{{answer.id}}" name="{{question_detail.question.id}}" 
+                                                    value="{{forloop.counter}}" 
+                                                    onchange="updateRating({{question_detail.question.id}}, {{forloop.counter}}, {{answer.id}})"
+                                                    > &nbsp;&nbsp;                                              
+                                                </td>
+                                                {% endfor %}
+                                                {% endif%}
+
+                                            </div>                                    
+                                            
+                                           
+                                        </div>
+                                {% endfor %}
+                                
+                            </div>
+                            {% endfor %}
+                            </table>
+                            </div>
+                        </div>
+                        <table width="100%">
+                            <tr>
+                                <td colspan="2" width="100%" class="text-center">
+                                    <input type="submit" name="submit" value="Submit" class="btn btn-sm btn-primary">
+                                </td>
+                            </tr>
+                        </table>
+                        {% elif result_display_flag == True %}
+                            <div class="row">
+                                <div class="col col-md-12">
+                                    <!-- {{candidate_assessment_details}} -->
+                                    <b>Chart Display for {{object.id}} assessments done</b>
+                                    <br>
+
+                                </div>
+                            </div>
+                        {% endif %}
+                        <!-- end display of assessment -->
+                      
+
+
+
+                    </div>
+                    <!-- display a header -->   
+                </div>
+            </div>
+            <!-- end display-->
+        </div>
+    </div>
+</div>  
+</form>
+<script>
+    function updateRating(questionId, rating, selected_id) {
+    // Get the row element
+    const row = document.getElementById('row_' + questionId);
+    const cell = document.getElementById('rating_cell_' + questionId);
+    const scell = document.getElementById('selected_cell_' + selected_id);
+
+    // Define colors based on the rating
+    const colors = {
+        1: 'lightcoral', // Red for the lowest rating
+        2: 'lightsalmon', // Light red
+        3: 'lightblue', // Yellow
+        4: 'lightgreen', // Light green
+        5: 'lightseagreen'  // Green for the highest rating
+    };
+
+    // Update the row background color
+    //row.style.backgroundColor = colors[rating];
+    cell.style.backgroundColor = colors[rating];
+    cell.innerHTML = `<strong>${rating}</strong>`;
+
+    // Clear all answer cell colors for the current question
+    const answerCells = document.querySelectorAll('#row_' + questionId + ' [id^="selected_cell_"]');
+        answerCells.forEach(function(scell) {
+            scell.style.backgroundColor = ''; // Clear previous color
+        });
+    scell.style.backgroundColor = colors[rating];
+
+}
+
+</script>
+<!-- End: Content -->
+{% endblock content %}

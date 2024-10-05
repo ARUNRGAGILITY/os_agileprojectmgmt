@@ -1,0 +1,80 @@
+{% extends 'app_assessment/__common/base_template.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+
+{% block content %}
+<style>
+    .card-text {
+        font-size: 11px;
+        color: grey;
+    }
+    .card {
+        min-height: 200px;
+        display: flex;
+        flex-direction: column;  /* Align children of the card vertically */
+    }
+    .card-body {
+        flex: 1;  /* Flex-grow to use available space */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; /* Pushes the button to the bottom */
+    }
+</style>
+<style>
+    .mermaid .node rect,
+    .mermaid .node polygon {
+        fill: transparent !important; /* Ensures background is transparent */
+        stroke: transparent !important; /* Removes any border */
+    }
+</style>
+{% include 'app_assessment/__common/navbar.html' %}
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+<script>
+    mermaid.initialize({startOnLoad:true});
+</script>
+<!-- Begin: Content -->
+<div class="container-fluid mt-4">
+    <div class="row bg-info">
+        <div class="col col-md-12">
+            {% include 'app_assessment/configure/conduct_assessments/breadcrumb_conduct_assessments.html' %}
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <!-- content part1 -->
+    <div class="row">  
+        <div class="col col-md-12">           
+            <!-- display -->
+            {% include 'app_assessment/configure/conduct_assessments/__conduct_assessment_tabs.html' %}
+            <div class="tab-content">
+            <div class="tab-pane active">
+                <h3>Conduct Assessments</h3>
+                <p>Conducing assessments is a simplified step-by-step process of selecting, configuring, scheduling, assessing, reviewing and analysing reports.</p>
+                <!-- Content for selecting an assessment goes here -->
+                
+                <!-- Flow chart -->
+                <div class="container">
+
+                    <div class="mermaid">
+                       
+                        graph LR
+                        A[<a href="{% url 'select_assessment' org.id %}"><img src="{% static 'img/assessment/select_step.svg' %}" width='20' height='20'/>Step 1: Select Assessment</a>] -->|Data Flow| B[<a href="{% url 'select_assessment' org.id %}"><img src="{% static 'img/assessment/configure_step.svg' %}" width='20' height='20'/>Step 2: Configure</a>]
+                        B -->|Proceed| C[<a href="{% url 'select_assessment' org.id %}"><img src="{% static 'img/assessment/schedule_step.svg' %}" width='20' height='20'/>Step 3: Schedule</a>]
+                        C -->|Assessment| D[<a href="{% url 'select_assessment' org.id %}"><img src="{% static 'img/assessment/schedule_step.svg' %}" width='20' height='20'/>Step 4: Assessment</a>]
+                        D -->|Review| E[<a href="{% url 'select_assessment' org.id %}"><img src="{% static 'img/assessment/review_step.svg' %}" width='20' height='20'/>Step 5: Review</a>]
+                        E -->|See Reports| F[<a href="{% url 'select_assessment' org.id %}"><img src="{% static 'img/assessment/analyze_step.svg' %}" width='20' height='20'/>Step 6: Analyze</a>]
+                        F -->|Continuous improvement| A
+                    </div>
+                </div>
+
+                    
+                </div>
+            </div>
+            <!-- end display-->
+        </div>
+    </div>
+</div>  
+
+<!-- End: Content -->
+{% endblock content %}

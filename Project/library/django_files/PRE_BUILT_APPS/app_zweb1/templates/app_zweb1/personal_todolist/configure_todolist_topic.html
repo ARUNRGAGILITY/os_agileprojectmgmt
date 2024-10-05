@@ -1,0 +1,44 @@
+{% extends 'app_zweb1/__common/base_template.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+{% load app_web_my_filters %}
+
+{% block content %}
+{% include 'app_zweb1/__common/navbar.html' %}
+{% include 'app_zweb1/personal_todolist/breadcrumb_personal_todolist.html' %}
+<!-- Begin: Content -->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col col-md-12">
+            <div class="container-fluid-width">
+                <div class="row">
+                    <div class="col col-md-8">
+                        <h2>Personal To Do List :: Configure Topic </h2>
+                    </div>
+                    <div class="col col-md-4 text-end">
+                        <a href="{% url 'personal_todolist' %}" class="btn btn-sm btn-primary"><b>List Topics</b></a>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                       <th>Configuring Options for your Personal To Do List</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <a href="{% url 'create_todolist_templates' %}"
+                            class="btn btn-sm btn-primary">Create To Do List Templates</a>
+                        </td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- End: Content -->
+{% endblock content %}

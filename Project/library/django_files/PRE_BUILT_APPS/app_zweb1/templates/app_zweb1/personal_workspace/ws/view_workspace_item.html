@@ -1,0 +1,80 @@
+{% extends 'app_zweb1/__common/base_template.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+{% load app_web_my_filters %}
+
+{% block content %}
+{% include 'app_zweb1/personal_workspace/ws/css_workspace.html' %}
+{% include 'app_zweb1/__common/navbar.html' %}
+<!-- Begin: Content -->
+{% include 'app_zweb1/personal_workspace/ws/breadcrumb_display_ws.html' %}
+<form action="" method="POST">
+{% csrf_token %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col col-md-12">
+            
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col col-md-12">
+            <div class="container-fluid-width">
+                <div class="row pb-2">
+                    <div class="col col-md-8">
+                        <h2>{{workspace}} </h2>
+                    </div>
+                    <div class="col col-md-4 text-end">                  
+                        <a href="{% url 'personal_workspace' %}" class="btn btn-sm btn-primary"><b>List Workspaces </b></a>
+                    </div>
+                </div>
+                
+            </div>
+            <table class="table table-bordered sortable_table {{theme}}" id="themeTable"
+            >
+                <thead>
+                    <tr>
+                        <th colspan="2">
+                            <div class="container-fluid-width">
+                                <div class="row">
+                                    <div class="col col-md-4">
+                                        View Workspace Item
+                                    </div>
+                                    <div class="col col-md-8 text-end">
+                                       
+                                        <a href="{% url 'edit_workspace_item' workspace.id %}" class="btn btn-sm btn-info">
+                                            Edit
+                                        </a>
+                                        &nbsp;&nbsp;&nbsp;
+                                        <a href="{% url 'delete_workspace_item' workspace.id %}" class="btn btn-sm btn-danger">
+                                            Delete
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </th>         
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>To Do:</strong></td>
+                        <td>{{workspace.name}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Description:</strong></td>
+                        <td>{{workspace.description}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="text-center"><button type="submit"
+                            class="btn btn-sm btn-success">Save</button></td>
+                    </tr>
+                </tbody>
+                
+            </table>
+        </div>
+    </div>
+</div>
+</form>
+<!-- End: Content -->
+{% endblock content %}

@@ -1,0 +1,88 @@
+
+{% extends 'app_assessment/__common/base_template.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+{% load app_web_my_filters %}
+{% load markdown_extras  %}
+
+{% block content %}
+{% include 'app_assessment/__common/navbar.html' %}
+<div class="container-fluid mt-4">
+    <div class="row bg-info">
+        <div class="col col-md-12">
+            {% include 'app_assessment/configure/assessments/breadcrumb_assessments.html' %}
+        </div>
+    </div>
+</div>
+<!-- Begin: Content -->
+<form method="post">
+    {% csrf_token %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col col-md-12">
+                <div class="container-fluid-width">
+                    <div class="row">
+                        <div class="col col-md-8">
+                            <h2>{% if form.instance.pk %}Edit{% else %}Create{% endif %} 
+                                Templates</h2>
+                        </div>
+                        <div class="col col-md-4 text-end">
+                            <a href="{% url 'list_assessments' org.id %}"
+                             class="btn btn-sm btn-primary"><b>List Assessment(s)</b></a>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th colspan="2">{{page_title}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td width="15%">
+                                <strong>Assessment Template</strong>
+                            </td>
+                            <td>
+                                <select name="assessment_template" id="assessment_template">
+                                    <option value="">-- Select Assessment Template --</option>
+                                    {% for at in assessment_templates %}
+                                    <option value="{{at.id}}">{{at.name}}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="15%">
+                                <strong>Assessment</strong>
+                            </td>
+                            <td>
+                                {{form.name|as_crispy_field}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Description</strong>
+                            </td>
+                            <td>
+                                {{form.description|as_crispy_field}}
+                            </td>
+                        </tr>
+                       <tr>
+                            <td colspan="2" class="text-center"><button type="submit"
+                                class="btn btn-sm btn-success">Save</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</form>
+<script>
+    focusField = document.getElementById('assessment_template');
+    focusField.focus();
+</script>
+
+<!-- End: Content -->
+{% endblock content %}

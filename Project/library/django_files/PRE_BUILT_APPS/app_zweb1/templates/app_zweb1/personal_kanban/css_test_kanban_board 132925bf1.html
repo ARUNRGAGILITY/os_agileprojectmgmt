@@ -1,0 +1,155 @@
+<style>
+    {% for state in board_states %}
+        #sortable_{{state.id}} {
+        border: 1px solid #eee;
+        width: 142px;
+        min-width: 100%;
+        min-height: 20px;
+        list-style-type: none;
+        margin: 0;
+        padding: 5px 0 0 0;
+        float: left;
+        margin-right: 10px;
+        }
+        #sortable_{{state.id}} li {
+            margin: 0 5px 5px 5px;
+            padding: 5px;
+            width: 120px;
+        }
+    {% endfor %}
+</style>
+<style>
+    
+
+    .droppable-cell {
+        width: 350px;
+        background-color: red;
+    }
+
+    .post_it_notes {
+        position: relative;
+        min-height: 70px;
+        margin: 1px;
+        padding: 4px;
+        font-size: 14px;
+    }
+   
+    .post_it_notes:before {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        border-width: 8px 8px 0 0;
+        border-style: solid;
+    }
+
+    /* The priority styling */
+    .priority1 {
+      background-color: red;
+      color: white;
+    }
+    .priority1:before {
+        border-color: lightcoral white;
+    }
+    .priority2 {
+      background-color: orange;
+      color: white;
+    }
+    .priority2:before {
+        border-color: lightskyblue white;
+    }
+    .priority3 {
+      background-color: yellow;
+      color: black;
+    }
+    .priority3:before {
+        border-color: lightgreen white;
+    }
+    .priority4 {
+      background-color: green;
+      color: white;
+    }
+    .priority4:before {
+        border-color: lightgreen white;
+    }
+  
+  </style>
+
+  <style>
+   .view-button {
+    display: inline-block;
+    padding: 1px 2px; /* Smaller padding */
+    margin: 1px;
+    background-color: #007BFF; /* Bootstrap primary color */
+    color: white;
+    font-size: 12px; /* Smaller font size */
+    text-align: center;
+    text-decoration: none;
+    border-radius: 3px; /* Smaller border-radius */
+    border: none;
+    transition: background-color 0.3s;
+}
+
+.view-button:hover {
+    background-color: #0056b3; /* Darken color on hover */
+    color: white;
+    text-decoration: none; /* Ensures no underline appears */
+}
+
+  </style>
+<script>
+  
+$( function() {
+     // Toggle the dropdown menu when the button is clicked
+    
+
+        {% for state in board_states %}
+        $( "#sortable_{{state.id}}" ).sortable({
+            connectWith: ".connectedSortable",           
+        }).disableSelection();
+        {% endfor %}
+
+  
+    // Enabling sortable functionality on all lists that are meant to be sortable
+    $(".sortable-list").sortable({
+        connectWith: ".sortable-list", // Allow dragging between lists
+        placeholder: "ui-state-highlight", // Visual placeholder configuration
+        start: function(event, ui) {
+            ui.item.data('start_pos', ui.item.index()); // Store the starting position
+        },
+        stop: function(event, ui) {
+            var card_id = ui.item.attr('id'); // Get the ID of the card that was moved
+            var state_id = ui.item.closest('ul').attr('id').split('_')[1]; // Get the new state ID from the parent list
+            var cards = [];
+
+            // Collect the updated list of card IDs and their new positions in the new state
+            ui.item.parent().children().each(function(index) {
+                cards.push({
+                    id: $(this).attr('id'),
+                    position: index
+                });
+            });
+            
+            
+            // AJAX call to update the backend with the new positions and the moved card details
+            $.ajax({
+                url: "{% url 'ajax_update_kanban_board_state' %}",
+                type: 'POST',
+                data: {
+                    'card_id': card_id,
+                    'state_id': state_id,
+                    'cards': JSON.stringify(cards),
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    console.log('Update successful', response);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error updating position:', status, error);
+                }
+            });
+        }
+    }).disableSelection();
+});
+
+</script>

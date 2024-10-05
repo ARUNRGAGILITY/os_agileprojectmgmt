@@ -1,0 +1,29 @@
+<div class="container-fluid-width mt-2">
+    <ul class="nav nav-tabs">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link {% if page == 'conduct_assessments' %}active{% endif %}" href="{% url 'conduct_assessments' org.id %}">Conduct Assessments</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if page == 'select_assessment' %}active{% endif %}" href="{% url 'select_assessment' org.id %}">Select Assessment</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if page == 'configure_assessment' %}active{% endif %}" href="{% url 'select_assessment' org.id  %}">Configure Assessment</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if page == 'schedule_assessment' %}active{% endif %}" href="{% url 'select_assessment' org.id %}">Schedule Assessment</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if page == 'assessment' %}active{% endif %}" href="{% url 'select_assessment' org.id %}">Assessment</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if page == 'review_assessment' %}active{% endif %}" href="{% url 'select_assessment' org.id %}">Review Assessment</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if page == 'analyze_assessment' %}active{% endif %}" href="{% url 'select_assessment' org.id %}">Analyze Assessment</a>
+            </li>
+            <!-- Add other tabs similarly -->
+        </ul>               
+        <!-- Add other tabs similarly -->
+    </ul>               
+</div>

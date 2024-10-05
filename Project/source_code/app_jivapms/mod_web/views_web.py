@@ -9,6 +9,7 @@ version = "v1"
 module_dirname = "mod_web"
 
 from app_jivapms.mod_web.helper_web import *
+from app_jivapms.mod_web.views_ajax_web import *
 # Create your views here.
 def index(request):
     user = request.user

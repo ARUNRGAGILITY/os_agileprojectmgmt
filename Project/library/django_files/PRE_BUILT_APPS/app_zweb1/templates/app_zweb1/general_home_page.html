@@ -1,0 +1,71 @@
+{% extends 'app_zweb1/__common/base_template.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+{% load app_web_my_filters %}
+
+{% block content %}
+{% include 'app_zweb1/__common/navbar.html' %}
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col col-md-12">
+            <!-- Begin: Breadcrumb -->
+            <nav aria-label="breadcrumb" style="margin-top: 60px;"> <!-- Inline style for demonstration -->
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="{% url 'general_home_page' %}">
+                            <i class="bi bi-house"></i> Home
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">Get Started</li>
+                </ol>
+            </nav>
+            <!-- End: Breadcrumb -->
+        </div>
+    </div>
+</div>
+<!-- End: Breadcrumb -->
+<!-- Begin: Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col col-md-12">
+                <div class="hero text-center">
+                    <h1>Open-Source Enterprise Agile Software</h1>
+                    <p>Empower your Agile at Scale implementation with agileTIA, supporting and implementing 
+                        frameworks like SAFe, LeSS, Spotify, Custom and more.</p>
+                    <a href="{% url 'get_started' %}" class="btn btn-primary">Get Started</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-5">
+        <h2 class="text-center mb-3">Key Features</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card feature">
+                    <div class="card-body">
+                        <h5 class="card-title">Multiple Frameworks</h5>
+                        <p class="card-text">Supports SAFe, LeSS, Spotify, and custom frameworks for seamless integration.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card feature">
+                    <div class="card-body">
+                        <h5 class="card-title">Scrum & Kanban, and more</h5>
+                        <p class="card-text">Offers integrated support for Scrum and Kanban with customization options.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card feature">
+                    <div class="card-body">
+                        <h5 class="card-title">Enterprise Ready</h5>
+                        <p class="card-text">Designed for scalability, ensuring enterprise-wide deployment is smooth and effective.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

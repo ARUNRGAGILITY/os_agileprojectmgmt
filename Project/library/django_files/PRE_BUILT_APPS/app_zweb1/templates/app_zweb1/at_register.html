@@ -1,0 +1,43 @@
+{% extends 'app_zweb1/__common/base_template.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+{% load app_web_my_filters %}
+
+{% block content %}
+{% include 'app_zweb1/__common/register_css.html' %}
+{% include 'app_zweb1/__common/navbar.html' %}
+<!-- Begin: Content -->
+     
+<div class="register-container">
+    <div class="info col-md-4">
+        <h4>Discover Agile at Scale with agileTIA</h4>
+        <p>AgileTIA empowers organizations to seamlessly integrate Agile practices across various frameworks like SAFe, LeSS, and Spotify inspired or customized organization frameworks that you have developed. It is designed to enhance collaboration, increase efficiency, and drive higher value in your agile initiatives and achieve agility.</p>
+        <p>By registering, you'll gain access to platform, systems and tools that help you streamline your processes and achieve true agility in a supportive, scalable environment.</p>
+    </div>
+    <div class="register-form col-md-8">
+        <form style="width: 300px;">
+            <b class="h2">Register or </b> 
+            <b class="h2"><a href="{% url 'at_login' %}">Login</a></b>
+            <div class="mb-3 pt-2">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" required>
+            </div>          
+            <div class="mb-3">
+                <label for="password1" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password1" required>
+            </div>
+            <div class="mb-3">
+                <label for="password2" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" id="password2" required>
+            </div>
+            <div class="mb-3">
+                <label for="reg_code" class="form-label">Authorized Code for Registration</label>
+                <input type="password" class="form-control"  id="reg_code" name="reg_code" size="50" maxlength="200">
+            </div>
+            <button type="submit" class="btn btn-primary">Register</button>
+        </form>
+    </div>
+</div>
+<!-- End: Content -->
+{% endblock content %}

@@ -1,0 +1,149 @@
+{% extends 'app_zweb1/__common/base_template.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+{% load app_web_my_filters %}
+
+{% block content %}
+<style>
+    .stats-container {
+        display: flex; /* Use flexbox */
+        align-items: center; /* Align items vertically in the center */
+        gap: 10px; /* Optional: Adds space between the stats and the progress bar */
+    }
+    
+    .stats {
+        flex-shrink: 0; /* Prevents the stats from shrinking */
+    }
+    
+    .progress {
+        flex-grow: 0.5; /* Allows the progress bar to take up the remaining space */
+        width: 40%; /* Ensures the progress bar can grow as needed */
+    }
+    </style>
+    
+{% include 'app_zweb1/personal_todolist/css_todolist.html' %}
+{% include 'app_zweb1/__common/navbar.html' %}
+
+<!-- Begin: Content -->
+{% include 'app_zweb1/personal_todolist/breadcrumb_templates.html' %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col col-md-12">
+            
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col col-md-12">
+            <div class="container-fluid-width">
+                <div class="row pb-2">
+                    <div class="col col-md-8">
+                        <h2>Personal To Do List</h2>
+                    </div>
+                    <div class="col col-md-4 text-end">
+                        <span class="display_count">{{objects_count}} template(s)</span>
+                        &nbsp;&nbsp;
+                        <a href="{% url 'personal_todolist' %}" 
+                        class="btn btn-sm btn-primary"><b>List Topics</b></a>
+                        &nbsp;&nbsp;
+                        <a href="{% url 'create_template' %}" 
+                        class="btn btn-sm btn-success"><b>+ Create Template</b></a>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-bordered sortable_table">
+                <thead>
+                    <tr>
+                        <th width="2%"><i class="bi bi-grip-vertical"></i></th>
+                        <th width="2%">#</th>
+                        <th>Template</th>
+                        <th width="20%">Description</th>
+                        <th width="50%">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody  id="sortable" class="sortable-tbody">
+                    {% for topic in topic_details %}
+                    <tr id="{{topic.topic.id}}_{{ forloop.counter }}" class="sortable-row display_tr">
+                        <td class="drag-handle">
+                            <i class="bi bi-grip-vertical"></i>
+                        </td>
+                        <td>{{forloop.counter}}</td>
+                        <td width="20%">{{topic.topic.name}}</td>
+                        <td width="">
+                            {{topic.topic.description}}
+                        </td>
+                       
+                        <td width="30%">
+                            <a href="{% url 'view_todolist_topic' topic.topic.id %}" class="btn btn-sm btn-primary">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            &nbsp;&nbsp;&nbsp;
+                            <a href="{% url 'edit_todolist_topic' topic.topic.id %}" class="btn btn-sm btn-warning">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            &nbsp;&nbsp;&nbsp;
+                            <a href="{% url 'delete_todolist_topic' topic.topic.id %}" class="btn btn-sm btn-danger">
+                                <i class="bi bi-x-lg"></i>
+                            </a>
+                         
+                            &nbsp;&nbsp;&nbsp;
+                            <a href="{% url 'copy_template' topic.topic.id %}" class="btn btn-sm btn-info">
+                                <i class="bi bi-clipboard-check"></i>
+                            </a>
+                            
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <a href="{% url 'view_todolist' topic.topic.id %}" class="btn btn-sm btn-info">
+                                
+                                {% if topic.topic_completion_stats %}
+                                {{ topic.topic_completion_stats.total_count }}
+                                {% endif %}
+                                <i class="bi bi-card-checklist"></i> 
+                                To Do
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                    <tr>
+                        <td colspan="5">
+                            {% include 'app_zweb1/__common/pagination.html' %}
+                        </td>
+                    </tr>
+                
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(".sortable_table").find("tbody").sortable({
+      items: "> tr",
+      handle: ".drag-handle",
+      appendTo: "parent",
+      cancel: "[contenteditable]",
+      update: function(event, ui) {
+              var serialOrder = $('#sortable').sortable('serialize');
+              var arrayOrder = $('#sortable').sortable('toArray');
+              //alert(arrayOrder);
+              $.ajax({
+                url: '/v1/ajax_update_model_list_sorted/',
+                type: 'POST',
+                data : {
+                  'csrfmiddlewaretoken': "{{ csrf_token }}",
+                  'model_name': 'TodoListTopic',
+                  'app_name': 'app_zweb1',
+                  'sorted_list_data': JSON.stringify(arrayOrder),
+                  
+                },
+                dataType: 'json',
+                success: function(data) {
+                  console.log(data);
+                }
+              })
+            }
+    });
+    </script>
+<!-- End: Content -->
+{% endblock content %}

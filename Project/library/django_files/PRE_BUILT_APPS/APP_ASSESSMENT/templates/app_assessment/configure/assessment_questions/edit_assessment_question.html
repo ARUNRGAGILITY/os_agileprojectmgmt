@@ -1,0 +1,228 @@
+
+{% extends 'app_assessment/__common/base_template.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+{% load app_web_my_filters %}
+{% load markdown_extras  %}
+
+{% block content %}
+
+    
+{% include 'app_assessment/__common/navbar.html' %}
+<div class="container-fluid mt-4">
+    <div class="row bg-info">
+        <div class="col col-md-12">
+            {% include 'app_assessment/configure/assessment_questions/breadcrumb_assessment_questions.html' %}
+        </div>
+    </div>
+</div>
+<!-- Begin: Content -->
+<form method="post">
+    {% csrf_token %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col col-md-12">
+                <div class="container-fluid-width">
+                    <div class="row">
+                        <div class="col col-md-8">
+                            <h2>{% if form.instance.pk %}Edit{% else %}Create{% endif %} 
+                                Assessment Question</h2>
+                        </div>
+                        <div class="col col-md-4 text-end">
+                            <a href="{% url 'list_assessment_questions' areas_id %}"
+                             class="btn btn-sm btn-primary"><b>List Assessment Question(s)</b></a>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th colspan="2">
+                                <div class="container-fluid-width">
+                                    <div class="row">
+                                        <div class="col col-md-5">
+                                            {{page_title}}:: {{form.instance}}
+                                        </div>
+                                        <div class="col col-md-7">
+                                            <div class="text-end">
+                                                <a href="{% url 'view_assessment_question' area.id form.instance.id %}" class="btn btn-sm btn-primary"><b>View</b></a>
+                                                &nbsp;&nbsp;&nbsp;
+                                                <a href="{% url 'delete_assessment_question' area.id form.instance.id %}" class="btn btn-sm btn-danger"><b>Delete</b></a>
+                                                
+                                            </div>
+    
+                                        </div>
+                                    </div>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td width="15%">
+                                <strong>Question Type</strong>
+                            </td>
+                            <td>
+                                {{form.question_type|as_crispy_field}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="15%">
+                                <strong>Assessment Question</strong>
+                            </td>
+                            <td>
+                                {{form.text|as_crispy_field}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="15%">
+                                <strong>Answers</strong>
+                            </td>
+                            <td>
+                               
+                                {% if question.question_type.name == 'SCQ' %}                                
+                                <div>
+                                    {% for answer in answers %}
+                                    <div class="display_input">
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <input type="text" class="form-control" id="{{answer.id}}" name="answers" 
+                                                    value="{{ answer.text }}" size="85" required/>
+                                                    &nbsp;&nbsp;
+                                                </td>
+                                                <td>
+                                                    &nbsp;&nbsp;
+                                                    <input type="radio" name="correct_answer" 
+                                                    value="{{ forloop.counter0 }}" 
+                                                    {% if answer.is_correct %}checked{% endif %}>                                                   
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>                                    
+                                    {% endfor %}
+                                </div>
+                                {% elif object.question_type.name == 'MCQ' %}
+                                <div>
+                                    {% for answer in answers %}
+                                    <div class="display_input">
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <input type="text" class="form-control" id="{{answer.id}}" name="answers" 
+                                                    value="{{ answer.text }}" size="85" required/>
+                                                    &nbsp;&nbsp;
+                                                </td>
+                                                <td>
+                                                    &nbsp;&nbsp
+                                                    <input type="checkbox" id="{{answer.id}}" name="correct_answer" 
+                                                    value="{{ forloop.counter0 }}" 
+                                                    {% if answer.is_correct %}checked{% endif %}>                                                    
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>                                    
+                                    {% endfor %}
+                                </div>
+                                {% elif question.question_type.name == 'Yes/No' or question.question_type.name == 'True/False' %}
+                                {% for answer in answers %}
+                                <div class="display_input">
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                &nbsp;&nbsp;
+                                                <input type="radio" id="{{answer.id}}" name="correct_answer" 
+                                                value="{{ forloop.counter0 }}" 
+                                                {% if answer.is_correct %}checked{% endif %}>    
+                                                &nbsp;&nbsp;                                               
+                                            </td>
+                                            <td>
+                                                &nbsp;&nbsp;     
+                                                <input type="hidden" class="form-control" id="{{answer.id}}" name="answers" 
+                                                value="{{ answer.text }}" size="85" required/>
+                                                {{ answer.text }}
+                                                &nbsp;&nbsp;
+                                            </td>
+                                            
+                                        </tr>
+                                    </table>
+                                </div>                                    
+                                {% endfor %}
+                                {% elif question.question_type.name == 'Rating5' %}
+                                <div>
+                                    {% for answer in answers %}
+                                    <div class="display_input">
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <input type="text" class="form-control" id="{{answer.id}}" name="answers" 
+                                                    value="{{ answer.text }}" size="85" required/>
+                                                    &nbsp;&nbsp;
+                                                </td>
+                                                <td>
+                                                                                               
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>                                    
+                                    {% endfor %}
+                                </div>
+                                {% elif question.question_type.name == 'Rating10' %}
+                                <div>
+                                    {% for answer in answers %}
+                                    <div class="display_input">
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <input type="text" class="form-control" id="{{answer.id}}" name="answers" 
+                                                    value="{{ answer.text }}" size="85" required/>
+                                                    &nbsp;&nbsp;
+                                                </td>
+                                                <td>
+                                                                                              
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>                                    
+                                    {% endfor %}
+                                </div>
+                                {% elif question.question_type.name == 'Text' %}
+                                <div>
+                                    {% for answer in answers %}
+                                    <input class="form-control" type="text" id="{{answer.id}}" name="answers" value="{{ answer.text }}" size="85" required>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                                
+                                <div id="answers_container">
+                                    <!-- Answers will be dynamically added here based on the selected question type -->
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Instructions</strong>
+                            </td>
+                            <td>
+                                {{form.instructions|as_crispy_field}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="text-center"><button type="submit"
+                                class="btn btn-sm btn-success">Save</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</form>
+<script>
+    focusField = document.getElementById('id_question_type');
+    focusField.focus();
+</script>
+
+<!-- End: Content -->
+{% endblock content %}
+

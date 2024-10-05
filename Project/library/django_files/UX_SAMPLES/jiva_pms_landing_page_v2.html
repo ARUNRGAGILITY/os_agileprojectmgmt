@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Jiva PMS</title>
+    <style>
+        /* Global Styles */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: white;
+            overflow-x: hidden;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            width: 100%;
+            background-color: #333;
+            overflow: hidden;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .navbar a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 20px;
+            text-decoration: none;
+            font-size: 17px;
+        }
+
+        .navbar a:hover {
+            background-color: #575757;
+            color: white;
+        }
+
+        .navbar a.active {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        /* For mobile view, the navbar collapses into a hamburger menu */
+        .navbar .icon {
+            display: none;
+        }
+
+        /* Landing Page Content */
+        .container {
+            text-align: center;
+            margin-top: 80px; /* Spacing to prevent navbar overlap */
+        }
+
+        .header {
+            font-size: 48px;
+            font-weight: bold;
+        }
+
+        .subheader {
+            font-size: 24px;
+            margin-top: 10px;
+            font-weight: normal;
+        }
+
+        /* Feature Slider */
+        .slider {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            max-width: 800px;
+            margin: 20px auto;
+        }
+
+        .slider-track {
+            display: flex;
+            transition: transform 0.4s ease-in-out;
+        }
+
+        .slider-box {
+            min-width: 100%;
+            box-sizing: border-box;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .slider-buttons {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+        }
+
+        .prev, .next {
+            background-color: #007BFF;
+            border: none;
+            color: white;
+            font-size: 18px;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+        /* Buttons */
+        .buttons {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Sticky Footer */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            padding: 10px 0;
+            background-color: #000080; /* Dark blue color */
+            color: white;
+            font-size: 14px;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .navbar a { display: none; }
+            .navbar a.icon {
+                float: right;
+                display: block;
+                color: white;
+            }
+
+            .navbar.responsive { position: relative; }
+            .navbar.responsive a.icon {
+                position: absolute;
+                right: 0;
+                top: 0;
+            }
+
+            .navbar.responsive a {
+                float: none;
+                display: block;
+                text-align: left;
+            }
+
+            .header {
+                font-size: 36px;
+            }
+
+            .subheader {
+                font-size: 20px;
+            }
+
+            /* Make the buttons appear on mobile */
+            .buttons {
+                display: block;
+                text-align: center;
+            }
+
+            .slider-box {
+                min-width: 100%;
+            }
+
+            .btn {
+                font-size: 14px;
+                padding: 8px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Responsive Navbar -->
+    <div class="navbar" id="navbar">
+        <a href="#home" class="active">Home</a>
+        <a href="#projects">Projects</a>
+        <a href="#blogs">Blogs</a>
+        <a href="#learning">Learning Center</a>
+        <a href="javascript:void(0);" class="icon" onclick="toggleMenu()">&#9776;</a>
+    </div>
+
+    <!-- Landing Page Content -->
+    <div class="container">
+        <div class="header">JIVA PMS</div>
+        <div class="subheader">Jiva Project Management System</div>
+
+        <!-- Feature Slider -->
+        <div class="slider">
+            <div class="slider-track" id="sliderTrack">
+                <div class="slider-box">
+                    Jiva is a cutting-edge, open-source Project Management System designed for individuals, teams, and enterprises seeking simplicity, flexibility, and scalability.
+                </div>
+
+                <div class="slider-box">
+                    Whether you're managing personal projects, coordinating with small teams, or overseeing large-scale enterprise operations, Jiva empowers you to streamline workflows and optimize productivity.
+                </div>
+
+                <div class="slider-box">
+                    Leverage the power of agile project management right out of the box or customize the platform to suit your unique needs. Best of all, it’s completely free under the MIT License.
+                </div>
+
+                <div class="slider-box">
+                    For those looking to accelerate their journey, we offer premium consulting services, including tailored training, coaching, and full-scale implementation support.
+                </div>
+
+                <div class="slider-box">
+                    Discover the freedom to manage projects your way with Jiva, and transform how you and your team collaborate, plan, and succeed.
+                </div>
+            </div>
+
+            <div class="slider-buttons">
+                <button class="prev" onclick="moveSlide(-1)">&#10094;</button>
+                <button class="next" onclick="moveSlide(1)">&#10095;</button>
+            </div>
+        </div>
+
+        <!-- Buttons for Sign Up, Sign In, and About the Project -->
+        <div class="buttons">
+            <a href="#" class="btn">Sign Up</a>
+            <a href="#" class="btn">Sign In</a>
+            <a href="#" class="btn">About the Project</a>
+        </div>
+    </div>
+
+    <!-- Sticky Footer -->
+    <div class="footer">
+        &copy; <span id="year"></span> Jiva Project Management System. All Rights Reserved.
+    </div>
+
+    <!-- Script for the year in the footer -->
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+
+    <!-- Script to toggle the navbar menu on small screens -->
+    <script>
+        function toggleMenu() {
+            var x = document.getElementById("navbar");
+            if (x.className === "navbar") {
+                x.className += " responsive";
+            } else {
+                x.className = "navbar";
+            }
+        }
+
+        // Slider functionality
+        let slideIndex = 0;
+        const track = document.getElementById('sliderTrack');
+        const slides = document.querySelectorAll('.slider-box');
+        const totalSlides = slides.length;
+
+        function moveSlide(n) {
+            slideIndex += n;
+            if (slideIndex >= totalSlides) slideIndex = 0;
+            if (slideIndex < 0) slideIndex = totalSlides - 1;
+            track.style.transform = 'translateX(' + (-slideIndex * 100) + '%)';
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,32 @@
+<nav class="breadcrumb" aria-label="breadcrumbs">
+    <ol class="breadcrumb">
+    <li class="breadcrumb-item ">&nbsp;
+        <a href="{% url 'general_home_page' %}">
+            <i class="bi bi-house"></i> Home
+        </a>
+    </li>
+    <li class="breadcrumb-item"><a href="{% url 'loggedin_home_page' %}">Dashboard</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'personal_workspace' %}">Workspaces</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'view_workspace_details' root_workspace.id %}">{{ root.name }}</a></li>
+    {% if ancestors %}
+        {% for ancestor in ancestors %}
+            {% if not forloop.first and not forloop.last %}
+                <li class="breadcrumb-item">
+                    <a href="{% url 'view_workspace_level' ancestor.pk %}">
+                        {{ ancestor.name }}</a>
+                    </li>
+            {% endif %}
+            {% if forloop.last %}
+            <li class="breadcrumb-item active" aria-current="page">{{ ancestor.name }}</li>
+            {% endif %}
+        {% endfor %}
+        <!-- {% if workspace  %}
+        <li class="breadcrumb-item">&nbsp;{{ workspace }}</li>
+        {% endif %} -->
+    {% else %}
+    <li class="breadcrumb-item"><a href="{% url 'loggedin_home_page' %}">Dashboard</a></li>
+    <li class="breadcrumb-item">{{ workspace }}</li>
+    {% endif %}
+    </ol>
+</nav>
+

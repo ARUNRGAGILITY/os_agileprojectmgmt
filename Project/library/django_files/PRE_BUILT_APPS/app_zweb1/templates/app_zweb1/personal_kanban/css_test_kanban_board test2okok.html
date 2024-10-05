@@ -1,0 +1,107 @@
+<style>
+    {% for state in board_states %}
+        #sortable_{{state.id}} {
+        border: 1px solid #eee;
+        width: 142px;
+        min-width: 100%;
+        min-height: 20px;
+        list-style-type: none;
+        margin: 0;
+        padding: 5px 0 0 0;
+        float: left;
+        margin-right: 10px;
+        }
+        #sortable_{{state.id}} li {
+            margin: 0 5px 5px 5px;
+            padding: 5px;
+            font-size: 1.2em;
+            width: 120px;
+        }
+    {% endfor %}
+</style>
+<style>
+    /* The priority styling */
+    .priority1 {
+      background-color: red;
+      color: white;
+    }
+    .priority2 {
+      background-color: orange;
+      color: white;
+    }
+    .priority3 {
+      background-color: yellow;
+      color: black;
+    }
+    .priority4 {
+      background-color: green;
+      color: white;
+    }
+
+    .droppable-cell {
+        width: 350px;
+        background-color: red;
+    }
+  </style>
+<script>
+    
+    $( function() {
+        {% for state in board_states %}
+        $( "#sortable_{{state.id}}" ).sortable({
+            connectWith: ".connectedSortable",           
+        }).disableSelection();
+        {% endfor %}
+    });
+
+    
+    function collectAndLogSortableDataCS(listId) {
+        var columnId = listId;
+        var listData = [];
+        // Iterate through the list items within the current list
+        $('[data-column-id="' + listId + '"] li').each(function() {
+            var itemId = $(this).attr('id');
+            var itemSwimlane = $(this).data('swimlane-id');
+            if (itemSwimlane == null) {itemSwimlane = 0;}
+            // var cData = [itemId, itemSwimlane]; // this is when swimlane used
+            var cData = itemId;
+            listData.push(cData);
+        });
+        return listData;
+    }
+
+   
+    $( function() {        
+        
+        $( ".droppable-cell" ).droppable({
+            drop: function( event, ui ) {
+                var card_id = ui.draggable.attr('id');
+                var state_id = $(this).find('ul').attr('id').split('_')[1];
+                var collectedData = [];
+                // Collect the data from the sortable lists
+                $(".sortable-list").each(function() {
+                    var listId = $(this).data("column-id"); // Get the ID of the sortable list
+                    var listData = collectAndLogSortableDataCS(listId);
+                    // Push the data into the array
+                    collectedData.push({
+                    listId: listId,
+                    listData: listData
+                    });
+                });
+                console.log(">>> === collectedData"+ collectedData +" === <<<");
+                $.ajax({
+                    url: "{% url 'ajax_update_kanban_board_state' %}",
+                    type: 'POST',
+                    data: {
+                        'card_id': card_id,
+                        'state_id': state_id,
+                        'cards': JSON.stringify(collectedData),
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function(response) {
+                        console.log(response);
+                    }
+                });
+            }
+        });
+    });
+</script>

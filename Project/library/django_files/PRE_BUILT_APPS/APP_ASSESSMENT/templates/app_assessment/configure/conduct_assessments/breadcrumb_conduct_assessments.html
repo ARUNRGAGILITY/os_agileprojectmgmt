@@ -1,0 +1,64 @@
+ <!-- Begin: Breadcrumb -->
+ <div class="breadcrumb1">
+    <nav aria-label="breadcrumb"> <!-- Inline style for demonstration -->
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{% url 'general_home_page' %}">
+                    <i class="bi bi-house"></i> Home
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{% url 'loggedin_home_page' %}">
+                    Dashboard
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{% url 'organization_list' %}">
+                    Organizations
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{% url 'organization_page' org.id %}">
+                    {{org}}
+                </a>
+            </li>
+            
+            <li class="breadcrumb-item">
+                <a href="{% url 'asmt_home' org.id %}">
+                    Assessment Home
+                </a>
+            </li>
+        
+            <li class="breadcrumb-item active" aria-current="page">
+                Conduct Assessments</li>
+        </ol>
+    </nav>
+</div>
+<!-- End: Breadcrumb -->
+<style>
+    /* Default state with light grey background */
+    .nav-tabs .nav-link {
+      background-color: #f8f9fa; /* light grey */
+      color: #495057; /* adjust text color as needed */
+    }
+  
+    /* Hover state with dark grey background */
+    .nav-tabs .nav-link:hover {
+      background-color: #6c757d; /* dark grey */
+      color: white; /* change text color on hover */
+    }
+  
+    /* Active state with light blue background */
+    .nav-tabs .nav-link.active {
+      background-color: #add8e6; /* light blue */
+      color: white; /* active tab text color */
+    }
+    
+  </style>
+  <style>
+    .nav-tabs .nav-link {
+      margin-right: 10px; /* adjust the right margin as needed */
+      padding: 8px 16px; /* optional, adjust padding for better visual appearance */
+    }
+  </style>
+  

@@ -1,0 +1,161 @@
+{% extends 'app_assessment/__common/base_template.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+
+{% block content %}
+<style>
+    .card-text {
+        font-size: 11px;
+        color: grey;
+    }
+    .card {
+        min-height: 200px;
+        display: flex;
+        flex-direction: column;  /* Align children of the card vertically */
+    }
+    .card-body {
+        flex: 1;  /* Flex-grow to use available space */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; /* Pushes the button to the bottom */
+    }
+</style>
+<style>
+    .mermaid .node rect,
+    .mermaid .node polygon {
+        fill: transparent !important; /* Ensures background is transparent */
+        stroke: transparent !important; /* Removes any border */
+    }
+</style>
+{% include 'app_assessment/__common/navbar.html' %}
+
+<!-- Begin: Content -->
+<div class="container-fluid mt-4">
+    <div class="row bg-info">
+        <div class="col col-md-12">
+            {% include 'app_assessment/configure/conduct_assessments/breadcrumb_conduct_assessments.html' %}
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <!-- content part1 -->
+    <div class="row">  
+        <div class="col col-md-12">           
+            <!-- display -->
+            {% include 'app_assessment/configure/conduct_assessments/breadcrumb_conduct_assessments.html' %}
+            <div class="tab-content">
+    <div class="tab-pane active">
+        <h3>Conduct Assessments</h3>
+        <p>Conducing assessments is a simplified step-by-step process of selecting, configuring, scheduling, assessing, reviewing and analysing reports.</p>
+        <!-- Content for selecting an assessment goes here -->
+         <!-- Include Mermaid.js from CDN -->
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+<!-- <script>
+    mermaid.initialize({startOnLoad:true});
+</script> -->
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+           themeCSS: `
+                .mermaid .edgePath .path {
+                    stroke: #4a90e2; /* Color for the arrow line */
+                    stroke-width: 10px; /* Width of the arrow line */
+                    fill: orange; /* This attempts to set the arrowhead color */
+                }
+                .mermaid .edgePath path {
+                    fill: orange; /* Explicitly setting the fill color of the arrowhead */
+                    stroke: orange; /* Matching the stroke to ensure consistency */
+                }
+            `
+        });
+    });
+</script>
+<div class="container">
+
+    <div class="mermaid">
+       
+        graph LR
+        A[<a href="{% url 'select_assessment' org.id %}"><img src="{% static 'img/assessment/select_step.svg' %}" width='20' height='20'/>Step 1: Select Assessment</a>] -->|Data Flow| B[<a href="{% url 'select_assessment' org.id %}"><img src="{% static 'img/assessment/configure_step.svg' %}" width='20' height='20'/>Step 2: Configure</a>]
+        B -->|Proceed| C[<a href="{% url 'select_assessment' org.id %}"><img src="{% static 'img/assessment/schedule_step.svg' %}" width='20' height='20'/>Step 3: Schedule</a>]
+        C -->|Review| D[<a href="{% url 'select_assessment' org.id %}"><img src="{% static 'img/assessment/review_step.svg' %}" width='20' height='20'/>Step 4: Assess</a>]
+        D -->|See Reports| E[<a href="{% url 'select_assessment' org.id %}"><img src="{% static 'img/assessment/analyze_step.svg' %}" width='20' height='20'/>Step 5: Analyze</a>]
+        E -->|Continuous improvement| A
+    </div>
+
+
+    
+    <div class="mermaid">
+
+        flowchart TD
+        
+        ST1[Strategic Theme: Dynamic Display] --> A
+
+        A[Epic] --> B1[Feature: Database storage facility]
+        B1 --> C1[Spike]
+        B1--> D1[User Story]
+        D1 --> E1[Task]
+        D1 --> F1[Bug]
+
+        A[Epic] --> B2[Component: Display component]
+        B2 --> C2[Spike]
+        B2--> D2[User Story]
+        D2 --> E2[Task]
+        D2 --> F2[Bug]
+
+        A[Epic] --> B3[Capability: Display System]
+        B3 --> C3[Spike]
+        B3--> D3[User Story]
+        D3 --> E3[Task]
+        D3 --> F3[Bug]
+
+        
+        linkStyle default stroke:red
+        linkStyle 0 stroke-width:4px,stroke:green
+        linkStyle 3 stroke:blue
+        linkStyle 4 stroke:blue
+     
+    </div>
+
+    <div class="mermaid">
+        flowchart TD
+            ST1[Strategic Theme: Dynamic Display] -.-> A
+            
+            A[Epic] -.-> B1[Feature: Database storage facility]
+            B1 -.-> C1[Spike]
+            B1-.-> D1[User Story]
+            D1 -.-> E1[Task]
+            D1 -.-> F1[Bug]
+    
+            A[Epic] -.-> B2[Component: Display component]
+            B2 -.-> C2[Spike]
+            B2-.-> D2[User Story]
+            D2 -.-> E2[Task]
+            D2 -.-> F2[Bug]
+    
+            A[Epic] -.-> B3[Capability: Display System]
+            B3 -.-> C3[Spike]
+            B3-.-> D3[User Story]
+            D3 -.-> E3[Task]
+            D3 -.-> F3[Bug]
+    
+        linkStyle default stroke:red
+        linkStyle 0 stroke-width:4px,stroke:green
+        linkStyle 3 stroke:blue
+        linkStyle 4 stroke:blue
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+            <!-- end display-->
+        </div>
+    </div>
+</div>  
+
+<!-- End: Content -->
+{% endblock content %}

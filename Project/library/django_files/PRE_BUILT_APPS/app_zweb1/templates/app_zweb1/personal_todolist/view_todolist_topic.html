@@ -1,0 +1,141 @@
+{% extends 'app_zweb1/__common/base_template.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+{% load app_web_my_filters %}
+
+{% block content %}
+<style>
+    .no-bullets {
+        list-style-type: none; /* Removes bullets */
+        padding-left: 0; /* Removes padding */
+        margin-left: 0; /* Aligns to the left edge if needed */
+    }
+</style>
+{% include 'app_zweb1/__common/navbar.html' %}
+{% include 'app_zweb1/personal_todolist/breadcrumb_todolist.html' %}
+<!-- Begin: Content -->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col col-md-12">
+            <div class="container-fluid-width">
+                <div class="row">
+                    <div class="col col-md-8">
+                        <h2>Personal To Do List :: View Topic </h2>
+                    </div>
+                    <div class="col col-md-4 text-end">
+                        <a href="{% url 'personal_todolist' %}" class="btn btn-sm btn-primary"><b>List Topics</b></a>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th colspan="2">
+                            <div class="container-fluid-width">
+                                <div class="row">
+                                    <div class="col col-md-5">
+                                        {{page_title}}:: {{topic}}
+                                    </div>
+                                    <div class="col col-md-7">
+                                        <div class="text-end">
+                                            <a href="{% url 'edit_todolist_topic' topic.id %}" class="btn btn-sm btn-primary"><b>Edit</b></a>
+                                            &nbsp;&nbsp;&nbsp;
+                                            <a href="{% url 'delete_todolist_topic' topic.id %}" class="btn btn-sm btn-danger"><b>Delete</b></a>
+                                            &nbsp;&nbsp;&nbsp;
+                                            <a href="{% url 'view_todolist' topic.id %}" class="btn btn-sm btn-success"><b>To Do List</b></a>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td width="8%">
+                            <strong>Topic</strong>
+                        </td>
+                        <td>
+                            {{topic.name}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Description</strong>
+                        </td>
+                        <td>
+                            {{topic.description}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Progress</strong>
+                        </td>
+                        <td>
+                            <div class="todolist_container">
+                            {% if topic_details %}
+                            {% for detail in topic_details %}
+                                <div>
+                                    <strong>{{ detail.topic_completion_stats.completed_count }}/{{ detail.topic_completion_stats.total_count }}</strong>
+                                    &nbsp;
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" style="width: {{ detail.topic_completion_stats.percent_complete }}%"
+                                             aria-valuenow="{{ detail.topic_completion_stats.percent_complete }}"
+                                             aria-valuemin="0" aria-valuemax="100">
+                                            {{ detail.topic_completion_stats.percent_complete }}%
+                                        </div>
+                                    </div>
+                                </div>
+                    
+                                <b class="h4">To Do List Item(s):</b><br>
+                                <ul class="no-bullets">
+                                    {% for item in detail.todo_items %}
+                                        <li>{{forloop.counter}} 
+                                            <input type="checkbox" id="done_{{ item.item.id }}" name="done_{{ item.item.id }}" 
+                                                value="{{ item.item.id }}" class="done-checkbox" 
+                                                {% if item.item.done %} checked {% endif %}
+                                                onchange="updateDoneState('{{ item.item.id }}', this.checked);">
+                                            {{ item.item.name }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endfor %}
+                            {% else %}
+                                <p>No todo list items found for this topic.</p>
+                            {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    function updateDoneState(todolistId, isType) {
+    $.ajax({
+        url: '/v1/ajax_update_todolist_done_state/',  // Ensure this URL is correct and handled properly in Django
+        type: 'POST',
+        data: {
+            'id': todolistId,
+            'done': isType,
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+        },
+        success: function(response) {
+            console.log('Update successful!');
+            // Optionally, trigger a DOM update here to visually confirm the change
+        },
+        error: function(xhr, status, error) {
+            console.log('An error occurred: ' + error);
+        }
+    });
+}
+</script>
+
+
+
+
+    
+<!-- End: Content -->
+{% endblock content %}

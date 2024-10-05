@@ -1,0 +1,130 @@
+{% extends 'app_assessment/__common/base_template.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+
+{% block content %}
+<style>
+    .card-text {
+        font-size: 11px;
+        color: grey;
+    }
+    .card {
+        min-height: 200px;
+        display: flex;
+        flex-direction: column;  /* Align children of the card vertically */
+    }
+    .card-body {
+        flex: 1;  /* Flex-grow to use available space */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; /* Pushes the button to the bottom */
+    }
+</style>
+<style>
+    .chart-container {
+        width: 50%; /* Adjust this to change the chart size dynamically */
+        max-width: 400px; /* Maximum width */
+        margin: auto; /* Centering the chart if desired */
+    }
+    #ratingsChart {
+        width: 100%; /* Make the canvas size responsive based on the container width */
+        height: auto; /* Maintain aspect ratio */
+        display: block;
+    }
+</style>
+{% include 'app_assessment/__common/navbar.html' %}
+
+<!-- Begin: Content -->
+<div class="container-fluid mt-4">
+    <div class="row bg-info">
+        <div class="col col-md-12">
+            {% include 'app_assessment/configure/conduct_assessments/breadcrumb_conduct_assessments.html' %}
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <!-- content part1 -->
+    <div class="row">  
+        <div class="col col-md-12">           
+            <!-- display -->
+            {% include 'app_assessment/configure/conduct_assessments/__conduct_assessment_tabs.html' %}
+
+            <!-- <div class="tab-content">
+                <div class="tab-pane active">
+                    <h3>Review Assessment</h3>
+                    <p>Setting up the schedule either manually or automatically send the assessments for the required participants.</p>
+                    <a href="{% url 'analyze_assessment' org.id  object.id  %}"
+                    class="btn btn-sm btn-primary"><i class="bi bi-calendar-check"></i> Analyze</a>
+
+                </div>
+            </div> -->
+
+            <div class="tab-content">
+                <div class="tab-pane active">     
+                    <!-- display a header -->                    
+                    <div class="container-fluid-width">
+                        <div class="row pt-3">
+                            <div class="col col-md-7">
+                                <b class="h3">Review Assessment:</b> {{object}} 
+                            </div>
+                            <div class="col col-md-5 text-end">
+                                <a href="{% url 'analyze_assessment' org.id  object.id  %}"
+                                    class="btn btn-sm btn-primary"><i class="bi bi-clipboard-pulse"></i> Next: Analyze Assessment</a>
+                            </div>
+                        </div>
+                        <!-- display a header -->
+
+                        <!-- display radar/spider chart -->
+                        <!-- for rating5 -->
+                        <div class="row">
+                            <div class="col col-md-12">
+                                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                                <div class="chart-container">
+                                    <canvas id="ratingsChart"></canvas>
+                                </div>
+                                <script>
+                                    var ctx = document.getElementById('ratingsChart').getContext('2d');
+                                
+                                    var areaLabels = {{ area_labels_json|safe }};
+                                    var areaData = {{ area_data_json|safe }};
+                                    var ratingsChart = new Chart(ctx, {
+                                        type: 'radar',
+                                        data: {
+                                            labels: areaLabels,  // Now correctly using area labels as an array
+                                            datasets: [{
+                                                label: 'Average Ratings',
+                                                data: areaData,  // Now correctly using area data as an array
+                                                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                                borderColor: 'rgba(255, 99, 132, 1)',
+                                                borderWidth: 1
+                                            }]
+                                        },
+                                        options: {
+                                            scales: {
+                                                r: {
+                                                    suggestedMin: 0,
+                                                    suggestedMax: 5
+                                                }
+                                            }
+                                        }
+                                    });
+                                </script>
+                            </div>
+                        </div>
+                        <!-- for rating5 -->
+                    </div>
+                    
+                     
+                </div>
+            </div>
+
+
+
+            <!-- end display-->
+        </div>
+    </div>
+</div>  
+
+<!-- End: Content -->
+{% endblock content %}

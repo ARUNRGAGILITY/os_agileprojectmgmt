@@ -1,0 +1,567 @@
+{% extends 'app_cafeimpl/__common/base_template.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+{% block content %}
+
+
+<style>
+    #iconPalette {
+        border: 1px solid #ccc;
+        padding: 10px;
+        width: 200px;
+        height: 500px;
+        overflow: auto;
+    }
+    #myCanvas {
+        border: 1px solid black;
+        margin-top: 0px;
+    }
+    img {
+        width: 50px;
+        height: 50px;
+        margin: 5px;
+    }
+</style>
+<div class="container-fluid ">
+    <div class="row bg-info">
+        <div class="col col-md-12">
+           <b class="h4">Basic Drawing</b>
+        </div>
+    </div>
+</div>
+<div class="col col-md-12">
+<div class="container-fluid-width">
+    <div class="row">
+        <div class="col col-md-3">
+            <div id="iconPalette">
+                {% include 'app_zweb1/platform/drawing/basic/icons_display.html' %}
+            </div>
+        </div>
+        <div class="col col-md-6">
+            <canvas id="myCanvas" width="600" height="500"></canvas>
+        </div>
+        <div class="col col-md-3">
+
+    <label for="rotationAngle">Rotation Angle (degrees):</label>
+    <input type="number" id="rotationAngle" value="0" size="3">
+    <button onclick="applyRotation()">Apply Rotation</button>
+    <br>
+    <label for="scaleFactor">Scale Factor (positive, non-zero):</label>
+    <input type="number" id="scaleFactor" value="1" min="0.1" step="0.1" size="4">
+    <button onclick="applyResize()">Apply Resize</button>
+    
+    <br>
+    <button onclick="flipHorizontal()">Flip Horizontal</button>
+    &nbsp;
+    <button onclick="flipVertical()">Flip Vertical</button>
+    <br>
+    <label for="textInput">Text:</label>
+    <input type="text" id="textInput" placeholder="Enter text">
+    <button onclick="addText()">Add Text</button>
+    <button onclick="clearText()">Clear Text</button>
+    <br>
+    <label for="fontSize">Font Size:</label>
+    <input type="number" id="fontSize" value="16">
+    <label for="fontFamily">Font Family:</label>
+    <select id="fontFamily">
+        <option value="Arial">Arial</option>
+        <option value="Verdana">Verdana</option>
+        <option value="Helvetica">Helvetica</option>
+    </select>
+    <label><input type="checkbox" id="bold"> Bold</label>
+    <label><input type="checkbox" id="italic"> Italic</label>
+    <label><input type="checkbox" id="underline"> Underline</label>
+    <br>
+    <label for="textColor">Text Color:</label>
+    <select id="textColor">
+        <option value="#000000">Black</option>
+        <option value="#ffffff">White</option>
+        <option value="#FF0000">Red</option>
+        <option value="#00FF00">Lime</option>
+        <option value="#0000FF">Blue</option>
+        <option value="#FFFF00">Yellow</option>
+        <option value="#00FFFF">Cyan</option>
+        <option value="#FF00FF">Magenta</option>
+        <!-- Add more colors as per your 24 color shades requirement -->
+    </select>
+    <br>
+    <button id="saveAsPngBtn">Save as PNG</button>
+    &nbsp;&nbsp;
+    <button id="saveAsJpgBtn">Save as JPG</button>
+    <br>
+    <button onclick="toggleMode('select')">Select</button>
+    <button onclick="toggleMode('draw')">Draw</button>
+    <br>
+    <button onclick="exportToJson()">Export to JSON</button>
+
+    <textarea id="jsonOutput" rows="10" cols="50"></textarea>
+
+    <br>
+    <label for="brushColor">Color:</label>
+    <input type="color" id="brushColor" value="#000000">
+
+    <label for="brushSize">Brush Size:</label>
+    <input type="range" id="brushSize" min="1" max="10" value="2">
+
+    <button onclick="toggleEraser()">Eraser</button>
+    <button onclick="deleteSelected()">Delete Selected</button>
+
+    </div>
+    </div>
+    </div>
+</div>
+</div>
+
+
+    <script>
+        const canvas = document.getElementById('myCanvas');
+        const ctx = canvas.getContext('2d');
+        let elements = [];
+        let selectedElement = null;
+        let isDragging = false;
+        let offsetX, offsetY;
+        let isDrawing = false;
+        let lastX = 0;
+        let lastY = 0;
+        let mode = 'select';  // Default mode is to select elements, switch to 'draw' for drawing
+        let currentColor = '#000000';
+        let currentSize = 2;
+        let isErasing = false;
+
+        document.getElementById('brushColor').addEventListener('change', function() {
+            currentColor = this.value;
+            isErasing = false; // Disable eraser when changing color
+        });
+
+        document.getElementById('brushSize').addEventListener('change', function() {
+            currentSize = parseInt(this.value, 10);
+            isErasing = false; // Disable eraser when changing brush size
+        });
+        document.getElementById('draggableIcon').addEventListener('dragstart', function(e) {
+            e.dataTransfer.setData('text/plain', e.target.src);
+        });
+
+        function toggleEraser() {
+            isErasing = !isErasing; // Toggle eraser mode
+            currentColor = isErasing ? '#FFFFFF' : document.getElementById('brushColor').value; // Set color to white for eraser
+            currentSize = isErasing ? 10 : parseInt(document.getElementById('brushSize').value, 10); // Increase size for eraser
+        }
+
+
+
+        // JSON OUTPUT
+        function exportToJson() {
+            const json = elements.map(el => {
+                const jsonEl = { ...el };
+                if (el.type === 'image' && el.img) {
+                    // Extract the filename from the URL
+                    jsonEl.src = el.img.src.split('/').pop();  // Gets the last segment after the last '/'
+                }
+                // Remove the 'img' attribute if it exists as it's no longer needed
+                delete jsonEl.img;
+                return jsonEl;
+            });
+
+            const jsonString = JSON.stringify(json, null, 2); // Pretty print JSON
+            document.getElementById('jsonOutput').value = jsonString; // Output to textarea
+        }
+
+
+        // Toggle function to switch between modes
+        function toggleMode(newMode) {
+            mode = newMode;
+        }
+        // save the canvas as an image
+        // Add button listeners
+        document.getElementById('saveAsPngBtn').addEventListener('click', function() {
+            downloadCanvasAsImage('png');
+        });
+
+        document.getElementById('saveAsJpgBtn').addEventListener('click', function() {
+            downloadCanvasAsImage('jpeg'); // note 'jpeg' not 'jpg' for the MIME type
+        });
+        function downloadCanvasAsImage(imageFormat) {
+            let canvas = document.getElementById('myCanvas');
+            let imageURL = canvas.toDataURL('image/' + imageFormat);
+
+            // Create a link and trigger download
+            let downloadLink = document.createElement('a');
+            downloadLink.href = imageURL;
+            downloadLink.download = 'canvas-image.' + imageFormat;
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+        }
+        // end save module
+
+        // begin drawing
+        function draw(e) {
+            if (!isDrawing) return; // Stop the function from running when not moused down
+
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(e.offsetX, e.offsetY);
+            ctx.strokeStyle = "#000"; // Set the color of the drawing line
+            ctx.lineWidth = 2; // Set the width of the drawing line
+            ctx.stroke();
+            ctx.closePath();
+
+            // Update the last position to the current position
+            lastX = e.offsetX;
+            lastY = e.offsetY;
+        }
+        function startNewPath(x, y, color, lineWidth) {
+            const path = {
+                type: 'path',
+                points: [{ x, y }],
+                color: color || "#000", // Default to black if no color is provided
+                lineWidth: lineWidth || 2 // Default line width
+            };
+            elements.push(path);
+            return path;
+        }
+
+        function addPointToPath(x, y) {
+            if (selectedElement && selectedElement.type === 'path') {
+                selectedElement.points.push({ x, y });
+            }
+        }
+
+        // end drawing
+
+     
+
+        canvas.addEventListener('dragover', function(e) {
+            e.preventDefault();
+        });
+
+        canvas.addEventListener('drop', function(e) {
+            e.preventDefault();
+            const src = e.dataTransfer.getData('text/plain');
+            const x = e.clientX - canvas.offsetLeft;
+            const y = e.clientY - canvas.offsetTop;
+            const img = new Image();
+            img.src = src;
+
+            img.onload = () => {
+                elements.push({
+                    type: "image",
+                    img: img,
+                    x: x - img.width / 2,
+                    y: y - img.height / 2,
+                    width: img.width,
+                    height: img.height,
+                    rotation: 0
+                });
+                drawAll();
+            };
+        });
+
+        // Simulated JSON load (replace this with your actual AJAX call or similar if needed)
+        const imageData = [
+    ];
+       
+        // Initialize canvas with images from JSON data
+        function loadImages() {
+            imageData.forEach(data => {
+                console.log("data type", data.type);
+                if (data.type == "image") {
+                                  
+                    const img = new Image();
+                    img.onload = () => {
+                        elements.push({
+                            type: "image",
+                            img: img,
+                            x: data.x,
+                            y: data.y,
+                            width: data.width,
+                            height: data.height,
+                            rotation: data.rotation
+                        });
+                        drawAll();  // Draw when all images are loaded
+                    };
+                    img.src = data.src;
+                } else if (data.type === "text") {
+
+                    elements.push({
+                        type: "text",
+                        text: data.text,
+                        x: data.x,
+                        y: data.y,
+                        fontSize: data.fontSize,
+                        fontFamily: data.fontFamily,
+                        fontWeight: data.fontWeight,
+                        fontStyle: data.fontStyle,
+                        underline: data.underline,
+                        rotation: data.rotation
+                    });
+                    drawAll();  // Ensure to draw text immediately after loading
+                } else if (data.type === "path") {
+                    const path = {
+                        type: "path",
+                        points: data.points,
+                        color: data.color,
+                        lineWidth: data.lineWidth
+                    };
+                    elements.push(path);
+                    drawAll();  // Draw the path
+                }
+            });
+        }
+        // SUPER IMPORTANT
+        window.onload = loadImages;  // Load images when the page is ready
+ 
+       
+       
+        canvas.addEventListener('mousedown', function(e) {
+        const x = e.offsetX, y = e.offsetY;
+
+
+        if (mode === 'draw') {
+            isDrawing = true;
+            lastX = x;
+            lastY = y;
+            //selectedElement = startNewPath(x, y);
+            selectedElement = startNewPath(x, y, currentColor, currentSize);
+            return; // Skip the rest of the function
+        }
+
+        selectedElement = null;
+        let elementFound = false;
+
+        // Iterate in reverse to prioritize elements on top if overlapping
+        for (let i = elements.length - 1; i >= 0; i--) {
+            const el = elements[i];
+            // Calculate text width and positioning dynamically
+            if (el.type === 'text') {
+                ctx.font = `${el.fontWeight} ${el.fontStyle} ${el.fontSize}px ${el.fontFamily}`;
+                const metrics = ctx.measureText(el.text);
+                const textWidth = metrics.width;
+                const textHeight = el.fontSize * 1.2; // Approximate the height based on font size
+                
+                // Center the hit box around the text's specified position
+                if (x >= el.x - textWidth / 2 && x <= el.x + textWidth / 2 &&
+                    y >= el.y - textHeight / 2 && y <= el.y + textHeight / 2) {
+                    selectedElement = el;
+                    offsetX = x - el.x;
+                    offsetY = y - el.y;
+                    isDragging = true;
+                    elementFound = true;
+                    break;
+                }
+            } else if (el.type === 'image') {
+                // Check for images as usual
+                if (x > el.x && x < el.x + el.width && y > el.y && y < el.y + el.height) {
+                    selectedElement = el;
+                    offsetX = x - el.x;
+                    offsetY = y - el.y;
+                    isDragging = true;
+                    elementFound = true;
+                    break;
+                }
+            }
+        }
+
+        if (elementFound) {
+            drawAll();  // Redraw to show the selected element with a border
+        } else {
+            drawAll();  // Deselect any selected element if clicking outside any images or text
+        }
+    });
+
+    canvas.addEventListener('mousemove', function(e) {
+        if (mode === 'draw' && isDrawing) {
+            addPointToPath(e.offsetX, e.offsetY);
+            drawAll();  // Redraw to include the new segment of the path
+            return;
+        }
+        // if (mode === 'draw' && isDrawing) {
+        //     // Drawing logic
+        //     ctx.beginPath();
+        //     ctx.moveTo(lastX, lastY);
+        //     ctx.lineTo(e.offsetX, e.offsetY);
+        //     ctx.strokeStyle = "#000"; // Set color or make it customizable
+        //     ctx.lineWidth = 2; // Set line width or make it customizable
+        //     ctx.stroke();
+        //     lastX = e.offsetX;
+        //     lastY = e.offsetY;
+        //     return;
+        // }
+
+    
+        if (!isDragging || !selectedElement) return;
+        selectedElement.x = e.offsetX - offsetX;
+        selectedElement.y = e.offsetY - offsetY;
+        drawAll();
+    });
+
+    canvas.addEventListener('mouseup', function(e) {
+        if (mode === 'draw') {
+            isDrawing = false; // Stop drawing
+            selectedElement = null;
+            return;
+        }
+        isDragging = false;
+    });
+    canvas.addEventListener('mouseout', function(e) {
+        if (mode === 'draw' && isDrawing) {
+            isDrawing = false; // Stop drawing
+        }
+    });
+    // ADD TEXT
+
+    function addText() {
+        const text = document.getElementById('textInput').value;
+        const fontSize = parseInt(document.getElementById('fontSize').value);
+        const fontFamily = document.getElementById('fontFamily').value;
+        const bold = document.getElementById('bold').checked ? 'bold' : '';
+        const italic = document.getElementById('italic').checked ? 'italic' : '';
+        const underline = document.getElementById('underline').checked;
+        const color = document.getElementById('textColor').value;
+        if (text) {
+            elements.push({
+                type: "text",
+                text: text,
+                x: 100,  // default position
+                y: 100,  // default position
+                fontSize: fontSize,
+                fontFamily: fontFamily,
+                fontWeight: bold,
+                fontStyle: italic,
+                textDecoration: underline,
+                color: color,
+                rotation: 0
+            });
+            drawAll();
+        }
+    }
+
+    function clearText() {
+        elements = elements.filter(el => el.type !== 'text');
+        drawAll();
+    }
+
+    
+    
+    function drawAll() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas to start fresh
+    elements.forEach(el => {
+        ctx.save(); // Save the current state of the canvas
+
+        // Common transformations for both images and text
+        ctx.translate(el.x + (el.type === 'image' ? el.width / 2 : 0), el.y + (el.type === 'image' ? el.height / 2 : 0));
+        ctx.rotate(el.rotation * Math.PI / 180);
+
+        // Apply horizontal and vertical flips
+        if (el.flipHorizontal) {
+            ctx.scale(-1, 1);
+        }
+        if (el.flipVertical) {
+            ctx.scale(1, -1);
+        }
+        ctx.strokeStyle = el.color;
+        ctx.lineWidth = el.lineWidth;
+
+        if (el.type === 'path') {
+            ctx.beginPath();
+            el.points.forEach((point, index) => {
+                if (index === 0) {
+                    ctx.moveTo(point.x, point.y);
+                } else {
+                    ctx.lineTo(point.x, point.y);
+                }
+            });
+            ctx.stroke();
+        } else if (el.type === 'image') {
+            ctx.drawImage(el.img, -el.width / 2, -el.height / 2, el.width, el.height);
+        } else if (el.type === 'text') {
+            // Set text properties
+            ctx.font = `${el.fontWeight} ${el.fontStyle} ${el.fontSize}px ${el.fontFamily}`;
+            ctx.fillStyle = el.color;
+            const metrics = ctx.measureText(el.text);
+            el.width = metrics.width;
+            el.height = el.fontSize * 0.9; // Update the height to better estimate
+            // Adjust the text drawing position
+            ctx.fillText(el.text, -metrics.width / 2, -el.height / 2 + el.fontSize / 2);
+
+            if (el.textDecoration) {
+                ctx.beginPath();
+                ctx.moveTo(-metrics.width / 2, el.fontSize / 2);
+                ctx.lineTo(metrics.width / 2, el.fontSize / 2);
+                ctx.strokeStyle = el.color;
+                ctx.stroke();
+            }
+        }
+
+        // Draw a bounding box if the element is selected
+        if (el === selectedElement) {
+            ctx.strokeStyle = el.type === 'text' ? 'blue' : 'red';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(-el.width / 2, -el.height / 2 - 10, el.width, el.height +10);
+        }
+
+        ctx.restore(); // Restore the canvas state for the next element
+    });
+}
+
+        function applyRotation() {
+            const rotationAngle = parseInt(document.getElementById('rotationAngle').value);
+            if (selectedElement) {
+                selectedElement.rotation = rotationAngle;
+                drawAll();
+            } else {
+                alert('No element selected');
+            }
+        }
+
+        function applyResize() {
+            const scaleFactor = parseFloat(document.getElementById('scaleFactor').value);
+            if (selectedElement && scaleFactor > 0) {
+                selectedElement.width *= scaleFactor;
+                selectedElement.height *= scaleFactor;
+                drawAll();
+            } else {
+                alert('No element selected or invalid scale factor');
+            }
+        }
+
+
+        function flipHorizontal() {
+        if (selectedElement) {
+                // Toggle a flip state property
+                selectedElement.flipHorizontal = !selectedElement.flipHorizontal;
+                drawAll();
+            } else {
+                alert('No element selected');
+            }
+        }
+
+        function flipVertical() {
+            if (selectedElement) {
+                // Toggle a flip state property
+                selectedElement.flipVertical = !selectedElement.flipVertical;
+                drawAll();
+            } else {
+                alert('No element selected');
+            }
+        }
+
+        // delete option
+        document.addEventListener('keydown', function(event) {
+        // Check if the 'Delete' key was pressed
+        if (event.keyCode === 46 || event.key === 'Delete') {  // Some browsers might use 'event.key'
+            // Ensure there is a selected text element to delete
+            console.log("delete key pressed");
+            if (selectedElement) {
+                // Filter out the selected text element from the elements array
+                elements = elements.filter(el => el !== selectedElement);
+                // Clear the dragTarget since it's been removed
+                dragTarget = null;
+                // Redraw the canvas without the deleted element
+                drawAll();
+                }
+            }
+        });
+    </script>
+{% endblock   %}

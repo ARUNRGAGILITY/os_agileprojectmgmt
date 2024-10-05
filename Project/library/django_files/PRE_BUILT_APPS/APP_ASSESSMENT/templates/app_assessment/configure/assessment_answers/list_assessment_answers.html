@@ -1,0 +1,122 @@
+
+{% extends 'app_assessment/__common/base_template.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+{% load app_web_my_filters %}
+{% load markdown_extras  %}
+{% block content %}
+
+{% include 'app_assessment/__common/navbar.html' %}
+
+<!-- Begin: Content -->
+<div class="container-fluid mt-4">
+    <div class="row bg-info">
+        <div class="col col-md-12">
+            {% include 'app_assessment/configure/assessment_answers/breadcrumb_assessment_answers.html' %}
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col col-md-12">           
+            <!-- display -->
+            
+            <div class="row">
+                <div class="col col-md-12">
+                    <div class="container-fluid-width">
+                        <div class="row pb-2">
+                            <div class="col col-md-8">
+                                <b class="h2">Assessment Answers</b>
+                                &nbsp;&nbsp;
+                                {{org}}/Assessment Answers List
+                            </div>
+                            <div class="col col-md-4 text-end">
+                                <span class="display_count">{{objects_count}} assessment_answer(s)</span>
+                                &nbsp;&nbsp;
+                                <a href="{% url 'create_assessment_answer' question_id  %}" 
+                                class="btn btn-sm btn-success"><b>+ Create Assessment Answer</b></a>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-bordered sortable_table">
+                        <thead>
+                            <tr>
+                                <th width="2%"><i class="bi bi-grip-vertical"></i></th>
+                                <th width="2%">#</th>
+                                <th>Assessment Answer</th>
+                                <th width="20%">Description</th>
+                                <th width="10%">Configure</th>
+                                <th width="50%">Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody  id="sortable" class="sortable-tbody">
+                            {% for tobject in tobjects %}
+                            <tr id="{{tobject.id}}_{{ forloop.counter }}" class="sortable-row display_tr">
+                                <td class="drag-handle">
+                                    <i class="bi bi-grip-vertical"></i>
+                                </td>
+                                <td>{{forloop.counter}}</td>
+                                <td width="20%"><strong>{{tobject.name}}</strong></td>
+                                <td width="">
+                                    {{tobject.description}}
+                                </td>
+                                <td width="35%">
+                                
+                                </td>
+                                <td width="20%">
+                                    <a href="{% url 'view_assessment_answer' question_id  tobject.id  %}"
+                                    class="btn btn-sm btn-primary"><i class="bi bi-eye"></i></a>
+                                    &nbsp;&nbsp;
+                                    <a href="{% url 'edit_assessment_answer' question_id  tobject.id %}"
+                                    class="btn btn-sm btn-warning"><i class="bi bi-pencil-square"></i></a>
+                                    &nbsp;&nbsp;
+                                    <a href="{% url 'delete_assessment_answer' question_id  tobject.id %}"
+                                    class="btn btn-sm btn-danger"><i class="bi bi-x-square"></i></a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                            <tr>
+                                <td colspan="5">
+                                    {% include 'app_assessment/__common/pagination.html' %}
+                                </td>
+                            </tr>                        
+                    </table>
+                <!-- end display -->
+        </div>
+    </div>
+  
+</div>
+
+<script>
+    $(".sortable_table").find("tbody").sortable({
+      items: "> tr",
+      handle: ".drag-handle",
+      appendTo: "parent",
+      cancel: "[contenteditable]",
+      update: function(event, ui) {
+              var serialOrder = $('#sortable').sortable('serialize');
+              var arrayOrder = $('#sortable').sortable('toArray');
+              //alert(arrayOrder);
+              $.ajax({
+                url: '/v1/ajax_update_model_list_sorted/',
+                type: 'POST',
+                data : {
+                  'csrfmiddlewaretoken': "{{ csrf_token }}",
+                  'model_name': 'AssessmentAnswers',
+                  'app_name': 'app_assessment',
+                  'sorted_list_data': JSON.stringify(arrayOrder),
+                  
+                },
+                dataType: 'json',
+                success: function(data) {
+                  console.log(data);
+                }
+              })
+            }
+    });
+    </script>
+<!-- End: Content -->
+{% endblock content %}

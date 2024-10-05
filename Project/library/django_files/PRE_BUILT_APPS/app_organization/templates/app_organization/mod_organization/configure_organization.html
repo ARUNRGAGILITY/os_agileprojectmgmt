@@ -1,0 +1,178 @@
+
+{% extends 'app_common/common_files/base_template.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+{% load app_web_my_filters %}
+{% load markdown_extras  %}
+
+{% block content %}
+{% include 'app_common/common_files/navbar.html' %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col col-md-12">
+            {% include 'app_organization/mod_organization/breadcrumb_organizations.html' %}
+        </div>
+    </div>
+</div>
+<!-- Begin: Content -->
+<form method="post">
+    {% csrf_token %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col col-md-12">
+                <div class="container-fluid-width">
+                    <div class="row">
+                        <div class="col col-md-8">
+                            <h2>Configure Organization</h2>
+                        </div>
+                        <div class="col col-md-4 text-end">
+                            <a href="{% url 'list_organizations' %}"
+                             class="btn btn-sm btn-primary"><b>List Organization(s)</b></a>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-bordered">
+                   <tr>
+                        <td width="33.33%">
+                            <a id="Backlog_super_type" href="{% url 'list_backlog_super_types' object.id %}"
+                            class="btn btn-sm btn-primary">
+                                <i class="bi bi-diagram-3"></i> 
+                                Backlog Super Type
+                            </a>
+                            &nbsp;&nbsp;
+                        </td>
+                        <td width="33.33%">                            
+                            <a id="Backlog" href="{% url 'list_backlogs' object.id 0 %}"
+                            class="btn btn-sm btn-primary">
+                            <i class="bi bi-diagram-3"></i> 
+                            Backlog
+                            </a>
+                        </td>
+                        
+                   </tr>
+
+                   <tr>
+                        <td width="33.33%">                                
+                            <a id="System_super_type" href="{% url 'list_system_super_types' object.id %}"
+                            class="btn btn-sm btn-primary">
+                            <i class="bi bi-diagram-3"></i> 
+                            System Super Type
+                            </a>
+                            &nbsp;&nbsp;
+                        </td>
+                        <td width="33.33%">
+                            <a id="System" href="{% url 'list_systems' object.id 0 %}"
+                            class="btn btn-sm btn-primary">
+                                <i class="bi bi-diagram-3"></i> 
+                                System
+                            </a>
+                        </td>
+                   </tr>
+
+
+                   <tr>
+                    <td width="33.33%">
+                        <a id="System" href="{% url 'list_teams' object.id  %}"
+                        class="btn btn-sm btn-primary">
+                            <i class="bi bi-diagram-3"></i> 
+                            Team(s)
+                        </a>  
+                    </td>
+                    <td width="33.33%">
+                        
+                    </td>
+                    </tr>
+                    <tr>
+                        <td width="33.33%">
+                            <a id="System" href="{% url 'list_projects' object.id  %}"
+                            class="btn btn-sm btn-primary">
+                                <i class="bi bi-diagram-3"></i> 
+                                Project(s)
+                            </a>  
+                        </td>
+                        <td width="33.33%">
+                            
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td width="33.33%">
+                            <a id="System" href="{% url 'list_products' object.id  %}"
+                            class="btn btn-sm btn-primary">
+                                <i class="bi bi-diagram-3"></i> 
+                                Product(s)
+                            </a>  
+                        </td>
+                        <td width="33.33%">
+                            
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td width="33.33%">
+                            <a id="System" href="{% url 'scrum_homepage' object.id  %}"
+                            class="btn btn-sm btn-primary">
+                                <i class="bi bi-diagram-3"></i> 
+                                ScrumSW App Home
+                            </a>  
+
+                            <a id="System" href="{% url 'list_roadmap_types' object.id  %}"
+                            class="btn btn-sm btn-primary">
+                                <i class="bi bi-diagram-3"></i> 
+                                 Roadmap Types
+                            </a>  
+                            
+                            <a id="System" href="{% url 'list_roadmaps' object.id  %}"
+                            class="btn btn-sm btn-primary">
+                                <i class="bi bi-diagram-3"></i> 
+                                 Roadmap
+                            </a>  
+                            <a id="System" href="{% url 'list_epics' object.id  %}"
+                            class="btn btn-sm btn-primary">
+                                <i class="bi bi-diagram-3"></i> 
+                                 Epics
+                            </a>  
+
+                            <a id="System" href="{% url 'list_teams' object.id  %}"
+                            class="btn btn-sm btn-primary">
+                                <i class="bi bi-diagram-3"></i> 
+                                 Team(s)
+                            </a>  
+
+                            <a id="System" href="{% url 'list_backlogs' object.id  %}"
+                            class="btn btn-sm btn-primary">
+                                <i class="bi bi-diagram-3"></i> 
+                                 Backlog(s)
+                            </a>  
+
+                            <a id="System" href="{% url 'list_projects' object.id  %}"
+                            class="btn btn-sm btn-primary">
+                                <i class="bi bi-diagram-3"></i> 
+                                 Projec(s)
+                            </a>  
+
+                            <a id="System" href="{% url 'list_products' object.id  %}"
+                            class="btn btn-sm btn-primary">
+                                <i class="bi bi-diagram-3"></i> 
+                                 Product(s)
+                            </a>  
+                        </td>
+                        <td width="33.33%">
+                            
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<!-- End: Content -->
+{% endblock content %}
+
+
+
+
+

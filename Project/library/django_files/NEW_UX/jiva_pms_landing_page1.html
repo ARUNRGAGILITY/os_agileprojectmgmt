@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Jiva PMS</title>
+
+    <!-- Bootstrap CSS CDN -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* Global Styles */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: white;
+            overflow-x: hidden;
+        }
+
+        .header {
+            font-size: 48px;
+            font-weight: bold;
+        }
+
+        .subheader {
+            font-size: 24px;
+            margin-top: 10px;
+            font-weight: normal;
+        }
+
+        /* Buttons */
+        .buttons {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Sticky Footer */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            padding: 10px 0;
+            background-color: #000080; /* Dark blue color */
+            color: white;
+            font-size: 14px;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .header {
+                font-size: 36px;
+            }
+
+            .subheader {
+                font-size: 20px;
+            }
+
+            .buttons {
+                display: block;
+                text-align: center;
+            }
+
+            .btn {
+                font-size: 14px;
+                padding: 8px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Bootstrap Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <a class="navbar-brand" href="#">JIVA PMS</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#home">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#projects">Projects</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#blogs">Blogs</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#learning">Learning Center</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Landing Page Content -->
+    <div class="container mt-5 pt-5">
+        <div class="header">JIVA PMS</div>
+        <div class="subheader">Jiva Project Management System</div>
+
+        <!-- Bootstrap Carousel Slider -->
+        <div id="featureCarousel" class="carousel slide mt-4" data-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <div class="slider-box">
+                        <p>Jiva is a cutting-edge, open-source Project Management System designed for individuals, teams, and enterprises seeking simplicity, flexibility, and scalability.</p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="slider-box">
+                        <p>Whether you're managing personal projects, coordinating with small teams, or overseeing large-scale enterprise operations, Jiva empowers you to streamline workflows and optimize productivity.</p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="slider-box">
+                        <p>Leverage the power of agile project management right out of the box or customize the platform to suit your unique needs. Best of all, it’s completely free under the MIT License.</p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="slider-box">
+                        <p>For those looking to accelerate their journey, we offer premium consulting services, including tailored training, coaching, and full-scale implementation support.</p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="slider-box">
+                        <p>Discover the freedom to manage projects your way with Jiva, and transform how you and your team collaborate, plan, and succeed.</p>
+                    </div>
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#featureCarousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#featureCarousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+
+        <!-- Buttons for Sign Up, Sign In, and About the Project -->
+        <div class="buttons">
+            <a href="#" class="btn">Sign Up</a>
+            <a href="#" class="btn">Sign In</a>
+            <a href="#" class="btn">About the Project</a>
+        </div>
+    </div>
+
+    <!-- Sticky Footer -->
+    <div class="footer">
+        &copy; <span id="year"></span> Jiva Project Management System. All Rights Reserved.
+    </div>
+
+    <!-- Script for the year in the footer -->
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+
+    <!-- Bootstrap JS, Popper.js, and jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,106 @@
+{% extends 'app_zweb1/__common/base_template.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+{% load app_web_my_filters %}
+
+{% block content %}
+{% include 'app_zweb1/__common/navbar.html' %}
+<!-- Begin: Content -->
+<form  method="POST">
+{% csrf_token %}
+<div class="container mt-4">
+    <h2 class="mb-3">Features</h2>
+    <table class="table table-bordered">
+        <thead class="table-light">
+            <tr>
+                <td colspan="4">
+                    {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    {% endfor %}
+                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                    <script>
+                        $(document).ready(function() {
+                            // Wait for 5 seconds
+                            setTimeout(function() {
+                                // Use jQuery to fade out all elements with the class 'alert'
+                                $('.alert').fadeOut('slow');
+                            }, 5000); // Adjust time as needed
+                        });
+                    </script>
+                {% endif %}
+                
+                </td>
+            </tr>
+            <tr>
+                <th>Feature</th>
+                <th>Community Edition</th>
+                <th>Enterprise Edition - Cloud</th>
+                <th>Enterprise Edition - SaaS</th>
+            </tr>
+        </thead>
+        <tbody>            
+            <tr>
+                <td>Framework Support</td>
+                <td>All Community: SAFe, Agile at Scale, Custom, 
+                    <br>Scrum, Kanban, and Combining practices</td>
+                <td>All Community + Custom</td>
+                <td>All Community + Custom</td>                
+            </tr>
+            <tr>
+                <td>User Management</td>
+                <td>Unlimited</td>
+                <td>Unlimited</td>
+                <td>Unlimited</td>                
+            </tr>
+            <tr>
+                <td>Customization</td>
+                <td>Advanced</td>
+                <td>Advanced</td>
+                <td>Advanced</td>                
+            </tr>
+            <tr>
+                <td>Support</td>
+                <td>Community support</td>
+                <td>24/7 Priority support</td>
+                <td>24/7 Priority support</td>
+            </tr>
+            <tr>
+                <td>Analytics and Reporting</td>
+                <td>Advanced Reports</td>
+                <td>Advanced Analytics</td>
+                <td>Advanced Analytics</td>
+            </tr>
+            <tr>
+                <td>Consulting for Transformation</td>
+                <td>No Fees for first 10hours <br>Chargeable minute basis
+                </td>
+                <td>Chargeable minute basis</td>
+                <td>Chargeable minute basis</td>
+            </tr>
+            <tr>
+                <td>
+                    Consult
+                </td>
+                <td>
+                    <input type="submit" class="btn btn-sm btn-success" id="community_edition" name="community_edition" value="Consult for Community Edition">
+                </td>
+                <td>
+                    <input type="submit" class="btn btn-sm btn-info" id="cloud_edition" name="cloud_edition" value="Consult for Cloud Edition">
+                </td>
+                <td>
+                    <input type="submit" class="btn btn-sm btn-primary" id="saas_edition" name="saas_edition" value="Consult for SaaS Edition">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</form>
+<!-- End: Content -->
+{% endblock content %}

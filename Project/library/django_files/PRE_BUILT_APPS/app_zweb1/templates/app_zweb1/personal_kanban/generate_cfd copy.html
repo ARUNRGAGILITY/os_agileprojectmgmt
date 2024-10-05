@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cumulative Flow Diagram</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .chart-container {
+            width: 80%;
+            height: 80%;
+        }
+    </style>
+</head>
+<body>
+    <div class="chart-container">
+        <canvas id="cfdChart"></canvas>
+    </div>
+    <script>
+        // Parse the JSON string into JavaScript objects
+        const labels = JSON.parse('{{ labels|safe }}');
+        const datasets = JSON.parse('{{ datasets|safe }}');
+
+        const ctx = document.getElementById('cfdChart').getContext('2d');
+        const cfdChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: datasets
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                elements: {
+                    line: {
+                        tension: 0.4 // Smooths the line for better visual presentation
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    hover: {
+                        mode: 'index',
+                        intersect: false
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
