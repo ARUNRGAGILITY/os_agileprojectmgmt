@@ -124,89 +124,82 @@
      );
  </script>
 
- <script>
-   
-     function toggleSidebar() {
-         const sidebar = document.getElementById('sidebar');
-         const isMobileView = window.innerWidth <= 768; // Check if it's mobile view
- 
-         // Toggle the sidebar only in mobile view
-         if (isMobileView) {
-             sidebar.classList.toggle('open');
-         }
-     }
- 
-     // Function to close the sidebar when clicking outside of it (for mobile view)
-     window.addEventListener('click', function(e) {
-         const sidebar = document.getElementById('sidebar');
-         const toggleBtn = document.querySelector('.toggle-btn');
- 
-         // Close the sidebar if the user clicks outside the sidebar and it's open
-         if (!sidebar.contains(e.target) && !toggleBtn.contains(e.target) && sidebar.classList.contains('open')) {
-             sidebar.classList.remove('open');
-         }
-     });
-    //  // Close the sidebar when the mouse leaves the sidebar area in responsive mode
-    //  document.getElementById('sidebar').addEventListener('mouseleave', function() {
-    //      const isMobileView = window.innerWidth <= 768;  // Check if in mobile view
-    //      const sidebar = document.getElementById('sidebar');
 
-    //      if (isMobileView && sidebar.classList.contains('open')) {
-    //          sidebar.classList.remove('open');  // Close the sidebar when mouse leaves it
-    //      }
-    //  });
-     // Listen for window resize event to reset sidebar state in larger screens
-     window.addEventListener('resize', function() {
-         const sidebar = document.getElementById('sidebar');
-         const isMobileView = window.innerWidth <= 768;
- 
-         // If returning to desktop mode, reset the sidebar state
-         if (!isMobileView && sidebar.classList.contains('open')) {
-             sidebar.classList.remove('open');
-         }
-     });
- 
-     function displayContent(contentId, breadcrumbText) {
-         // Hide all content sections
-         document.querySelectorAll('.contentbar > #content > div').forEach(section => {
-             section.style.display = 'none';
-         });
- 
-         // Show the selected content section
-         document.getElementById(contentId).style.display = 'block';
- 
-         // Remove 'active' class from all sidebar, navbar, and dropdown nav links
-         document.querySelectorAll('.sidebar .nav-link, .navbar .nav-link, .dropdown-item').forEach(link => {
-             link.classList.remove('active');
-             let icon = link.querySelector('i');
-             if (icon) {
-                 icon.className = icon.className.replace('-fill', '');
-             }
-         });
- 
-         // Add 'active' class to the clicked link in the sidebar, navbar, or dropdown
-         const activeLink = document.querySelector(`.sidebar .nav-link[onclick="displayContent('${contentId}', '${breadcrumbText}')"], .navbar .nav-link[onclick="displayContent('${contentId}', '${breadcrumbText}')"], .dropdown-item[onclick="displayContent('${contentId}', '${breadcrumbText}')"]`);
-         if (activeLink) {
-             activeLink.classList.add('active');
-             // Update icon to filled variant for active link
-             const icon = activeLink.querySelector('i');
-             if (icon) {
-                 icon.className = icon.className.replace(/bi-[^-]+/, (match) => match + '-fill');
-             }
-         }
-         // Ensure Home link is active if the listSiteContent is displayed
-         if (contentId === 'listSiteContent') {
-             const homeLink = document.querySelector('.navbar .nav-link.active[href="/"], .navbar .nav-link[href="/"]');
-             if (homeLink) {
-                 homeLink.classList.add('active');
-             }
-         }
+<script>
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const isMobileView = window.innerWidth <= 768; // Check if it's mobile view
 
+        // Toggle the sidebar only in mobile view
+        if (isMobileView) {
+            sidebar.classList.toggle('open');
+        }
+    }
 
-     } 
-     // Set default content
-     displayContent('listSiteContent', 'SuperAdmin Home');
+    // Function to close the sidebar when clicking outside of it (for mobile view)
+    window.addEventListener('click', function(e) {
+        const sidebar = document.getElementById('sidebar');
+        const toggleBtn = document.querySelector('.toggle-btn');
+
+        // Close the sidebar if the user clicks outside the sidebar and it's open
+        if (!sidebar.contains(e.target) && !toggleBtn.contains(e.target) && sidebar.classList.contains('open')) {
+            sidebar.classList.remove('open');
+        }
+    });
+    // Close the sidebar when the mouse leaves the sidebar area in responsive mode
+    document.getElementById('sidebar').addEventListener('mouseleave', function() {
+        const isMobileView = window.innerWidth <= 768;  // Check if in mobile view
+        const sidebar = document.getElementById('sidebar');
+
+        if (isMobileView && sidebar.classList.contains('open')) {
+            sidebar.classList.remove('open');  // Close the sidebar when mouse leaves it
+        }
+    });
+    // Listen for window resize event to reset sidebar state in larger screens
+    window.addEventListener('resize', function() {
+        const sidebar = document.getElementById('sidebar');
+        const isMobileView = window.innerWidth <= 768;
+
+        // If returning to desktop mode, reset the sidebar state
+        if (!isMobileView && sidebar.classList.contains('open')) {
+            sidebar.classList.remove('open');
+        }
+    });
+
+    function displayContent(contentId, breadcrumbText) {
+        // Hide all content sections
+        document.querySelectorAll('.contentbar > #content > div').forEach(section => {
+            section.style.display = 'none';
+        });
+
+        // Show the selected content section
+        document.getElementById(contentId).style.display = 'block';
+
+        // Remove 'active' class from all sidebar, navbar, and dropdown nav links
+        document.querySelectorAll('.sidebar .nav-link, .navbar .nav-link, .dropdown-item').forEach(link => {
+            link.classList.remove('active');
+            let icon = link.querySelector('i');
+            if (icon) {
+                icon.className = icon.className.replace('-fill', '');
+            }
+        });
+
+        // Add 'active' class to the clicked link in the sidebar, navbar, or dropdown
+        const activeLink = document.querySelector(`.sidebar .nav-link[onclick="displayContent('${contentId}', '${breadcrumbText}')"], .navbar .nav-link[onclick="displayContent('${contentId}', '${breadcrumbText}')"], .dropdown-item[onclick="displayContent('${contentId}', '${breadcrumbText}')"]`);
+        if (activeLink) {
+            activeLink.classList.add('active');
+            // Update icon to filled variant for active link
+            const icon = activeLink.querySelector('i');
+            if (icon) {
+                icon.className = icon.className.replace(/bi-[^-]+/, (match) => match + '-fill');
+            }
+        }
+    }
+
+    // Set default content
+    displayContent('listSiteContent', 'SuperAdmin Home');
 </script>
+
 
 
 <script>
