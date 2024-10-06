@@ -146,15 +146,15 @@
              sidebar.classList.remove('open');
          }
      });
-     // Close the sidebar when the mouse leaves the sidebar area in responsive mode
-     document.getElementById('sidebar').addEventListener('mouseleave', function() {
-         const isMobileView = window.innerWidth <= 768;  // Check if in mobile view
-         const sidebar = document.getElementById('sidebar');
+    //  // Close the sidebar when the mouse leaves the sidebar area in responsive mode
+    //  document.getElementById('sidebar').addEventListener('mouseleave', function() {
+    //      const isMobileView = window.innerWidth <= 768;  // Check if in mobile view
+    //      const sidebar = document.getElementById('sidebar');
 
-         if (isMobileView && sidebar.classList.contains('open')) {
-             sidebar.classList.remove('open');  // Close the sidebar when mouse leaves it
-         }
-     });
+    //      if (isMobileView && sidebar.classList.contains('open')) {
+    //          sidebar.classList.remove('open');  // Close the sidebar when mouse leaves it
+    //      }
+    //  });
      // Listen for window resize event to reset sidebar state in larger screens
      window.addEventListener('resize', function() {
          const sidebar = document.getElementById('sidebar');
