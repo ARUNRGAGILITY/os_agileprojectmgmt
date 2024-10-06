@@ -1,0 +1,4 @@
+{
+    "organization_name": "ABC Organization",
+    "roles": ["Admin", "Editor", "Viewer", "Manager", "Scrum Master", "Product Owner", "Developer"]
+}
