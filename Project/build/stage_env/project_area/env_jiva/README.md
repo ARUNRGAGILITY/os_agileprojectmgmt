@@ -1,2 +1,0 @@
-# projektmgr
-PROJECT MGR 
