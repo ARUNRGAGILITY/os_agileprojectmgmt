@@ -1,6 +1,0 @@
-#!/bin/bash
-
-DB_BKUP_DIR=../../../db_bkup/dev
-cd ..
-python manage.py dumpdata > ${DB_BKUP_DIR}/data.json
-
