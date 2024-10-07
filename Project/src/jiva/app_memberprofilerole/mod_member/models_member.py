@@ -19,11 +19,11 @@ class Member(BaseModelImpl):
             return "test"
    
 class MemberOrganizationRole(BaseModelImpl):
-    member = models.ForeignKey(Member, on_delete=models.CASCADE, null=True, blank=True,
+    member = models.ForeignKey('app_memberprofilerole.Member', on_delete=models.CASCADE, null=True, blank=True,
                                related_name="member_roles")
     org = models.ForeignKey('app_organization.Organization', on_delete=models.CASCADE, null=True, blank=True, 
                                      related_name="mro_members")
-    role = models.ForeignKey(Role, on_delete=models.CASCADE, null=True, blank=True,
+    role = models.ForeignKey('app_memberprofilerole.Role', on_delete=models.CASCADE, null=True, blank=True,
                              related_name="role_members")
     
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True,
