@@ -5,15 +5,4 @@ SRC_DIR=../../src
 DEV_ENV_DIR=../dev_env
 PROJECT_NAME=jiva
 
-cd "$DEV_ENV_DIR"/project_area/env_"$PROJECT_NAME"/"$PROJECT_NAME"
-pwd
-
-ls -la
-
-rm -r ./app_memberprofilerole/migrations
-rm -r ./app_organization/migrations
-rm -r ./app_user/migrations
-rm -r ./app_web/migrations
-cd -
-
 cp -rpf  "$DEV_ENV_DIR"/project_area/env_"$PROJECT_NAME"/"$PROJECT_NAME" "$SRC_DIR"/.
