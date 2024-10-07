@@ -13,7 +13,7 @@ class Project(BaseModelImpl):
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True,
                                related_name="author_projects")
     
-    members = models.ManyToManyField(Member, through='ProjectMembership', related_name='projects')
+    members = models.ManyToManyField('app_memberprofilerole.Member', through='ProjectMembership', related_name='projects')
    
         
     def __str__(self):

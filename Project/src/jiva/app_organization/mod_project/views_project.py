@@ -55,7 +55,8 @@ def list_projects(request, org_id):
     logger.debug(f">>> === User roles: {user_roles} with {project_admin_str} {org_admin_str} === <<<")
     # Members who are org admins or project admins can create projects
     # Now, filter the user's roles based on these Role objects
-    relevant_admin = user_roles.filter(role__in=[project_admin_role, org_admin_role]).exists()
+    #relevant_admin = user_roles.filter(role__in=[project_admin_role, org_admin_role]).exists()
+    relevant_admin = False
 
     is_org_admin = user_roles.filter(name=org_admin_str).exists()
 
