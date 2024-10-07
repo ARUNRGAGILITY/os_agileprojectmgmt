@@ -63,7 +63,7 @@ def list_projects(request, org_id):
     user_memberships = ProjectMembership.objects.filter(project__org=organization, member=member, active=True)
 
     # Check if the user is a project admin (at least one project where they are an admin)
-    is_project_admin = user_memberships.filter(project_role__name=project_admin_str).exists()
+    is_project_admin = user_memberships.filter(project_role__role_name=project_admin_str).exists()
 
     logger.debug(f">>> === CHECKING1: {user.username} ==> User roles: {user_roles}, Memberships: {user_memberships}, Org Admin: {is_org_admin}, Project Admin: {is_project_admin} === <<<")
 
