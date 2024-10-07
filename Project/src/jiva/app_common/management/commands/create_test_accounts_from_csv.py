@@ -81,7 +81,7 @@ class Command(BaseCommand):
 
                 # Check if the role exists, if not, create it
                 if role_name not in role_objects:
-                    role, created = Role.objects.get_or_create(name=role_name, org=organization)
+                    role, created = Role.objects.get_or_create(name=role_name, org=organization, user_role=user)
                     role_objects[role_name] = role  # Cache the role object
                     if created:
                         self.stdout.write(self.style.SUCCESS(f'Role: {role_name} created'))

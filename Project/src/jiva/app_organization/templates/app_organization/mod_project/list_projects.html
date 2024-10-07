@@ -55,8 +55,10 @@
                             <div class="col col-md-3 text-end">
                                 <span class="display_count">{{objects_count}} project(s)</span>
                                 &nbsp;&nbsp;
+                                {% if is_org_admin or is_project_admin %}
                                 <a href="{% url 'create_project' org_id  %}" 
                                 class="btn btn-sm btn-success"><b>+ Create Project</b></a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -114,7 +116,7 @@
                                 onblur="save_element_text(this, '{{ tobject.id }}',  'app_organization', 'Project', 'description')"
                                 >{% if tobject.description != None %}{{tobject.description}}{% endif %}</td>
                                 <td width="20%">
-                                
+                                {{user_roles}} {{user_memberships}}
                                 </td>
                                 <td width="50%">
                                     <a href="{% url 'view_project' org_id  tobject.id  %}"

@@ -14,11 +14,15 @@
             <div class="sidebar-menu">
                 <a href="#" class="nav-link active" onclick="displayContent('listSiteContent', 'Site Administration')">
                     <i class="bi bi-grid"></i>
-                    <span>Site Administration</span>
+                    <span>Project Administration</span>
                 </a>
                 <a href="#" class="nav-link active" onclick="displayContent('dashboardContent', 'Dashboard')">
                     <i class="bi bi-collection"></i>
                     <span>Dashboard</span>
+                </a>
+                <a href="{% url 'list_organizations' %}" class="nav-link active">
+                    <i class="bi bi-calendar"></i>
+                    <span>Organizations</span>
                 </a>
             </div>
 

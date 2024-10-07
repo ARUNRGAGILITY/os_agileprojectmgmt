@@ -8,6 +8,9 @@ class Role(BaseModelImpl):
     org = models.ForeignKey('app_organization.Organization', on_delete=models.CASCADE, 
                             related_name="org_roles", null=True, blank=True)
     
+    user_role = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True,
+                               related_name="user_roles")
+    
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True,
                                related_name="author_roles")
    
