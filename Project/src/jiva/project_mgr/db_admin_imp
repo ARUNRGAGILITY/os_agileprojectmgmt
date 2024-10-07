@@ -1,0 +1,6 @@
+#!/bin/bash
+
+DB_BKUP_DIR=../../../db_bkup/dev
+cd ..
+
+python manage.py loaddata ${DB_BKUP_DIR}/data.json

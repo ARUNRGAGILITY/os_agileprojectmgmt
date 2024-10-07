@@ -1,0 +1,48 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-white">
+    <div class="container-fluid no-gutters">        
+        <a class="navbar-brand" href="/">
+            <div class="logo">
+                <span class="slash slash1">/</span>
+                <span class="slash slash2">/</span>
+                <span class="slash slash3">/</span>
+                <span class="text">Jiva PMS</span>
+            </div>
+        </a>
+         <!-- Bootstrap Toggler Button -->
+         <button class="navbar-toggler" type="button"
+         data-bs-toggle="collapse" data-bs-target="#navbarNav" data-target="#navbarNav"
+         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link {% if page == 'index' %}active{% endif %} " href="/">Home</a>
+                </li>
+               
+                
+                {% if user.is_authenticated %}                
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {% if page == 'user_logged_in' or parent_page == 'user_logged_in' %}active{% endif %}" 
+                    href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    User: {{user.username}}
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="{% url 'view_my_role' %}">My Role(s)</a></li>
+                        <li><a class="dropdown-item" href="{% url 'display_profile' %}">Profile</a></li>
+                        <li><a class="dropdown-item" href="{% url 'at_logout' %}">Logout</a></li>
+                    </ul>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link {% if page == 'at_register' %}active{% endif %}" href="{% url 'at_register' %}">Register</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if page == 'at_login' %}active{% endif %}" href="{% url 'at_login' %}">Login</a>
+                </li>
+                {% endif %} 
+              
+            </ul>
+        </div>
+    </div>
+</nav>
