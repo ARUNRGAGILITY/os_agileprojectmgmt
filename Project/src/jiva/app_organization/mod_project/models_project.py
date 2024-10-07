@@ -34,7 +34,7 @@ class ProjectRole(BaseModelTrackImpl):
 
 
 class ProjectMembership(BaseModelImpl):
-    member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name='project_memberships', null=True, blank=True)
+    member = models.ForeignKey('app_memberprofilerole.Member', on_delete=models.CASCADE, related_name='project_memberships', null=True, blank=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='project_members', null=True, blank=True)
     project_role = models.ForeignKey(ProjectRole, on_delete=models.CASCADE, null=True, blank=True)  # Role in the project (e.g., 'Project Admin', 'Viewer')
 

@@ -8,7 +8,7 @@ class Profile(BaseModelImpl):
     image = models.ImageField(default='user_default_icon.svg', upload_to='profile_pics', null=True, blank=True)
     bio = models.TextField(null=True, blank=True)
 
-    org = models.ForeignKey(Organization, on_delete=models.SET_NULL, null=True, blank=True,
+    org = models.ForeignKey('app_organization.Organization', on_delete=models.SET_NULL, null=True, blank=True,
                             related_name="org_profiles")
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True,
                                related_name="author_profiles")

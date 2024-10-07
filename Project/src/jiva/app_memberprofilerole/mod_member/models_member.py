@@ -7,7 +7,7 @@ from app_memberprofilerole.mod_role.models_role import *
 class Member(BaseModelImpl):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, 
                              related_name="member")
-    org = models.ForeignKey(Organization, on_delete=models.CASCADE, null=True, blank=True, 
+    org = models.ForeignKey('app_organization.Organization', on_delete=models.CASCADE, null=True, blank=True, 
                                      related_name="org_members")
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True,
                                related_name="author_members")
@@ -21,7 +21,7 @@ class Member(BaseModelImpl):
 class MemberOrganizationRole(BaseModelImpl):
     member = models.ForeignKey(Member, on_delete=models.CASCADE, null=True, blank=True,
                                related_name="member_roles")
-    org = models.ForeignKey(Organization, on_delete=models.CASCADE, null=True, blank=True, 
+    org = models.ForeignKey('app_organization.Organization', on_delete=models.CASCADE, null=True, blank=True, 
                                      related_name="mro_members")
     role = models.ForeignKey(Role, on_delete=models.CASCADE, null=True, blank=True,
                              related_name="role_members")
