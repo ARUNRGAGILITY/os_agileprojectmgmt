@@ -1,0 +1,1 @@
+ python manage.py create_test_accounts_from_csv --config ../../../../app_builder/test/test_data/config.json --csv ../../../../app_builder/test/test_data/user_roles.csv

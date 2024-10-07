@@ -55,7 +55,7 @@
                             <div class="col col-md-3 text-end">
                                 <span class="display_count">{{objects_count}} project(s)</span>
                                 &nbsp;&nbsp;
-                                {% if is_org_admin or is_project_admin %}
+                                {% if relevant_admin %}
                                 <a href="{% url 'create_project' org_id  %}" 
                                 class="btn btn-sm btn-success"><b>+ Create Project</b></a>
                                 {% endif %}

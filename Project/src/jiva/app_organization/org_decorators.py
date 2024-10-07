@@ -1,8 +1,50 @@
 from django.http import HttpResponseForbidden
+from django.shortcuts import get_object_or_404
 from functools import wraps
 from app_memberprofilerole.mod_role.models_role import *
 from app_memberprofilerole.mod_member.models_member import *
 from app_organization.mod_project.models_project import *
+
+from app_jivapms.mod_app.all_view_imports import *
+
+org_admin_str = COMMON_ROLE_CONFIG['ORG_ADMIN']['name']
+project_admin_str = COMMON_ROLE_CONFIG['PROJECT_ADMIN']['name']
+
+# First, fetch the Role objects for 'Project Admin' and 'Org Admin'
+project_admin_role = Role.objects.get(name=project_admin_str)  # 'Project Admin'
+org_admin_role = Role.objects.get(name=org_admin_str)  # 'Org Admin'
+
+def org_access_required(allowed_roles=None):
+    if allowed_roles is None:
+        allowed_roles = ['Org Admin', 'Project Admin']  # Default roles for access
+
+    def decorator(view_func):
+        @wraps(view_func)
+        def _wrapped_view(request, *args, **kwargs):
+            org_id = kwargs.get('org_id')  # Extract org_id from kwargs
+            organization = get_object_or_404(Organization, id=org_id)
+
+            # Check if the user is a member of the organization
+            try:
+                member = Member.objects.get(user=request.user, org=organization)
+            except Member.DoesNotExist:
+                return HttpResponseForbidden("You are not a member of this organization.")
+
+            # Fetch the roles based on allowed_roles
+            allowed_roles_objs = Role.objects.filter(name__in=allowed_roles)
+
+            # Check if the member has one of the allowed roles in this organization
+            try:
+                org_membership = MemberOrganizationRole.objects.get(member=member, org=organization, role__in=allowed_roles_objs)
+            except MemberOrganizationRole.DoesNotExist:
+                return HttpResponseForbidden("You don't have the necessary privileges in this organization.")
+
+            # Proceed with the view and pass member and org_membership along with kwargs
+            return view_func(request, member=member, org_membership=org_membership, *args, **kwargs)
+
+        return _wrapped_view
+    return decorator
+
 
 def project_access_required(allowed_roles=None):
     if allowed_roles is None:

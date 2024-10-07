@@ -19,7 +19,9 @@ class Project(BaseModelImpl):
     def __str__(self):
         return self.name
     
-class ProjectRole(BaseModelImpl):
+class ProjectRole(BaseModelTrackImpl):
+    role_name = models.CharField(max_length=255, null=True, blank=True)
+    description = models.CharField(max_length=255, null=True, blank=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, 
                                 related_name='project_roles', null=True, blank=True)
     
@@ -36,7 +38,7 @@ class ProjectMembership(BaseModelImpl):
     project_role = models.ForeignKey(ProjectRole, on_delete=models.CASCADE, null=True, blank=True)  # Role in the project (e.g., 'Project Admin', 'Viewer')
 
     def __str__(self):
-        return f"{self.member.user.username} in {self.project.name} as {self.project_role.name}"
+        return f"{self.member.user.username} in {self.project.name}"
 
 
 """

@@ -22,6 +22,10 @@ module_path = f'mod_project'
 org_admin_str = COMMON_ROLE_CONFIG['ORG_ADMIN']['name']
 project_admin_str = COMMON_ROLE_CONFIG['PROJECT_ADMIN']['name']
 
+# First, fetch the Role objects for 'Project Admin' and 'Org Admin'
+project_admin_role = Role.objects.get(name=project_admin_str)  # 'Project Admin'
+org_admin_role = Role.objects.get(name=org_admin_str)  # 'Org Admin'
+
 # viewable flag
 first_viewable_flag = '__ALL__'  # 'all' or '__OWN__'
 viewable_flag = '__ALL__'  # 'all' or '__OWN__'
@@ -45,20 +49,23 @@ def list_projects(request, org_id):
 
     # Fetch the organization
     organization = get_object_or_404(Organization, id=org_id, active=True)
-
+    member = Member.objects.get(user=user, org=organization, active=True)
     # Fetch the user's role in the organization or check if they have org-level admin access
-    user_roles = Role.objects.filter(user_role=user)
+    user_roles = MemberOrganizationRole.objects.filter(member=member)
     logger.debug(f">>> === User roles: {user_roles} with {project_admin_str} {org_admin_str} === <<<")
+    # Members who are org admins or project admins can create projects
+    # Now, filter the user's roles based on these Role objects
+    relevant_admin = user_roles.filter(role__in=[project_admin_role, org_admin_role]).exists()
+
     is_org_admin = user_roles.filter(name=org_admin_str).exists()
 
-    # Get the user's project memberships
-    member = Member.objects.get(user=user, org=organization, active=True)
+    # Get the user's project memberships    
     user_memberships = ProjectMembership.objects.filter(project__org=organization, member=member, active=True)
 
     # Check if the user is a project admin (at least one project where they are an admin)
     is_project_admin = user_memberships.filter(project_role__name=project_admin_str).exists()
 
-    logger.debug(f">>> === CHECKING1: User roles: {user_roles}, Memberships: {user_memberships}, Org Admin: {is_org_admin}, Project Admin: {is_project_admin} === <<<")
+    logger.debug(f">>> === CHECKING1: {user.username} ==> User roles: {user_roles}, Memberships: {user_memberships}, Org Admin: {is_org_admin}, Project Admin: {is_project_admin} === <<<")
 
     # Filter projects based on user access
     if is_org_admin:
@@ -138,6 +145,7 @@ def list_projects(request, org_id):
         'page_title': 'Project List',
         'is_org_admin': is_org_admin,
         'is_project_admin': is_project_admin,
+        'relevant_admin': relevant_admin,
         'user_roles': user_roles,
         'user_memberships': user_memberships,
     }
@@ -225,22 +233,68 @@ def list_deleted_projects(request, org_id):
 
 
 
-# Create View
-@login_required
-def create_project(request, org_id):
-    user = request.user
-    organization = Organization.objects.get(id=org_id, active=True, 
-                                                **first_viewable_dict)
+# # Create View
+# @login_required
+# @org_access_required(allowed_roles=['Project Admin'])
+# def create_project(request, org_id):
+#     user = request.user
+#     organization = Organization.objects.get(id=org_id, active=True, 
+#                                                 **first_viewable_dict)
     
+#     if request.method == 'POST':
+#         form = ProjectForm(request.POST)
+#         if form.is_valid():
+#             form.instance.author = user
+#             form.instance.org_id = org_id
+#             form.save()
+#         else:
+#             print(f">>> === form.errors: {form.errors} === <<<")
+#         return redirect('list_projects', org_id=org_id)
+#     else:
+#         form = ProjectForm()
+
+#     context = {
+#         'parent_page': '___PARENTPAGE___',
+#         'page': 'create_project',
+#         'organization': organization,
+#         'org_id': org_id,
+        
+#         'module_path': module_path,
+#         'form': form,
+#         'page_title': f'Create Project',
+#     }
+#     template_file = f"{app_name}/{module_path}/create_project.html"
+#     return render(request, template_file, context)
+
+@login_required
+@org_access_required()
+def create_project(request, member, org_membership, org_id):
+    user = request.user
+    organization = Organization.objects.get(id=org_id, active=True, **first_viewable_dict)
+    logger.debug(f">>> === ORG_DECORATOR: {user.username} ==> User roles: {org_membership} === <<<")
     if request.method == 'POST':
         form = ProjectForm(request.POST)
         if form.is_valid():
-            form.instance.author = user
-            form.instance.org_id = org_id
-            form.save()
+            project = form.save(commit=False)
+            project.author = user
+            project.org_id = org_id
+            project.save()
+            
+            # Check if the member has 'Project Admin' role in the organization
+            if org_membership.role.name == 'Project Admin':
+                # Create or get the 'Admin' role for the project
+                admin_role, created = ProjectRole.objects.get_or_create(project=project, name='Admin')
+
+                # Assign the member as 'Admin' in the ProjectMembership
+                ProjectMembership.objects.create(
+                    member=member,
+                    project=project,
+                    project_role=admin_role
+                )
+            
+            return redirect('list_projects', org_id=org_id)
         else:
             print(f">>> === form.errors: {form.errors} === <<<")
-        return redirect('list_projects', org_id=org_id)
     else:
         form = ProjectForm()
 
@@ -249,14 +303,13 @@ def create_project(request, org_id):
         'page': 'create_project',
         'organization': organization,
         'org_id': org_id,
-        
         'module_path': module_path,
         'form': form,
         'page_title': f'Create Project',
     }
+
     template_file = f"{app_name}/{module_path}/create_project.html"
     return render(request, template_file, context)
-
 
 
 
